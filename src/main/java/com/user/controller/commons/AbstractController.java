@@ -17,26 +17,28 @@ import java.util.List;
 @Log
 public abstract class AbstractController {
 
-    AbstractService service = InitService.get(this.getClass());
+    private AbstractService getService() {
+        return InitService.get(this.getClass());
+    }
 
     @GetMapping("dto/{id}")
     public Dto getDto(@PathVariable("id") long id) {
-        return service.getDto(id);
+        return this.getService().getDto(id);
     }
 
     @GetMapping("dto")
     public List getAllDto() {
-        return service.getAllDto();
+        return this.getService().getAllDto();
     }
 
     @GetMapping("raw/{id}")
     public AbstractEntity get(@PathVariable("id") long id) {
-        return (AbstractEntity) service.get(id);
+        return (AbstractEntity) this.getService().get(id);
     }
 
     @GetMapping("raw")
     public List getAll() {
-        return service.getAll();
+        return this.getService().getAll();
     }
 
 }
