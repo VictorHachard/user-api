@@ -1,11 +1,11 @@
 package com.user.model.entities;
 
+import com.user.model.entities.commmons.AbstractEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
 // Lombok
@@ -14,17 +14,9 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class Password implements Serializable {
-
-    @Id
-    @GeneratedValue
-    long id;
+public class Password extends AbstractEntity {
 
     @Column
     String password;
-
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    Date createdAt;
 
 }

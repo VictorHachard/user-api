@@ -1,11 +1,13 @@
 package com.user.model.entities;
 
+import com.user.model.entities.commmons.AbstractEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Entity
 // Lombok
@@ -14,18 +16,10 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class Role implements Serializable  {
-
-    @Id
-    @GeneratedValue
-    long id;
+public class Role extends AbstractEntity {
 
     @Column
     @Enumerated(EnumType.STRING)
     RoleEnum role;
-
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    Date createdAt;
 
 }

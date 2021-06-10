@@ -1,12 +1,12 @@
 package com.user.model.entities;
 
+import com.user.model.entities.commmons.AbstractEntity;
 import com.user.utils.Utils;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -18,11 +18,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class Email implements Serializable {
-
-    @Id
-    @GeneratedValue
-    long id;
+public class Email extends AbstractEntity {
 
     @Column(unique = true, nullable = false)
     String email;
@@ -41,10 +37,6 @@ public class Email implements Serializable {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     Date emailAuthAt;
-
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    Date createdAt;
 
     public void initToken() {
         this.emailAuthToken = Utils.generateNewToken(42); //TODO unique

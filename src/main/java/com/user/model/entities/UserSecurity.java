@@ -1,11 +1,14 @@
 package com.user.model.entities;
 
+import com.user.model.entities.commmons.AbstractEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 // Lombok
@@ -14,11 +17,7 @@ import java.util.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class UserSecurity implements Serializable {
-
-    @Id
-    @GeneratedValue
-    long id;
+public class UserSecurity extends AbstractEntity {
 
     /*@OneToOne
     User user;*/
@@ -27,7 +26,7 @@ public class UserSecurity implements Serializable {
     String username;
 
     @OneToMany
-    List<Password> passwordList = new ArrayList<>();
+    Set<Password> passwordList = new HashSet<>();
 
     @Column
     String firstName;
@@ -43,16 +42,16 @@ public class UserSecurity implements Serializable {
     Date birth;
 
     @OneToMany()
-    List<CookieRemember> cookieList = new ArrayList<>();
+    Set<CookieRemember> cookieList = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    List<Role> permissionList = new ArrayList<>();
+    @ManyToMany()
+    Set<Role> permissionList = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    List<Group> groupList = new ArrayList<>();
+    @ManyToMany()
+    Set<Group> groupList = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    List<Email> emailList = new ArrayList<>();
+    @ManyToMany()
+    Set<Email> emailList = new HashSet<>();
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -61,10 +60,6 @@ public class UserSecurity implements Serializable {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     Date lastConnection;
-
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    Date createdAt;
 
     public void addPassword(Password... passwords) {
         passwordList.addAll(Arrays.asList(passwords));

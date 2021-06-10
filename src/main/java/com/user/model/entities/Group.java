@@ -1,28 +1,24 @@
 package com.user.model.entities;
 
+import com.user.model.entities.commmons.AbstractEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "group_a")
 // Lombok
 @ToString
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class Group implements Serializable {
+public class Group extends AbstractEntity {
 
-    @Id
-    @GeneratedValue
-    long id;
-
+    @Column()
     String name;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    Date createdAt;
 
 }
