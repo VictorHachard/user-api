@@ -4,6 +4,7 @@ import com.user.dto.commons.Dto;
 import com.user.init.AbstractAutowire;
 import com.user.init.InitMapper;
 import com.user.init.InitRepository;
+import com.user.init.InitService;
 import com.user.mapper.commons.AbstractMapper;
 import com.user.model.repositories.commons.AbstractRepository;
 import com.user.validator.commons.AbstractValidator;
@@ -20,8 +21,16 @@ import java.util.List;
 @Log
 public abstract class AbstractService<I> extends AbstractAutowire {
 
+    private AbstractRepository getRepository() {
+        return InitRepository.get(this.getClass());
+    }
+
+    private AbstractMapper getMapper() {
+        return InitMapper.get(this.getClass());
+    }
+
     public List<I> getAll() {
-        AbstractRepository repository = InitRepository.get(this.getClass());
+        AbstractRepository repository = this.getRepository();
         if (repository.findAll().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
         } else {
@@ -30,7 +39,7 @@ public abstract class AbstractService<I> extends AbstractAutowire {
     }
 
     public I get(long id) {
-        AbstractRepository repository = InitRepository.get(this.getClass());
+        AbstractRepository repository = this.getRepository();
         if (!repository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
         } else {
@@ -39,13 +48,11 @@ public abstract class AbstractService<I> extends AbstractAutowire {
     }
 
     public Dto getDto(long id) {
-        AbstractMapper mapper = InitMapper.get(this.getClass());
-        return (Dto) mapper.getDto(this.get(id));
+        return (Dto) this.getMapper().getDto(this.get(id));
     }
 
     public List<Dto> getAllDto() {
-        AbstractMapper mapper = InitMapper.get(this.getClass());
-        return (List<Dto>) mapper.getAllDto(this.getAll());
+        return (List<Dto>) this.getMapper().getAllDto(this.getAll());
     }
 
     public void add(AbstractValidator abstractValidator) {
@@ -53,14 +60,13 @@ public abstract class AbstractService<I> extends AbstractAutowire {
     }
 
     public void update(AbstractValidator abstractValidator, int id) {
-        AbstractRepository repository = InitRepository.get(this.getClass());
-        if (!repository.existsById(id)) {
+        if (!this.getRepository().existsById(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
         }
     }
 
     public void delete(long id) {
-        AbstractRepository repository = InitRepository.get(this.getClass());
+        AbstractRepository repository = this.getRepository();
         if (!repository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
         } else {
