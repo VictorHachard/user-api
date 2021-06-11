@@ -8,6 +8,7 @@ import org.omnifaces.cdi.Startup;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,21 +22,16 @@ public class InitRepository extends AbstractAutowire {
     public static Map<String, AbstractRepository> map = new HashMap<>();
 
     @PostConstruct
-    public void init() {
-        map.put("Email", emailRepository);
-
-        /*try {
-            List<Class> allClasses = Utils.getClasses("be.heh.app.model.repositories.app");
-            for (Class clazz : allClasses) {
-                if (!repositoryMap.containsKey(clazz.getSimpleName().replace("Repository", ""))) {
-                    log.warning(clazz.getSimpleName() + " is missing in the repositoryMap");
-                }
+    public void init() throws IllegalAccessException {
+        for (Field f : AbstractAutowire.class.getDeclaredFields()) {
+            if (f.getName().contains("Repository")) {
+                map.put(f.getName().replace("Repository", ""), (AbstractRepository) f.get(this));
             }
-        } catch (Exception ignored) { }*/
+        }
     }
 
     public static <T>T get(Class c) {
-        return (T) map.get(c.getSimpleName().replace("Service", ""));
+        return (T) map.get(c.getSimpleName().replace("Service", "").toLowerCase());
     }
 
 }

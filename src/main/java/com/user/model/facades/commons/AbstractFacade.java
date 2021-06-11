@@ -5,8 +5,6 @@ import lombok.extern.java.Log;
 
 import java.lang.reflect.ParameterizedType;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 // Lombok
 @Log
@@ -22,10 +20,6 @@ public abstract class AbstractFacade<T> {
         }
         obj.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return (T) obj;
-    }
-
-    public List<T> getList(List<T> list){
-        return new ArrayList<>(list);
     }
 
 }

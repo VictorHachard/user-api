@@ -4,7 +4,6 @@ import com.user.dto.commons.Dto;
 import com.user.init.AbstractAutowire;
 import com.user.init.InitMapper;
 import com.user.init.InitRepository;
-import com.user.init.InitService;
 import com.user.mapper.commons.AbstractMapper;
 import com.user.model.repositories.commons.AbstractRepository;
 import com.user.validator.commons.AbstractValidator;
@@ -19,18 +18,26 @@ import java.util.List;
 // Lombok
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Log
-public abstract class AbstractService<I> extends AbstractAutowire {
+public abstract class AbstractService<I, T> extends AbstractAutowire {
 
-    private AbstractRepository getRepository() {
+    private AbstractRepository getAbstractRepository() {
         return InitRepository.get(this.getClass());
     }
 
-    private AbstractMapper getMapper() {
+    protected T getRepository() {
+        return (T) InitRepository.get(this.getClass());
+    }
+
+    protected AbstractMapper getMapper() {
         return InitMapper.get(this.getClass());
     }
 
+    public long count() {
+        return this.getAbstractRepository().count();
+    }
+
     public List<I> getAll() {
-        AbstractRepository repository = this.getRepository();
+        AbstractRepository repository = this.getAbstractRepository();
         if (repository.findAll().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
         } else {
@@ -39,7 +46,7 @@ public abstract class AbstractService<I> extends AbstractAutowire {
     }
 
     public I get(long id) {
-        AbstractRepository repository = this.getRepository();
+        AbstractRepository repository = this.getAbstractRepository();
         if (!repository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
         } else {
@@ -55,23 +62,33 @@ public abstract class AbstractService<I> extends AbstractAutowire {
         return (List<Dto>) this.getMapper().getAllDto(this.getAll());
     }
 
-    public void add(AbstractValidator abstractValidator) {
-
+    public void create(AbstractValidator abstractValidator) {
     }
 
-    public void update(AbstractValidator abstractValidator, int id) {
-        if (!this.getRepository().existsById(id)) {
+    public void update(AbstractValidator abstractValidator, long id) {
+        if (!this.getAbstractRepository().existsById(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
         }
     }
 
     public void delete(long id) {
-        AbstractRepository repository = this.getRepository();
+        AbstractRepository repository = this.getAbstractRepository();
         if (!repository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
         } else {
             repository.deleteById(id);
         }
+    }
+
+    protected void responseStatus(HttpStatus hs, String response) {
+        /*switch (hs) {
+            case OK:
+                response = "";
+                break;
+            case NO_CONTENT:
+                response = "Success " +  + " created";
+        }*/
+        throw new ResponseStatusException(hs, response);
     }
 
 }

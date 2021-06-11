@@ -18,6 +18,12 @@
     </parent>
     <!-- dependencies -->
     <dependencies>
+        <!-- Reflections -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.12</version>
+        </dependency>
         <!-- javax.mail -->
         <dependency>
             <groupId>javax.mail</groupId>
