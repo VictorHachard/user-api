@@ -1,8 +1,9 @@
 package com.user.service;
 
 import com.user.model.entities.Email;
-import com.user.model.entities.PriorityEnum;
+import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.repositories.EmailRepository;
+import com.user.model.repositories.commons.AbstractRepository;
 import com.user.service.commons.AbstractService;
 import com.user.validator.EmailValidator;
 import com.user.validator.commons.AbstractValidator;
@@ -11,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 // Lombok
@@ -26,13 +28,24 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
     }
 
     public Email create(String email, PriorityEnum pe) {
-        boolean existsByEmail = this.getRepository().existsByEmail(email);
-        if (existsByEmail) {
+        if (this.getRepository().existsByEmail(email)) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "This email is already in the database");
         }
         Email e = emailFacade.newInstance(email, pe);
+        emailFacade.initToken(e);
         this.getRepository().save(e);
         return e;
+    }
+
+    @Override
+    public void delete(long id) {
+        if (!this.getRepository().existsById(id)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
+        } else if (this.getRepository().findById(id).get().getPriority() == PriorityEnum.PRINCIPAL) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "Cannot delete PRINCIPAL email");
+        } else {
+            this.getRepository().deleteById(id);
+        }
     }
 
 }

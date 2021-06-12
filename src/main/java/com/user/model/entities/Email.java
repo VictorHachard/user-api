@@ -1,6 +1,7 @@
 package com.user.model.entities;
 
 import com.user.model.entities.commons.AbstractEntity;
+import com.user.model.entities.enums.PriorityEnum;
 import com.user.utils.Utils;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -27,23 +28,18 @@ public class Email extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     PriorityEnum priority;
 
+    @Column(name = "email_auth")
+    Boolean emailConfirmed;
+
     @Column(unique = true)
-    String emailAuthToken;
+    String emailConfirmedToken;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    Date emailAuthSet;
+    Date emailConfirmedSet;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    Date emailAuthAt;
-
-    public void initToken() {
-        this.emailAuthToken = Utils.generateNewToken(42); //TODO unique
-        this.emailAuthSet = new Timestamp(System.currentTimeMillis());
-        this.emailAuthAt = null;
-        log.info("The validation token for " + this.email + " is " + this.emailAuthToken
-                + ", the link is: http://localhost:4200/confirm/" + this.emailAuthToken);
-    }
+    Date emailConfirmedAt;
 
 }

@@ -11,4 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class RoleDto extends Dto {
+
+    String name;
+
 }

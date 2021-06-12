@@ -22,6 +22,8 @@ public class UserSecurityMapper extends AbstractMapper<UserSecurityDto, UserSecu
         dto.setUsername(e.getUsername());
         dto.setAuthToken(e.getAuthToken());
         dto.setEmailList(emailMapper.getAllDto(new ArrayList<>(e.getEmailList())));
+        dto.setGroupDtoList(groupMapper.getAllDto(new ArrayList<>(e.getGroupList())));
+        dto.setRoleDtoList(roleMapper.getAllDto(new ArrayList<>(e.getPermissionList())));
         return dto;
     }
 

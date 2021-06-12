@@ -1,4 +1,4 @@
-package com.user.model.entities;
+package com.user.model.entities.enums;
 
 public enum RoleEnum {
     ROLE_OWNER,

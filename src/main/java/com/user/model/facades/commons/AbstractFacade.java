@@ -1,5 +1,6 @@
 package com.user.model.facades.commons;
 
+import com.user.init.AbstractAutowire;
 import com.user.model.entities.commons.AbstractEntity;
 import lombok.extern.java.Log;
 
@@ -8,7 +9,7 @@ import java.sql.Timestamp;
 
 // Lombok
 @Log
-public abstract class AbstractFacade<T> {
+public abstract class AbstractFacade<T> extends AbstractAutowire {
 
     public T newInstance() {
         AbstractEntity obj = null;

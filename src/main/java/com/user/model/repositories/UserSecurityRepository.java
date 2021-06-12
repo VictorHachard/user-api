@@ -14,8 +14,14 @@ public interface UserSecurityRepository extends AbstractRepository<UserSecurity,
     @Query("SELECT u FROM UserSecurity u join u.emailList e where e.email =?1")
     Optional<UserSecurity> findByEmail(@Param("email") String email);
 
-    @Query("SELECT u FROM UserSecurity u join u.emailList e where e.email =?1")
+    @Query("SELECT case when count(u)> 0 then true else false end FROM UserSecurity u join u.emailList e where e.email =?1")
     Boolean existsByEmail(@Param("email") String email);
+
+    @Query("SELECT u FROM UserSecurity u join u.cookieList c where c.token =?1")
+    Optional<UserSecurity> findByCookieRemember(@Param("cookieRemember") String cookieRemember);
+
+    @Query("SELECT case when count(u)> 0 then true else false end FROM UserSecurity u join u.cookieList c where c.token =?1")
+    Boolean existsByCookieRemember(@Param("cookieRemember") String cookieRemember);
 
     Optional<UserSecurity> findByUsername(@Param("username") String username);
 

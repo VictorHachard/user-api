@@ -17,6 +17,7 @@ public class RoleMapper extends AbstractMapper<RoleDto, Role> {
     @Override
     public RoleDto getDto(Role e) {
         RoleDto dto = super.getDto(e);
+        dto.setName(e.getRole().name());
         return dto;
     }
 

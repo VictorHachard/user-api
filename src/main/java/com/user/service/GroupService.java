@@ -25,8 +25,7 @@ public class GroupService extends AbstractService<Group, GroupRepository> {
     }
 
     public Group create(String name) {
-        boolean existsByName = this.getRepository().existsByName(name);
-        if (existsByName) {
+        if (this.getRepository().existsByName(name)) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "This group name already exist");
         }
         Group g = groupFacade.newInstance(name);

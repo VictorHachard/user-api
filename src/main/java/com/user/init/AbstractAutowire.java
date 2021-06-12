@@ -1,21 +1,9 @@
 package com.user.init;
 
-import com.user.mapper.EmailMapper;
-import com.user.mapper.GroupMapper;
-import com.user.mapper.PasswordMapper;
-import com.user.mapper.UserSecurityMapper;
-import com.user.model.facades.EmailFacade;
-import com.user.model.facades.GroupFacade;
-import com.user.model.facades.PasswordFacade;
-import com.user.model.facades.UserSecurityFacade;
-import com.user.model.repositories.EmailRepository;
-import com.user.model.repositories.GroupRepository;
-import com.user.model.repositories.PasswordRepository;
-import com.user.model.repositories.UserSecurityRepository;
-import com.user.service.EmailService;
-import com.user.service.GroupService;
-import com.user.service.PasswordService;
-import com.user.service.UserSecurityService;
+import com.user.mapper.*;
+import com.user.model.facades.*;
+import com.user.model.repositories.*;
+import com.user.service.*;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,5 +59,29 @@ public abstract class AbstractAutowire {
 
     @Autowired
     PasswordFacade passwordFacade;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    RoleMapper roleMapper;
+
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
+    RoleFacade roleFacade;
+
+    @Autowired
+    CookieRememberRepository cookieRememberRepository;
+
+    @Autowired
+    CookieRememberMapper cookieRememberMapper;
+
+    @Autowired
+    CookieRememberService cookieRememberService;
+
+    @Autowired
+    CookieRememberFacade cookieRememberFacade;
 
 }

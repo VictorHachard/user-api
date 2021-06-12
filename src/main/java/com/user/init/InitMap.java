@@ -29,11 +29,11 @@ public class InitMap extends AbstractAutowire {
     public void init() throws IllegalAccessException {
         for (Field f : AbstractAutowire.class.getDeclaredFields()) {
             if (f.getName().contains("Service")) {
-                mapService.put(f.getName().replace("Service", ""), (AbstractService) f.get(this));
+                mapService.put(f.getName().replace("Service", "").toLowerCase(), (AbstractService) f.get(this));
             } else if (f.getName().contains("Mapper")) {
-                mapMapper.put(f.getName().replace("Mapper", ""), (AbstractMapper) f.get(this));
+                mapMapper.put(f.getName().replace("Mapper", "").toLowerCase(), (AbstractMapper) f.get(this));
             } else if (f.getName().contains("Repository")) {
-                mapRepository.put(f.getName().replace("Repository", ""), (AbstractRepository) f.get(this));
+                mapRepository.put(f.getName().replace("Repository", "").toLowerCase(), (AbstractRepository) f.get(this));
             }
         }
     }

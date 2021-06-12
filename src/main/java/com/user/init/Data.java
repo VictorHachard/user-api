@@ -2,7 +2,7 @@ package com.user.init;
 
 import com.user.model.entities.Email;
 import com.user.model.entities.Group;
-import com.user.model.entities.PriorityEnum;
+import com.user.model.entities.enums.PriorityEnum;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.omnifaces.cdi.Startup;
@@ -23,9 +23,10 @@ public class Data extends AbstractAutowire {
 
     @PostConstruct
     public void init() {
-        emailList.add(emailFacade.newInstance("Test@@test.test", PriorityEnum.PRINCIPAL));
 
-        emailList.forEach(a -> {
+        /*emailList.add(emailFacade.newInstance("test@test.test", PriorityEnum.PRINCIPAL));*/
+
+        /*emailList.forEach(a -> {
             emailRepository.save(a);
         });
 
@@ -34,7 +35,7 @@ public class Data extends AbstractAutowire {
 
         groupList.forEach(a -> {
             groupRepository.save(a);
-        });
+        });*/
     }
 
 }

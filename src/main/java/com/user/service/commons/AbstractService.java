@@ -5,6 +5,7 @@ import com.user.init.AbstractAutowire;
 import com.user.init.InitMap;
 import com.user.init.MapTypeEnum;
 import com.user.mapper.commons.AbstractMapper;
+import com.user.model.entities.UserSecurity;
 import com.user.model.repositories.commons.AbstractRepository;
 import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
@@ -32,6 +33,10 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
 
     protected T getRepository() {
         return (T) InitMap.get(this.getClass(), MapTypeEnum.REPOSITORY);
+    }
+
+    protected UserSecurity getUser() {
+        return null;
     }
 
     protected AbstractMapper getMapper() {

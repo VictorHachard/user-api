@@ -10,12 +10,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class EmailDto extends Dto {
+public class CookieRememberDto extends Dto {
 
-    String email;
-
-    String priority;
-
-    boolean isConfirmed;
+    String token;
 
 }

@@ -1,7 +1,9 @@
 package com.user.mapper;
 
+import com.user.dto.CookieRememberDto;
 import com.user.dto.EmailDto;
 import com.user.mapper.commons.AbstractMapper;
+import com.user.model.entities.CookieRemember;
 import com.user.model.entities.Email;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -12,14 +14,12 @@ import org.springframework.stereotype.Component;
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Log
-public class EmailMapper extends AbstractMapper<EmailDto, Email> {
+public class CookieRememberMapper extends AbstractMapper<CookieRememberDto, CookieRemember> {
 
     @Override
-    public EmailDto getDto(Email e) {
-        EmailDto dto = super.getDto(e);
-        dto.setEmail(e.getEmail());
-        dto.setPriority(e.getPriority().name());
-        dto.setConfirmed(e.getEmailConfirmed());
+    public CookieRememberDto getDto(CookieRemember e) {
+        CookieRememberDto dto = super.getDto(e);
+        dto.setToken(e.getToken());
         return dto;
     }
 

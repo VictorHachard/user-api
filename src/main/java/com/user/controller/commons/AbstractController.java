@@ -1,9 +1,7 @@
 package com.user.controller.commons;
 
-import com.user.dto.commons.Dto;
 import com.user.init.InitMap;
 import com.user.init.MapTypeEnum;
-import com.user.model.entities.commons.AbstractEntity;
 import com.user.service.commons.AbstractService;
 import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
@@ -26,11 +24,6 @@ public abstract class AbstractController<E, D> {
     @GetMapping("/count")
     public long count() {
         return this.getService().count();
-    }
-
-    @PostMapping("/create")
-    public void create(@Valid @RequestBody AbstractValidator abstractValidator) {
-        this.getService().create(abstractValidator);
     }
 
     @DeleteMapping("{id}")

@@ -1,6 +1,7 @@
 package com.user.model.entities;
 
 import com.user.model.entities.commons.AbstractEntity;
+import com.user.model.entities.enums.RoleEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

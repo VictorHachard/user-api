@@ -1,6 +1,6 @@
 package com.user.utils;
 
-import com.user.model.entities.RoleEnum;
+import com.user.model.entities.enums.RoleEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

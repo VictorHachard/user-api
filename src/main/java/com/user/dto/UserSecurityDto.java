@@ -16,8 +16,12 @@ public class UserSecurityDto extends Dto {
 
     String username;
 
+    String authToken;
+
     List<EmailDto> emailList;
 
-    String authToken;
+    List<GroupDto> groupDtoList;
+
+    List<RoleDto> roleDtoList;
 
 }
