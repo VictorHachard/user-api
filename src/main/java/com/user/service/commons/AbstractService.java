@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -41,15 +42,31 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         return this.getAbstractRepository().count();
     }
 
-    public List<I> getAll(Integer pageNo, Integer pageSize, String sortBy, String orderBy) {
+    public List<I> getAll(Integer pageIndex, Integer pageSize, String sortBy, String orderBy) {
+        List<String> errorStrList = new ArrayList();
+        if (pageIndex < 0) {
+            errorStrList.add("Page index must not be less than zero!");
+        } if (pageSize < 1) {
+            errorStrList.add("Page size must not be less than one!");
+        } if (!orderBy.equals("desc") && !orderBy.equals("asc")) {
+            errorStrList.add("Order by must be equal to 'asc' or 'desc'!");
+        }
+        if (!errorStrList.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorStrList.size() == 1 ? errorStrList.get(0) : errorStrList.toString());
+        }
         AbstractRepository repository = this.getAbstractRepository();
         Pageable paging;
         if (orderBy.equals("desc")) {
-            paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
+            paging = PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).descending());
         } else {
-            paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).ascending());
+            paging = PageRequest.of(pageIndex, pageSize, Sort.by(sortBy).ascending());
         }
-        Page<I> pagedResult = repository.findAll(paging);
+        Page<I> pagedResult = null;
+        try {
+            pagedResult = repository.findAll(paging);
+        } catch (PropertyReferenceException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
         if (pagedResult.hasContent()) {
             return pagedResult.getContent();
         } else {

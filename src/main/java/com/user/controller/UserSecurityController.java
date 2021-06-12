@@ -2,6 +2,7 @@ package com.user.controller;
 
 import com.user.controller.commons.AbstractController;
 import com.user.dto.UserSecurityDto;
+import com.user.model.entities.UserSecurity;
 import com.user.service.UserSecurityService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -18,7 +19,7 @@ import java.util.Base64;
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Log
-public class UserSecurityController extends AbstractController {
+public class UserSecurityController extends AbstractController<UserSecurity, UserSecurityDto> {
 
     @PostMapping("login")
     public UserSecurityDto login(@RequestHeader("Authentication") String auth) {

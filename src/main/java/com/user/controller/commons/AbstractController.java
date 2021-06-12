@@ -17,7 +17,7 @@ import java.util.List;
 // Lombok
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Log
-public abstract class AbstractController {
+public abstract class AbstractController<E, D> {
 
     protected AbstractService getService() {
         return InitMap.get(this.getClass(), MapTypeEnum.SERVICE);
@@ -44,29 +44,29 @@ public abstract class AbstractController {
     }
 
     @GetMapping("dto/{id}")
-    public Dto getDto(@PathVariable("id") long id) {
-        return this.getService().getDto(id);
+    public D getDto(@PathVariable("id") long id) {
+        return (D) this.getService().getDto(id);
     }
 
     @GetMapping("dto")
-    public List getAllDto(@RequestParam(defaultValue = "0") Integer pageNo,
+    public List<D> getAllDto(@RequestParam(defaultValue = "0") Integer pageIndex,
                           @RequestParam(defaultValue = "10") Integer pageSize,
                           @RequestParam(defaultValue = "id") String sortBy,
                           @RequestParam(defaultValue = "asc") String orderBy) {
-        return this.getService().getAllDto(pageNo, pageSize, sortBy, orderBy);
+        return (List<D>) this.getService().getAllDto(pageIndex, pageSize, sortBy, orderBy);
     }
 
     @GetMapping("raw/{id}")
-    public AbstractEntity get(@PathVariable("id") long id) {
-        return (AbstractEntity) this.getService().get(id);
+    public E get(@PathVariable("id") long id) {
+        return (E) this.getService().get(id);
     }
 
     @GetMapping("raw")
-    public List getAll(@RequestParam(defaultValue = "0") Integer pageNo,
+    public List<E> getAll(@RequestParam(defaultValue = "0") Integer pageIndex,
                        @RequestParam(defaultValue = "10") Integer pageSize,
                        @RequestParam(defaultValue = "id") String sortBy,
                        @RequestParam(defaultValue = "asc") String orderBy) {
-        return this.getService().getAll(pageNo, pageSize, sortBy, orderBy);
+        return (List<E>) this.getService().getAll(pageIndex, pageSize, sortBy, orderBy);
     }
 
 }

@@ -1,6 +1,8 @@
 package com.user.controller;
 
 import com.user.controller.commons.AbstractController;
+import com.user.dto.GroupDto;
+import com.user.model.entities.Group;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Log
-public class GroupController extends AbstractController {
+public class GroupController extends AbstractController<Group, GroupDto> {
 
     /*@PutMapping("/{id}")
     public void update(@PathVariable("id") long id, @Valid @RequestBody GroupValidator validator) {

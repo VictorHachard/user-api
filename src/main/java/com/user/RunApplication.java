@@ -20,7 +20,7 @@ public class RunApplication {
 	@Bean
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("be.heh.app.controller.rest")).build();
+				.apis(RequestHandlerSelectors.basePackage("com.user.controller")).build();
 	}
 
 }
