@@ -6,17 +6,15 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "group_a")
 // Lombok
 @ToString
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class Group extends AbstractEntity {
+public class Theme extends AbstractEntity {
 
     @Column(name = "name_a")
     String name;

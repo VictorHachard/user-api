@@ -3,11 +3,16 @@ package com.user.controller;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.GroupDto;
 import com.user.model.entities.Group;
+import com.user.validator.GroupValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/v1/group/")
@@ -15,6 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Log
 public class GroupController extends AbstractController<Group, GroupDto> {
+
+    @PostMapping("/create")
+    public void create(@Valid @RequestBody GroupValidator validator) {
+        this.getService().create(validator);
+    }
 
     /*@PutMapping("/{id}")
     public void update(@PathVariable("id") long id, @Valid @RequestBody GroupValidator validator) {

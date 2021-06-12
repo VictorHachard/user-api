@@ -16,6 +16,8 @@ public class EmailDto extends Dto {
 
     String priority;
 
+    String privacy;
+
     boolean isConfirmed;
 
 }

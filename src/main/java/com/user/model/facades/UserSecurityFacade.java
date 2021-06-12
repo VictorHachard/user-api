@@ -3,6 +3,7 @@ package com.user.model.facades;
 import com.user.model.entities.Email;
 import com.user.model.entities.Password;
 import com.user.model.entities.UserSecurity;
+import com.user.model.entities.enums.PrivacyEnum;
 import com.user.model.facades.commons.AbstractFacade;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,8 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         res.setUsername(u);
         res.addPassword(p);
         res.addEmail(e);
+
+        res.setPrivacy(PrivacyEnum.PRIVATE);
         return res;
     }
 

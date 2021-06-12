@@ -39,8 +39,18 @@ public class UserSecurity extends AbstractEntity {
     String lastName;
 
     @Column
+    String url;
+
+    @Column
+    String biography;
+
+    @Column
     @Temporal(TemporalType.DATE)
     Date birth;
+
+    @JoinColumn()
+    @ManyToOne
+    Theme theme;
 
     @OneToMany()
     Set<CookieRemember> cookieList = new HashSet<>();

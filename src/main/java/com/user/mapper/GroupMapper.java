@@ -18,6 +18,8 @@ public class GroupMapper extends AbstractMapper<GroupDto, Group> {
     public GroupDto getDto(Group e) {
         GroupDto dto = super.getDto(e);
         dto.setName(e.getName());
+        dto.setActive(e.isActive());
+        dto.setOrder(e.getOrder());
         return dto;
     }
 

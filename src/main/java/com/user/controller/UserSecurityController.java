@@ -7,7 +7,6 @@ import com.user.service.UserSecurityService;
 import com.user.validator.EmailValidator;
 import com.user.validator.LoginFromCookieValidator;
 import com.user.validator.UserSecurityValidator;
-import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;

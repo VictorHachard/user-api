@@ -19,6 +19,6 @@ public class Dto {
 
     Date createdAt;
 
-    String createdAtFormated;
+    //String createdAtFormated;
 
 }

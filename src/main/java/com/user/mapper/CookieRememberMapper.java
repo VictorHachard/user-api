@@ -1,10 +1,8 @@
 package com.user.mapper;
 
 import com.user.dto.CookieRememberDto;
-import com.user.dto.EmailDto;
 import com.user.mapper.commons.AbstractMapper;
 import com.user.model.entities.CookieRemember;
-import com.user.model.entities.Email;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;

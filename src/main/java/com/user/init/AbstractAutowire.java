@@ -84,4 +84,16 @@ public abstract class AbstractAutowire {
     @Autowired
     CookieRememberFacade cookieRememberFacade;
 
+    @Autowired
+    ThemeRepository themeRepository;
+
+    @Autowired
+    ThemeMapper themeMapper;
+
+    @Autowired
+    ThemeService themeService;
+
+    @Autowired
+    ThemeFacade themeFacade;
+
 }

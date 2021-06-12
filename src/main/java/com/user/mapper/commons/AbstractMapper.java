@@ -3,7 +3,6 @@ package com.user.mapper.commons;
 import com.user.dto.commons.Dto;
 import com.user.init.AbstractAutowire;
 import com.user.model.entities.commons.AbstractEntity;
-import com.user.utils.Utils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
@@ -36,8 +35,23 @@ public abstract class AbstractMapper<T, E> extends AbstractAutowire {
         }
         obj.setId(ae.getId());
         obj.setCreatedAt(ae.getCreatedAt());
-        obj.setCreatedAtFormated(Utils.niceDate(ae.getCreatedAt()));
+        //obj.setCreatedAtFormated(Utils.niceDate(ae.getCreatedAt()));
         return (T) obj;
+    }
+
+    public Dto getAbstractDto(E e) {
+        AbstractEntity ae = (AbstractEntity) e;
+        Dto obj = null;
+        try {
+            Object instance = ((Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
+            obj = (Dto) instance;
+        } catch (Exception ex) {
+            log.info("Dto " + ex.getMessage());
+        }
+        obj.setId(ae.getId());
+        obj.setCreatedAt(ae.getCreatedAt());
+        //obj.setCreatedAtFormated(Utils.niceDate(ae.getCreatedAt()));
+        return obj;
     }
 
 }

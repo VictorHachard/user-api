@@ -20,6 +20,7 @@ public class EmailMapper extends AbstractMapper<EmailDto, Email> {
         dto.setEmail(e.getEmail());
         dto.setPriority(e.getPriority().name());
         dto.setConfirmed(e.getEmailConfirmed());
+        dto.setPrivacy(e.getPrivacy().name());
         return dto;
     }
 

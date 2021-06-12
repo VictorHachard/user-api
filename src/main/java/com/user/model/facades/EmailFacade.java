@@ -2,6 +2,7 @@ package com.user.model.facades;
 
 import com.user.model.entities.Email;
 import com.user.model.entities.enums.PriorityEnum;
+import com.user.model.entities.enums.PrivacyEnum;
 import com.user.model.facades.commons.AbstractFacade;
 import com.user.utils.Utils;
 import lombok.extern.java.Log;
@@ -14,10 +15,11 @@ import java.sql.Timestamp;
 @Log
 public class EmailFacade extends AbstractFacade<Email> {
 
-    public Email newInstance(String email, PriorityEnum pe) {
+    public Email newInstance(String email, PriorityEnum pe, PrivacyEnum pe2) {
         Email res = super.newInstance();
         res.setEmail(email);
         res.setPriority(pe);
+        res.setPrivacy(pe2);
         return res;
     }
 

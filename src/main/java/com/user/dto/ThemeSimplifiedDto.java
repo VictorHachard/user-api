@@ -10,12 +10,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class GroupDto extends Dto {
+public class ThemeSimplifiedDto extends Dto {
 
     String name;
-
-    boolean active;
-
-    int order;
 
 }
