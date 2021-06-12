@@ -1,4 +1,4 @@
-package com.user.model.entities.commmons;
+package com.user.model.entities.commons;
 
 import lombok.AccessLevel;
 import lombok.Getter;

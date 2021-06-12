@@ -22,7 +22,7 @@ public class PasswordService extends AbstractService<Password, PasswordRepositor
     public void create(AbstractValidator abstractValidator) {
         PasswordValidator validator = (PasswordValidator) abstractValidator;
         this.create(validator.getPassword());
-        this.responseStatus(HttpStatus.NO_CONTENT, "Success user created");
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success " + this.getClass().getSimpleName().toLowerCase() + " created");
     }
 
     public Password create(String password) {

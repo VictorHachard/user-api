@@ -1,8 +1,9 @@
 package com.user.controller.commons;
 
 import com.user.dto.commons.Dto;
-import com.user.init.InitService;
-import com.user.model.entities.commmons.AbstractEntity;
+import com.user.init.InitMap;
+import com.user.init.MapTypeEnum;
+import com.user.model.entities.commons.AbstractEntity;
 import com.user.service.commons.AbstractService;
 import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
@@ -18,8 +19,8 @@ import java.util.List;
 @Log
 public abstract class AbstractController {
 
-    private AbstractService getService() {
-        return InitService.get(this.getClass());
+    protected AbstractService getService() {
+        return InitMap.get(this.getClass(), MapTypeEnum.SERVICE);
     }
 
     @GetMapping("/count")
@@ -48,8 +49,11 @@ public abstract class AbstractController {
     }
 
     @GetMapping("dto")
-    public List getAllDto() {
-        return this.getService().getAllDto();
+    public List getAllDto(@RequestParam(defaultValue = "0") Integer pageNo,
+                          @RequestParam(defaultValue = "10") Integer pageSize,
+                          @RequestParam(defaultValue = "id") String sortBy,
+                          @RequestParam(defaultValue = "asc") String orderBy) {
+        return this.getService().getAllDto(pageNo, pageSize, sortBy, orderBy);
     }
 
     @GetMapping("raw/{id}")
@@ -58,8 +62,11 @@ public abstract class AbstractController {
     }
 
     @GetMapping("raw")
-    public List getAll() {
-        return this.getService().getAll();
+    public List getAll(@RequestParam(defaultValue = "0") Integer pageNo,
+                       @RequestParam(defaultValue = "10") Integer pageSize,
+                       @RequestParam(defaultValue = "id") String sortBy,
+                       @RequestParam(defaultValue = "asc") String orderBy) {
+        return this.getService().getAll(pageNo, pageSize, sortBy, orderBy);
     }
 
 }

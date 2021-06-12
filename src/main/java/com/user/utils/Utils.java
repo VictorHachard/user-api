@@ -4,10 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Enumeration;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Utils {
 
@@ -85,12 +83,16 @@ public class Utils {
         return new String(array);
     }
 
-    public static int StringToInt(String str) {
+    public static int stringToInt(String str) {
         int id = 0;
         try {
             id = Integer.parseInt(str);
         } catch (Exception ignored) { }
         return id;
+    }
+
+    public static String niceDate(Date date) {
+        return new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z").format(date);
     }
 
 }

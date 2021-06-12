@@ -8,6 +8,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -17,6 +19,9 @@ public class UserSecurityMapper extends AbstractMapper<UserSecurityDto, UserSecu
     @Override
     public UserSecurityDto getDto(UserSecurity e) {
         UserSecurityDto dto = super.getDto(e);
+        dto.setUsername(e.getUsername());
+        dto.setAuthToken(e.getAuthToken());
+        dto.setEmailList(emailMapper.getAllDto(new ArrayList<>(e.getEmailList())));
         return dto;
     }
 

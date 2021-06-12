@@ -1,6 +1,6 @@
 package com.user.model.facades.commons;
 
-import com.user.model.entities.commmons.AbstractEntity;
+import com.user.model.entities.commons.AbstractEntity;
 import lombok.extern.java.Log;
 
 import java.lang.reflect.ParameterizedType;

@@ -1,6 +1,6 @@
 package com.user.model.entities;
 
-import com.user.model.entities.commmons.AbstractEntity;
+import com.user.model.entities.commons.AbstractEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -60,6 +60,13 @@ public class UserSecurity extends AbstractEntity {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     Date lastConnection;
+
+    @Column()
+    String authToken;
+
+    @Column()
+    @Temporal(TemporalType.TIMESTAMP)
+    Date authTokenCreatedAt;
 
     public void addPassword(Password... passwords) {
         passwordList.addAll(Arrays.asList(passwords));

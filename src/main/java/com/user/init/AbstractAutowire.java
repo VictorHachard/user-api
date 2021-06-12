@@ -72,5 +72,4 @@ public abstract class AbstractAutowire {
     @Autowired
     PasswordFacade passwordFacade;
 
-
 }

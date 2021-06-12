@@ -1,13 +1,11 @@
 package com.user.init;
 
 import com.user.model.entities.Email;
+import com.user.model.entities.Group;
 import com.user.model.entities.PriorityEnum;
-import com.user.model.facades.EmailFacade;
-import com.user.model.repositories.EmailRepository;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.omnifaces.cdi.Startup;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -18,15 +16,10 @@ import java.util.List;
 @Startup
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Data {
-
-    @Autowired
-    EmailRepository emailRepository;
-
-    @Autowired
-    EmailFacade emailFacade;
+public class Data extends AbstractAutowire {
 
     static List<Email> emailList = new ArrayList<>();
+    static List<Group> groupList = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -35,5 +28,13 @@ public class Data {
         emailList.forEach(a -> {
             emailRepository.save(a);
         });
+
+        groupList.add(groupFacade.newInstance("Admin"));
+        groupList.add(groupFacade.newInstance("Aadmin"));
+
+        groupList.forEach(a -> {
+            groupRepository.save(a);
+        });
     }
+
 }

@@ -21,9 +21,8 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
     @Override
     public void create(AbstractValidator abstractValidator) {
         EmailValidator validator = (EmailValidator) abstractValidator;
-
         this.create(validator.getEmail(), PriorityEnum.valueOf(validator.getPriorityEnum())); //TODO check value
-        this.responseStatus(HttpStatus.NO_CONTENT, "Success user created");
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success " + this.getClass().getSimpleName().toLowerCase() + " created");
     }
 
     public Email create(String email, PriorityEnum pe) {

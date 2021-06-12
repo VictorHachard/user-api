@@ -20,15 +20,18 @@ public class GroupService extends AbstractService<Group, GroupRepository> {
     @Override
     public void create(AbstractValidator abstractValidator) {
         GroupValidator validator = (GroupValidator) abstractValidator;
+        this.create(validator.getName());
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success " + this.getClass().getSimpleName().toLowerCase() + " created");
+    }
 
-        boolean existsByName = this.getRepository().existsByName(validator.getName());
+    public Group create(String name) {
+        boolean existsByName = this.getRepository().existsByName(name);
         if (existsByName) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "This group name already exist");
-        } else {
-            Group g = groupFacade.newInstance(validator.getName());
-            this.getRepository().save(g);
-            this.responseStatus(HttpStatus.NO_CONTENT, "Success group created");
         }
+        Group g = groupFacade.newInstance(name);
+        this.getRepository().save(g);
+        return g;
     }
 
 }
