@@ -47,7 +47,12 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         return this.getAbstractRepository().count();
     }
 
-    public List<I> getAll(Integer pageIndex, Integer pageSize, String sortBy, String orderBy) {
+    public Page<I> getAllBy(Pageable pageable, String searchBy, String searchValue) {
+        AbstractRepository repository = this.getAbstractRepository();
+        return repository.findAll(pageable);
+    }
+
+    public List<I> getAll(Integer pageIndex, Integer pageSize, String sortBy, String orderBy, String searchBy, String searchValue) {
         List<String> errorStrList = new ArrayList();
         if (pageIndex < 0) {
             errorStrList.add("Page index must not be less than zero!");
@@ -68,7 +73,8 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         }
         Page<I> pagedResult = null;
         try {
-            pagedResult = repository.findAll(paging);
+            pagedResult = this.getAllBy(paging, searchBy, searchValue);
+            //pagedResult = repository.findAll(paging);
         } catch (PropertyReferenceException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
@@ -92,8 +98,8 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         return (Dto) this.getMapper().getDto(this.get(id));
     }
 
-    public List<Dto> getAllDto(Integer pageNo, Integer pageSize, String sortBy, String orderBy) {
-        return (List<Dto>) this.getMapper().getAllDto(this.getAll(pageNo, pageSize, sortBy, orderBy));
+    public List<Dto> getAllDto(Integer pageNo, Integer pageSize, String sortBy, String orderBy, String searchBy, String searchValue) {
+        return (List<Dto>) this.getMapper().getAllDto(this.getAll(pageNo, pageSize, sortBy, orderBy, searchBy, searchValue));
     }
 
     public void create(AbstractValidator abstractValidator) {

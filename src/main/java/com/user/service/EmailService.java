@@ -10,14 +10,36 @@ import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Log
 public class EmailService extends AbstractService<Email, EmailRepository> {
+
+    @Override
+    public Page<Email> getAllBy(Pageable pageable, String searchBy, String searchValue) {
+        switch (searchBy) {
+            case "email":
+                return this.getRepository().findByEmailContaining(searchValue, pageable);
+            case "priority":
+                return this.getRepository().findByPriorityContaining(PriorityEnum.valueOf(searchValue), pageable);
+            case "privacy":
+                return this.getRepository().findByPrivacyContaining(PrivacyEnum.valueOf(searchValue), pageable);
+            case "null":
+                super.getAllBy(pageable, searchBy, searchValue);
+            default:
+                this.responseStatus(HttpStatus.BAD_REQUEST, "By " + searchBy + " is incorrect");
+        }
+        return null;
+    }
 
     @Override
     public void create(AbstractValidator abstractValidator) {

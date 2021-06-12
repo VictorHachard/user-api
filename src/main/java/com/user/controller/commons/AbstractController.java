@@ -43,10 +43,12 @@ public abstract class AbstractController<E, D> {
 
     @GetMapping("dto")
     public List<D> getAllDto(@RequestParam(defaultValue = "0") Integer pageIndex,
-                          @RequestParam(defaultValue = "10") Integer pageSize,
-                          @RequestParam(defaultValue = "id") String sortBy,
-                          @RequestParam(defaultValue = "asc") String orderBy) {
-        return (List<D>) this.getService().getAllDto(pageIndex, pageSize, sortBy, orderBy);
+                             @RequestParam(defaultValue = "10") Integer pageSize,
+                             @RequestParam(defaultValue = "id") String sortBy,
+                             @RequestParam(defaultValue = "asc") String orderBy,
+                             @RequestParam(defaultValue = "null") String searchBy,
+                             @RequestParam(defaultValue = "null") String searchValue) {
+        return (List<D>) this.getService().getAllDto(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue);
     }
 
     @GetMapping("raw/{id}")
@@ -56,10 +58,12 @@ public abstract class AbstractController<E, D> {
 
     @GetMapping("raw")
     public List<E> getAll(@RequestParam(defaultValue = "0") Integer pageIndex,
-                       @RequestParam(defaultValue = "10") Integer pageSize,
-                       @RequestParam(defaultValue = "id") String sortBy,
-                       @RequestParam(defaultValue = "asc") String orderBy) {
-        return (List<E>) this.getService().getAll(pageIndex, pageSize, sortBy, orderBy);
+                          @RequestParam(defaultValue = "10") Integer pageSize,
+                          @RequestParam(defaultValue = "id") String sortBy,
+                          @RequestParam(defaultValue = "asc") String orderBy,
+                          @RequestParam(defaultValue = "null") String searchBy,
+                          @RequestParam(defaultValue = "null") String searchValue) {
+        return (List<E>) this.getService().getAll(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue);
     }
 
 }

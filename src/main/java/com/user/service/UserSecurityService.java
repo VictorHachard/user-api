@@ -15,6 +15,8 @@ import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,19 @@ import java.util.List;
 public class UserSecurityService extends AbstractService<UserSecurity, UserSecurityRepository> {
 
     @Override
+    public Page<UserSecurity> getAllBy(Pageable pageable, String searchBy, String searchValue) {
+        switch (searchBy) {
+            case "username":
+                return this.getRepository().findByUsernameContaining(searchValue, pageable);
+            case "null":
+                return super.getAllBy(pageable, searchBy, searchValue);
+            default:
+                this.responseStatus(HttpStatus.BAD_REQUEST, "By " + searchBy + " is incorrect");
+        }
+        return null;
+    }
+
+    @Override
     public void create(AbstractValidator abstractValidator) {
         UserSecurityValidator validator = (UserSecurityValidator) abstractValidator;
         this.create(validator.getUsername(), validator.getEmail(), validator.getPassword());
@@ -38,7 +53,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
 
     public UserSecurity create(String username, String email, String password) {
         String emailLower = email.toLowerCase();
-        //boolean existsByEmail = this.getRepository().existsByEmail(emailLower);
         boolean existsByEmailPriority = emailRepository.existsByEmailAndPriority(emailLower, PriorityEnum.PRINCIPAL);
         boolean existsByUsername = this.getRepository().existsByUsername(username);
         if (existsByUsername) {

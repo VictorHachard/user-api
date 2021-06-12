@@ -1,7 +1,10 @@
 package com.user.model.repositories;
 
+import com.user.model.entities.Email;
 import com.user.model.entities.UserSecurity;
 import com.user.model.repositories.commons.AbstractRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -30,5 +33,7 @@ public interface UserSecurityRepository extends AbstractRepository<UserSecurity,
     Optional<UserSecurity> findByAuthToken(@Param("authToken") String authToken);
 
     Boolean existsByAuthToken(@Param("authToken") String authToken);
+
+    Page<UserSecurity> findByUsernameContaining(String username, Pageable pageable);
 
 }
