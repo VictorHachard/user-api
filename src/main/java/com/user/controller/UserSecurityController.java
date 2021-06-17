@@ -28,10 +28,10 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     }
 
     @PostMapping("login")
-    public UserSecurityDto login(@RequestHeader("Authentification") String auth) {
+    public UserSecurityDto login(@Valid @RequestBody String auth) {
         UserSecurityService service = (UserSecurityService) this.getService();
+        System.out.println(auth);
         String token = new String(Base64.getDecoder().decode(auth));
-        token = token.replace("Basic ", "");
 
         UserSecurityDto res = service.login(token.substring(0, token.indexOf(":")),
                 token.substring(token.indexOf(":") + 1));

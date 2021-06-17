@@ -25,5 +25,5 @@ public interface EmailRepository extends AbstractRepository<Email, Long> {
     Page<Email> findByPriorityContaining(PriorityEnum priorityEnum, Pageable pageable);
 
     Page<Email> findByPrivacyContaining(PrivacyEnum privacyEnum, Pageable pageable);
-    
+
 }

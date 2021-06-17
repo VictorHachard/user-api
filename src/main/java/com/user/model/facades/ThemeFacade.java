@@ -15,4 +15,9 @@ public class ThemeFacade extends AbstractFacade<Theme> {
         return res;
     }
 
+    public void updateInstance(Theme theme, String name, boolean active) {
+        theme.setName(name);
+        theme.setActive(active);
+    }
+
 }
