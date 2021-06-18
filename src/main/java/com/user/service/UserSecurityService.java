@@ -1,16 +1,13 @@
 package com.user.service;
 
+import com.user.dto.CookieRememberDto;
 import com.user.dto.UserSecurityDto;
-import com.user.model.entities.Email;
-import com.user.model.entities.Password;
-import com.user.model.entities.UserSecurity;
+import com.user.model.entities.*;
 import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.repositories.UserSecurityRepository;
 import com.user.service.commons.AbstractService;
 import com.user.utils.Utils;
-import com.user.validator.EmailValidator;
-import com.user.validator.LoginFromCookieValidator;
-import com.user.validator.UserSecurityValidator;
+import com.user.validator.*;
 import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -96,30 +93,91 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
 
     private void setAuthToken(UserSecurity u) {
         String token;
-        do { token = Utils.generateNewToken(48); } while (cookieRememberRepository.existsByToken(token));
-        u.setAuthToken(token);
+        do { token = Utils.generateNewToken(48); } while (userSecurityRepository.existsByAuthToken(token));
         u.setAuthTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
         this.getRepository().save(u);
     }
 
     public void logOut() {
-
     }
 
     public void addEmail(EmailValidator validator) {
         if (PriorityEnum.valueOf(validator.getPriorityEnum()) == PriorityEnum.PRINCIPAL) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "You cannot define a new PRINCIPAL email, only one PRINCIPAL email");
         }
-        Email e = emailService.create(validator.getEmail().toLowerCase(), PriorityEnum.SECONDARY);
         UserSecurity u = this.getUser();
+        Email e = emailService.create(validator.getEmail().toLowerCase(), PriorityEnum.SECONDARY);
         u.addEmail(e);
         this.getRepository().save(u);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success new email added");
     }
 
+    public void addPassword(PasswordValidator validator) {
+        UserSecurity u = this.getUser();
+        Password p = passwordService.create(validator.getPassword());
+        u.addPassword(p);
+        this.getRepository().save(u);
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success new password added");
+    }
+
+    public CookieRememberDto addCookie(CookieRememberValidator validator) {
+        UserSecurity u = this.getUser();
+        CookieRemember cr = cookieRememberService.create(validator);
+        u.addCookie(cr);
+        this.getRepository().save(u);
+        return cookieRememberMapper.getDto(cr);
+    }
+
+    public void addGroup(long groupId, long userId) {
+        Group g = groupService.get(groupId);
+        UserSecurity u = this.get(userId);
+        if (u.getGroupList().contains(g)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This group is already define for this user");
+        }
+        u.addGroup(g);
+        this.getRepository().save(u);
+    }
+
+    public void addRole(long roleId, long userId) {
+        Role r = roleService.get(roleId);
+        UserSecurity u = this.get(userId);
+        if (u.getPermissionList().contains(r)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This role is already define for this user");
+        }
+        u.addRole(r);
+        this.getRepository().save(u);
+    }
+
+    public void removeGroup(long groupId, long userId) {
+        Group g = groupService.get(groupId);
+        UserSecurity u = this.get(userId);
+        if (!u.getGroupList().contains(g)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This group is not define for this user");
+        }
+        u.getGroupList().remove(g);
+        this.getRepository().save(u);
+    }
+
+    public void removeRole(long roleId, long userId) {
+        Role r = roleService.get(roleId);
+        UserSecurity u = this.get(userId);
+        if (!u.getPermissionList().contains(r)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This role is not define for this user");
+        }
+        u.getPermissionList().remove(r);
+        this.getRepository().save(u);
+    }
+
     public void removeEmail(long id) {
         //TODO remove from user
         emailService.delete(id);
+    }
+
+    public void removeCookie(long id) {
+        CookieRemember cr = cookieRememberService.get(id);
+        UserSecurity u = this.getUser();
+        u.getCookieList().remove(cr);
+        cookieRememberService.delete(id);
     }
 
     /*public boolean checkToken(Users user, String token) {
@@ -132,5 +190,30 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         user.setToken(Utils.generateNewToken(60));
         user.setTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
     }*/
+
+    /* Actions */
+
+    public void actionConfirmEmail(String token) {
+        emailService.confirmEmail(token);
+    }
+
+    public void actionResetPassword(String token) {
+        if (!this.getRepository().existsByPasswordResetToken(token)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This token is doesn't not exist");
+        }
+        UserSecurity u = this.getRepository().findByPasswordResetToken(token).get();
+        userSecurityFacade.confirmToken(u);
+        this.getRepository().save(u);
+    }
+
+    public void actionForgetPassword(String usernameOrEmail) {
+        if (!this.getRepository().existsByEmailOrUsername(usernameOrEmail)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "Cannot find an user witch this email or username");
+        }
+        UserSecurity u = this.getRepository().findByEmailOrUsername(usernameOrEmail).get();
+        //TODO check not the first time
+        userSecurityFacade.initToken(u);
+        this.getRepository().save(u);
+    }
 
 }

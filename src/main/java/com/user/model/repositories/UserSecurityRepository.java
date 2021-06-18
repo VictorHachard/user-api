@@ -1,6 +1,5 @@
 package com.user.model.repositories;
 
-import com.user.model.entities.Email;
 import com.user.model.entities.UserSecurity;
 import com.user.model.repositories.commons.AbstractRepository;
 import org.springframework.data.domain.Page;
@@ -13,6 +12,16 @@ import java.util.Optional;
 
 @Repository
 public interface UserSecurityRepository extends AbstractRepository<UserSecurity, Long> {
+
+    @Query("SELECT case when count(u)> 0 then true else false end FROM UserSecurity u JOIN u.emailList e where e.email =?1 or u.username =?1")
+    Boolean existsByEmailOrUsername(@Param("emailOrUsername") String emailOrUsername);
+
+    @Query("SELECT u FROM UserSecurity u JOIN u.emailList e where e.email =?1 or u.username =?1")
+    Optional<UserSecurity> findByEmailOrUsername(@Param("emailOrUsername") String emailOrUsername);
+
+    Boolean existsByPasswordResetToken(@Param("passwordResetToken") String passwordResetToken);
+
+    Optional<UserSecurity> findByPasswordResetToken(@Param("passwordResetToken") String passwordResetToken);
 
     @Query("SELECT u FROM UserSecurity u join u.emailList e where e.email =?1")
     Optional<UserSecurity> findByEmail(@Param("email") String email);

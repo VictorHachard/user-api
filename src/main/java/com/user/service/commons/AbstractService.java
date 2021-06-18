@@ -35,12 +35,12 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         return (T) InitMap.get(this.getClass(), MapTypeEnum.REPOSITORY);
     }
 
-    protected UserSecurity getUser() {
-        return null;
-    }
-
     protected AbstractMapper getMapper() {
         return InitMap.get(this.getClass(), MapTypeEnum.MAPPER);
+    }
+
+    protected UserSecurity getUser() {
+        return null;
     }
 
     public long count() {

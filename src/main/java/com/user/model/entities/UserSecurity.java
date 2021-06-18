@@ -26,6 +26,17 @@ public class UserSecurity extends AbstractEntity {
     @Column(unique = true, nullable = false)
     String username;
 
+    @Column(unique = true)
+    String passwordResetToken;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    Date passwordResetSet;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    Date passwordResetAt;
+
     @OneToMany
     Set<Password> passwordList = new HashSet<>();
 
@@ -85,6 +96,18 @@ public class UserSecurity extends AbstractEntity {
 
     public void addEmail(Email... emails) {
         emailList.addAll(Arrays.asList(emails));
+    }
+
+    public void addCookie(CookieRemember... cookieRemembers) {
+        cookieList.addAll(Arrays.asList(cookieRemembers));
+    }
+
+    public void addGroup(Group... groups) {
+        groupList.addAll(Arrays.asList(groups));
+    }
+
+    public void addRole(Role... roles) {
+        permissionList.addAll(Arrays.asList(roles));
     }
 
 }

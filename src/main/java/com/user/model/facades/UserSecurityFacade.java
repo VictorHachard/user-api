@@ -5,9 +5,15 @@ import com.user.model.entities.Password;
 import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.PrivacyEnum;
 import com.user.model.facades.commons.AbstractFacade;
+import com.user.utils.Utils;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+
 @Component
+// Lombok
+@Log
 public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
 
     public UserSecurity newInstance(Email e, Password p, String u) {
@@ -18,6 +24,22 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
 
         res.setPrivacy(PrivacyEnum.PRIVATE);
         return res;
+    }
+
+    public void initToken(UserSecurity u) {
+        String token;
+        do { token = Utils.generateNewToken(48); } while (userSecurityRepository.existsByPasswordResetToken(token));
+        u.setPasswordResetToken(token);
+        u.setPasswordResetSet(new Timestamp(System.currentTimeMillis()));
+        u.setAuthTokenCreatedAt(null);
+        log.info("The reset token for the user password is " + u.getPasswordResetToken()
+                + ", the link is: http://localhost:4200/confirm/" + u.getPasswordResetToken());
+    }
+
+    public void confirmToken(UserSecurity u) {
+        u.setPasswordResetToken(null);
+        u.setPasswordResetSet(null);
+        u.setAuthTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
     }
 
 }

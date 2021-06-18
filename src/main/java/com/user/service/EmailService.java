@@ -1,6 +1,8 @@
 package com.user.service;
 
+import com.user.model.entities.CookieRemember;
 import com.user.model.entities.Email;
+import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.entities.enums.PrivacyEnum;
 import com.user.model.repositories.EmailRepository;
@@ -14,9 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 // Lombok
@@ -67,6 +66,15 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
         } else {
             this.getRepository().deleteById(id);
         }
+    }
+
+    public void confirmEmail(String token) {
+        if (!this.getRepository().existsByEmailConfirmedToken(token)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This token is doesn't not exist");
+        }
+        Email e = this.getRepository().findByEmailConfirmedToken(token).get();
+        emailFacade.confirmToken(e);
+        this.getRepository().save(e);
     }
 
 }

@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface EmailRepository extends AbstractRepository<Email, Long> {
 
@@ -18,7 +20,9 @@ public interface EmailRepository extends AbstractRepository<Email, Long> {
     @Query("SELECT case when count(e)> 0 then true else false end FROM Email e where e.email =?1 and e.priority =?2")
     Boolean existsByEmailAndPriority(@Param("email") String email, @Param("priority") PriorityEnum priority);
 
-    Boolean  existsByEmailConfirmedToken(@Param("emailConfirmedToken") String emailConfirmedToken);
+    Boolean existsByEmailConfirmedToken(@Param("emailConfirmedToken") String emailConfirmedToken);
+
+    Optional<Email> findByEmailConfirmedToken(@Param("emailConfirmedToken") String emailConfirmedToken);
 
     Page<Email> findByEmailContaining(String email, Pageable pageable);
 

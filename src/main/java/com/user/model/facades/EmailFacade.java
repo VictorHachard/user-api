@@ -34,4 +34,11 @@ public class EmailFacade extends AbstractFacade<Email> {
                 + ", the link is: http://localhost:4200/confirm/" + e.getEmailConfirmedToken());
     }
 
+    public void confirmToken(Email e) {
+        e.setEmailConfirmed(true);
+        e.setEmailConfirmedToken(null);
+        e.setEmailConfirmedSet(null);
+        e.setEmailConfirmedAt(new Timestamp(System.currentTimeMillis()));
+    }
+
 }
