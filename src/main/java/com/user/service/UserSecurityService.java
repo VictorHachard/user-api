@@ -80,7 +80,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         return (UserSecurityDto) this.getMapper().getDto(user);
     }
 
-    public UserSecurityDto connectFromCookie(LoginFromCookieValidator validator) {
+    public UserSecurityDto connectCookie(LoginFromCookieValidator validator) {
         if (!this.getRepository().existsByCookieRemember(validator.getToken())) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "The token is not correct");
         }

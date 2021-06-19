@@ -21,7 +21,7 @@ public abstract class AbstractController<E, D> {
         return InitMap.get(this.getClass(), MapTypeEnum.SERVICE);
     }
 
-    @GetMapping("/count")
+    @GetMapping("count")
     public long count() {
         return this.getService().count();
     }

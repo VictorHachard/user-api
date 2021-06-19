@@ -36,10 +36,10 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         return res;
     }
 
-    @PostMapping("loginFromCookie")
-    public UserSecurityDto loginFromCookie(@Valid @RequestBody LoginFromCookieValidator validator) {
+    @PostMapping("login/Cookie")
+    public UserSecurityDto loginCookie(@Valid @RequestBody LoginFromCookieValidator validator) {
         UserSecurityService service = ((UserSecurityService) this.getService());
-        UserSecurityDto res = service.connectFromCookie(validator);
+        UserSecurityDto res = service.connectCookie(validator);
         log.info("LOGIN " + res.getAuthToken() + " is the token of user " + res.getUsername());
         return res;
     }
