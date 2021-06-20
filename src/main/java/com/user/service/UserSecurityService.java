@@ -84,7 +84,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         if (!this.getRepository().existsByCookieRemember(validator.getToken())) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "The token is not correct");
         }
-
         UserSecurity user = this.getRepository().findByCookieRemember(validator.getToken()).get();
         //TODO check if token not expired
         this.setAuthToken(user);
@@ -94,11 +93,21 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
     private void setAuthToken(UserSecurity u) {
         String token;
         do { token = Utils.generateNewToken(48); } while (userSecurityRepository.existsByAuthToken(token));
+        u.setAuthToken(token);
         u.setAuthTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
+        u.setLastConnection(new Timestamp(System.currentTimeMillis()));
+        log.info("LOGIN " + u.getAuthToken() + " is the token of user " + u.getUsername());
         this.getRepository().save(u);
     }
 
-    public void logOut() {
+    public void logOut(String authToken) {
+        if (!this.getRepository().existsByAuthToken(authToken)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "The token is not correct");
+        }
+        UserSecurity u = this.getRepository().findByAuthToken(authToken).get();
+        u.setAuthToken(null);
+        u.setAuthTokenCreatedAt(null);
+        log.info("LOGOUT of user " + u.getUsername());
     }
 
     public void addEmail(EmailValidator validator) {
@@ -169,8 +178,17 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
     }
 
     public void removeEmail(long id) {
-        //TODO remove from user
-        emailService.delete(id);
+        if (!emailRepository.existsById(id)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
+        }
+        Email e = emailRepository.findById(id).get();
+        if (e.getPriority() == PriorityEnum.PRINCIPAL) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "Cannot delete PRINCIPAL email");
+        } else {
+            UserSecurity u = this.getRepository().findByEmailId(id).get();
+            u.getEmailList().remove(e);
+            emailRepository.deleteById(id);
+        }
     }
 
     public void removeCookie(long id) {
@@ -184,11 +202,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         return user.getToken() != null
                 && user.getToken().equals(token)
                 && Date.from(Instant.now().minusSeconds(86400)).after(user.getTokenCreatedAt());
-    }
-
-    public void setToken(Users user) {
-        user.setToken(Utils.generateNewToken(60));
-        user.setTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
     }*/
 
     /* Actions */

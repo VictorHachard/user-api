@@ -32,16 +32,20 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         String token = new String(Base64.getDecoder().decode(auth));
         UserSecurityDto res = service.login(token.substring(0, token.indexOf(":")),
                 token.substring(token.indexOf(":") + 1));
-        log.info("LOGIN " + res.getAuthToken() + " is the token of user " + res.getUsername());
         return res;
     }
 
-    @PostMapping("login/Cookie")
+    @PostMapping("login/cookie")
     public UserSecurityDto loginCookie(@Valid @RequestBody LoginFromCookieValidator validator) {
         UserSecurityService service = ((UserSecurityService) this.getService());
         UserSecurityDto res = service.connectCookie(validator);
-        log.info("LOGIN " + res.getAuthToken() + " is the token of user " + res.getUsername());
         return res;
+    }
+
+    @PostMapping("logout")
+    public void loginCookie(@Valid @RequestBody String authToken) {
+        UserSecurityService service = ((UserSecurityService) this.getService());
+        service.logOut(authToken);
     }
 
     @PostMapping("add/email")

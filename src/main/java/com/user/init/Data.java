@@ -12,6 +12,7 @@ import com.user.utils.Utils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.omnifaces.cdi.Startup;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -26,20 +27,20 @@ public class Data extends AbstractAutowire {
 
     Lorem lorem = LoremIpsum.getInstance();
 
-
-    static List<Email> emailList = new ArrayList<>();
-    static List<Group> groupList = new ArrayList<>();
-
     @PostConstruct
     public void init() {
 
         for (int i = 0; i < 50; i++) {
-            Password p = passwordFacade.newInstance("Test123*");
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            Password p = passwordFacade.newInstance(passwordEncoder.encode("Test123*"));
             Email e = emailFacade.newInstance(lorem.getEmail(), PriorityEnum.PRINCIPAL, PrivacyEnum.PRIVATE);
             emailFacade.initToken(e);
             String un;
             do { un = lorem.getFirstName(); } while (userSecurityRepository.existsByUsername(un));
             UserSecurity u = userSecurityFacade.newInstance(e, p, un);
+            u.setFirstName(lorem.getFirstName());
+            u.setLastName(lorem.getLastName());
+            u.setMiddleName("");
             passwordRepository.save(p);
             emailRepository.save(e);
             userSecurityRepository.save(u);
