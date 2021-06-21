@@ -23,7 +23,16 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         res.addEmail(e);
 
         res.setPrivacy(PrivacyEnum.PRIVATE);
+        res.setTheme(themeRepository.findAll().get(0));
         return res;
+    }
+
+    public void updateInstance(UserSecurity u, String firstName, String middleName, String lastName, String biography, String url) {
+        u.setMiddleName(middleName);
+        u.setLastName(lastName);
+        u.setFirstName(firstName);
+        u.setBiography(biography);
+        u.setUrl(url);
     }
 
     public void initToken(UserSecurity u) {

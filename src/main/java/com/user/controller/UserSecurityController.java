@@ -42,16 +42,41 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         return res;
     }
 
-    @PostMapping("logout")
-    public void loginCookie(@Valid @RequestBody String authToken) {
+    @PostMapping("login/update")
+    public UserSecurityDto loginUpdate() {
         UserSecurityService service = ((UserSecurityService) this.getService());
-        service.logOut(authToken);
+        UserSecurityDto res = service.loginUpdate();
+        return res;
+    }
+
+    @PostMapping("logout")
+    public void logout() {
+        UserSecurityService service = ((UserSecurityService) this.getService());
+        service.logOut();
     }
 
     @PostMapping("add/email")
     public void addEmail(@Valid @RequestBody EmailValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.addEmail(validator);
+    }
+
+    @PostMapping("update/email/priority")
+    public void updateEmailPriority(@Valid @RequestBody EmailValidator validator) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.updateEmailPriority(validator);
+    }
+
+    @PostMapping("update/appearance/{appearanceId}")
+    public void updateAppearance(@PathVariable("appearanceId") long appearanceId) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.updateAppearance(appearanceId);
+    }
+
+    @PostMapping("update/profile")
+    public void updateProfile(@Valid @RequestBody UpdateProfileValidator validator) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.updateProfile(validator);
     }
 
     @PostMapping("add/password")
@@ -78,25 +103,25 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.addGroup(groupId, userId);
     }
 
-    @PostMapping("remove/role/{roleId}/user/{userId}")
+    @DeleteMapping("remove/role/{roleId}/user/{userId}")
     public void removeRole(@PathVariable("roleId") long roleId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeRole(roleId, userId);
     }
 
-    @PostMapping("remove/group/{groupId}/user/{userId}")
+    @DeleteMapping("remove/group/{groupId}/user/{userId}")
     public void removeGroup(@PathVariable("groupId") long groupId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeGroup(groupId, userId);
     }
 
-    @PostMapping("remove/email/{id}")
+    @DeleteMapping("remove/email/{id}")
     public void removeEmail(@PathVariable("id") long id) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeEmail(id);
     }
 
-    @PostMapping("remove/cookie/{id}")
+    @DeleteMapping("remove/cookie/{id}")
     public void removeCookie(@PathVariable("id") long id) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeCookie(id);

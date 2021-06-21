@@ -1,5 +1,6 @@
 package com.user.service.commons;
 
+import com.user.TokenInterceptor;
 import com.user.dto.commons.Dto;
 import com.user.init.AbstractAutowire;
 import com.user.init.InitMap;
@@ -40,7 +41,7 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
     }
 
     protected UserSecurity getUser() {
-        return null;
+        return TokenInterceptor.userSecurity;
     }
 
     public long count() {

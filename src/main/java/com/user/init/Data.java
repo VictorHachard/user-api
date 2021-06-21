@@ -30,6 +30,10 @@ public class Data extends AbstractAutowire {
     @PostConstruct
     public void init() {
 
+        themeRepository.save(themeFacade.newInstance("Default light", true, 0));
+        themeRepository.save(themeFacade.newInstance("Default dark", true, 0));
+        themeRepository.save(themeFacade.newInstance("Dark dimmed", true, 0));
+
         for (int i = 0; i < 50; i++) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             Password p = passwordFacade.newInstance(passwordEncoder.encode("Test123*"));

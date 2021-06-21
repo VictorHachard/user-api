@@ -36,7 +36,9 @@ public class ThemeMapper extends AbstractMapper<ThemeDto, Theme> {
     }
 
     public ThemeSimplifiedDto getSimplifiedDto(Theme e) {
-        ThemeSimplifiedDto dto = (ThemeSimplifiedDto) super.getAbstractDto(e);
+        ThemeSimplifiedDto dto = new ThemeSimplifiedDto();
+        dto.setId(e.getId());
+        dto.setCreatedAt(e.getCreatedAt());
         dto.setName(e.getName());
         return dto;
     }

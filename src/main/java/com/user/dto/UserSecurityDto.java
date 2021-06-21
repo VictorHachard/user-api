@@ -17,6 +17,8 @@ public class UserSecurityDto extends Dto {
 
     String username;
 
+    String nameFormatted;
+
     String authToken;
 
     String privacy;

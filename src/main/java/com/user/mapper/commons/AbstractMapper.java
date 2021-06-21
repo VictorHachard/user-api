@@ -50,7 +50,7 @@ public abstract class AbstractMapper<T, E> extends AbstractAutowire {
         }
         obj.setId(ae.getId());
         obj.setCreatedAt(ae.getCreatedAt());
-        //obj.setCreatedAtFormated(Utils.niceDate(ae.getCreatedAt()));
+        //obj.setCreatedAtFormatted(Utils.niceDate(ae.getCreatedAt()));
         return obj;
     }
 

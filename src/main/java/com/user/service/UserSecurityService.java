@@ -90,6 +90,10 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         return (UserSecurityDto) this.getMapper().getDto(user);
     }
 
+    public UserSecurityDto loginUpdate() {
+        return (UserSecurityDto) getMapper().getDto(this.getUser());
+    }
+
     private void setAuthToken(UserSecurity u) {
         String token;
         do { token = Utils.generateNewToken(48); } while (userSecurityRepository.existsByAuthToken(token));
@@ -100,25 +104,55 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         this.getRepository().save(u);
     }
 
-    public void logOut(String authToken) {
-        if (!this.getRepository().existsByAuthToken(authToken)) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "The token is not correct");
-        }
-        UserSecurity u = this.getRepository().findByAuthToken(authToken).get();
+    public void logOut() {
+        UserSecurity u = this.getUser();
         u.setAuthToken(null);
         u.setAuthTokenCreatedAt(null);
         log.info("LOGOUT of user " + u.getUsername());
     }
 
     public void addEmail(EmailValidator validator) {
-        if (PriorityEnum.valueOf(validator.getPriorityEnum()) == PriorityEnum.PRINCIPAL) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "You cannot define a new PRINCIPAL email, only one PRINCIPAL email");
-        }
         UserSecurity u = this.getUser();
         Email e = emailService.create(validator.getEmail().toLowerCase(), PriorityEnum.SECONDARY);
         u.addEmail(e);
+        System.out.println(u.getUsername());
         this.getRepository().save(u);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success new email added");
+    }
+
+    public void updateEmailPriority(EmailValidator validator) {
+        if (!this.getRepository().existsByEmail(validator.getEmail())) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "The email is not correct");
+        }
+        UserSecurity u = this.getUser();
+        boolean contain = false;
+        for (Email ee : u.getEmailList()) {if (ee.getEmail().equals(validator.getEmail())) {contain = true; break;}}
+        if (!contain) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "The user don't have this email");
+        }
+        for (Email e : u.getEmailList()) {
+            if (e.getPriority() == PriorityEnum.PRINCIPAL) {
+                e.setPriority(PriorityEnum.SECONDARY);
+                emailRepository.save(e);
+            }
+        }
+        emailService.updateEmailPriority(validator.getEmail());
+        this.getRepository().save(u);
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success new email added");
+    }
+
+    public void updateProfile(UpdateProfileValidator validator) {
+        UserSecurity u = this.getUser();
+        userSecurityFacade.updateInstance(u, validator.getFirstName(), validator.getMiddleName(), validator.getLastName(), validator.getBiography(), validator.getUrl());
+        this.getRepository().save(u);
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success update user");
+    }
+
+    public void updateAppearance(long id) {
+        UserSecurity u = this.getUser();
+        u.setTheme(themeService.get(id));
+        this.getRepository().save(u);
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success update appearance");
     }
 
     public void addPassword(PasswordValidator validator) {

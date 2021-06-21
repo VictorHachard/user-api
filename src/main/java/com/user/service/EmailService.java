@@ -43,7 +43,7 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
     @Override
     public void create(AbstractValidator abstractValidator) {
         EmailValidator validator = (EmailValidator) abstractValidator;
-        this.create(validator.getEmail(), PriorityEnum.valueOf(validator.getPriorityEnum())); //TODO check value
+        this.create(validator.getEmail(), PriorityEnum.SECONDARY);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success " + this.getClass().getSimpleName().toLowerCase() + " created");
     }
 
@@ -70,10 +70,19 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
 
     public void confirmEmail(String token) {
         if (!this.getRepository().existsByEmailConfirmedToken(token)) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "This token is doesn't not exist");
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This token is doesn't exist");
         }
         Email e = this.getRepository().findByEmailConfirmedToken(token).get();
         emailFacade.confirmToken(e);
+        this.getRepository().save(e);
+    }
+
+    public void updateEmailPriority(String es) {
+        if (!this.getRepository().existsByEmail(es)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This email doesn't exist");
+        }
+        Email e = this.getRepository().findByEmail(es).get();
+        e.setPriority(PriorityEnum.PRINCIPAL);
         this.getRepository().save(e);
     }
 

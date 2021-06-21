@@ -17,6 +17,8 @@ public interface EmailRepository extends AbstractRepository<Email, Long> {
 
     Boolean existsByEmail(@Param("email") String email);
 
+    Optional<Email> findByEmail(@Param("email") String email);
+
     @Query("SELECT case when count(e)> 0 then true else false end FROM Email e where e.email =?1 and e.priority =?2")
     Boolean existsByEmailAndPriority(@Param("email") String email, @Param("priority") PriorityEnum priority);
 

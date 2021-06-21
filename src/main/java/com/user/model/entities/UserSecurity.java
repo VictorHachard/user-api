@@ -63,16 +63,16 @@ public class UserSecurity extends AbstractEntity {
     @ManyToOne
     Theme theme;
 
-    @OneToMany()
+    @OneToMany(fetch = FetchType.EAGER)
     Set<CookieRemember> cookieList = new HashSet<>();
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> permissionList = new HashSet<>();
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<Group> groupList = new HashSet<>();
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<Email> emailList = new HashSet<>();
 
     @Column

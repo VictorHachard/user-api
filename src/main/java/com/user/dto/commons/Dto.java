@@ -1,5 +1,6 @@
 package com.user.dto.commons;
 
+import com.user.dto.EmailDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,12 +14,17 @@ import java.util.Date;
 @Log
 @Setter
 @Getter
-public class Dto {
+public class Dto implements Comparable<Dto> {
 
     long id;
 
     Date createdAt;
 
-    //String createdAtFormated;
+    @Override
+    public int compareTo(Dto o) {
+        return Long.compare(this.id, o.id);
+    }
+
+    //String createdAtFormatted;
 
 }
