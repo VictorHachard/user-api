@@ -31,7 +31,7 @@ public class EmailFacade extends AbstractFacade<Email> {
         e.setEmailConfirmedSet(new Timestamp(System.currentTimeMillis()));
         e.setEmailConfirmedAt(null);
         log.info("The validation token for " + e.getEmail() + " is " + e.getEmailConfirmedToken()
-                + ", the link is: http://localhost:4200/confirm/" + e.getEmailConfirmedToken());
+                + ", the link is: http://localhost:4200/confirm/email/" + e.getEmailConfirmedToken());
     }
 
     public void confirmToken(Email e) {

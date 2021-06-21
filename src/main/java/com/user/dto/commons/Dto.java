@@ -1,6 +1,5 @@
 package com.user.dto.commons;
 
-import com.user.dto.EmailDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

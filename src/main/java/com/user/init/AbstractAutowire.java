@@ -96,4 +96,16 @@ public abstract class AbstractAutowire {
     @Autowired
     ThemeFacade themeFacade;
 
+    @Autowired
+    SecurityLogRepository securityLogRepository;
+
+    @Autowired
+    SecurityLogMapper securityLogMapper;
+
+    @Autowired
+    SecurityLogService securityLogService;
+
+    @Autowired
+    SecurityLogFacade securityLogFacade;
+
 }

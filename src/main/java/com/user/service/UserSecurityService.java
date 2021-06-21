@@ -1,9 +1,11 @@
 package com.user.service;
 
 import com.user.dto.CookieRememberDto;
+import com.user.dto.SecurityLogDto;
 import com.user.dto.UserSecurityDto;
 import com.user.model.entities.*;
 import com.user.model.entities.enums.PriorityEnum;
+import com.user.model.entities.enums.SecurityLogEnum;
 import com.user.model.repositories.UserSecurityRepository;
 import com.user.service.commons.AbstractService;
 import com.user.utils.Utils;
@@ -20,7 +22,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 // Lombok
@@ -71,6 +75,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         }
         UserSecurity user = this.getRepository().findByUsername(username).get();
         List<Password> passwordList = new ArrayList<>(user.getPasswordList());
+        Collections.sort(passwordList);
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (!passwordEncoder.matches(password, passwordList.get(passwordList.size() -1).getPassword())) {
@@ -117,6 +122,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         u.addEmail(e);
         System.out.println(u.getUsername());
         this.getRepository().save(u);
+        securityLogService.create(SecurityLogEnum.EMAIL_ADDED, u, "Email " + e.getEmail() + " added");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success new email added");
     }
 
@@ -138,12 +144,24 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         }
         emailService.updateEmailPriority(validator.getEmail());
         this.getRepository().save(u);
+        securityLogService.create(SecurityLogEnum.EMAIL_CHANGE_PRIORITY, u, "Email " + validator.getEmail() + " updated to Principal");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success new email added");
     }
 
     public void updateProfile(UpdateProfileValidator validator) {
         UserSecurity u = this.getUser();
         userSecurityFacade.updateInstance(u, validator.getFirstName(), validator.getMiddleName(), validator.getLastName(), validator.getBiography(), validator.getUrl());
+        this.getRepository().save(u);
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success update user");
+    }
+
+    public void updateUsername(UpdateUsernameValidator validator) {
+        UserSecurity u = this.getUser();
+        boolean existsByUsername = this.getRepository().existsByUsername(validator.getUsername());
+        if (existsByUsername) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This username is already in the database");
+        }
+        userSecurityFacade.updateInstance(u, validator.getUsername());
         this.getRepository().save(u);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success update user");
     }
@@ -222,6 +240,8 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
             UserSecurity u = this.getRepository().findByEmailId(id).get();
             u.getEmailList().remove(e);
             emailRepository.deleteById(id);
+            securityLogService.create(SecurityLogEnum.EMAIL_REMOVED, u, "Email " + e.getEmail() + " removed");
+            this.responseStatus(HttpStatus.NO_CONTENT, "Email deleted");
         }
     }
 
@@ -238,10 +258,29 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
                 && Date.from(Instant.now().minusSeconds(86400)).after(user.getTokenCreatedAt());
     }*/
 
+    public List<SecurityLogDto> getAllSecurityLogDto(Integer pageIndex, Integer pageSize) {
+        UserSecurity u = this.getUser();
+        System.out.println(securityLogService.getAllDtoByUser(u, pageIndex, pageSize).getContent());
+        return securityLogMapper.getAllDto(securityLogService.getAllDtoByUser(u, pageIndex, pageSize).getContent());
+    }
+
     /* Actions */
 
     public void actionConfirmEmail(String token) {
         emailService.confirmEmail(token);
+    }
+
+    public void actionConfirmResendEmail(long id) {
+        if (!this.getRepository().existsByEmailId(id)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "The email is not correct");
+        }
+        UserSecurity u = this.getUser();
+        boolean contain = false;
+        for (Email ee : u.getEmailList()) {if (ee.getId() == id) {contain = true; break;}}
+        if (!contain) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "The user don't have this email");
+        }
+        emailService.resendConfirmEmail(emailService.get(id));
     }
 
     public void actionResetPassword(String token) {
@@ -261,6 +300,27 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         //TODO check not the first time
         userSecurityFacade.initToken(u);
         this.getRepository().save(u);
+        securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, u, "Email sent to " + u.getEmailList().stream().filter(email -> {return email.getPriority().equals(PriorityEnum.PRINCIPAL);}).collect(Collectors.toList()).get(0) + " for a password reset");
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success password forget");
+    }
+
+    public void actionSetPassword(SetPasswordValidator validator) {
+        UserSecurity u = this.getUser();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        List<Password> passwordList = new ArrayList<>(u.getPasswordList());
+        Collections.sort(passwordList);
+
+        System.out.println(validator.getOldPassword());
+        System.out.println(passwordList);
+        System.out.println(passwordList.get(passwordList.size() -1).getPassword());
+        if (!passwordEncoder.matches(validator.getOldPassword(), passwordList.get(passwordList.size() -1).getPassword())) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "The password is not correct");
+        }
+        Password p = passwordService.create(validator.getNewPassword());
+        u.addPassword(p);
+        this.getRepository().save(u);
+        securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, u, "Password update (no email)");
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success new password added");
     }
 
 }

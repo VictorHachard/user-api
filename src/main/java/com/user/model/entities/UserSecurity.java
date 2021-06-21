@@ -37,7 +37,7 @@ public class UserSecurity extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     Date passwordResetAt;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     Set<Password> passwordList = new HashSet<>();
 
     @Column

@@ -35,6 +35,10 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         u.setUrl(url);
     }
 
+    public void updateInstance(UserSecurity u, String username) {
+        u.setUsername(username);
+    }
+
     public void initToken(UserSecurity u) {
         String token;
         do { token = Utils.generateNewToken(48); } while (userSecurityRepository.existsByPasswordResetToken(token));

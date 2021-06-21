@@ -99,8 +99,8 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         return (Dto) this.getMapper().getDto(this.get(id));
     }
 
-    public List<Dto> getAllDto(Integer pageNo, Integer pageSize, String sortBy, String orderBy, String searchBy, String searchValue) {
-        return (List<Dto>) this.getMapper().getAllDto(this.getAll(pageNo, pageSize, sortBy, orderBy, searchBy, searchValue));
+    public List<Dto> getAllDto(Integer pageIndex, Integer pageSize, String sortBy, String orderBy, String searchBy, String searchValue) {
+        return (List<Dto>) this.getMapper().getAllDto(this.getAll(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue));
     }
 
     public void create(AbstractValidator abstractValidator) {

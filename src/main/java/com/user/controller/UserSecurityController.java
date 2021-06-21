@@ -2,6 +2,7 @@ package com.user.controller;
 
 import com.user.controller.commons.AbstractController;
 import com.user.dto.CookieRememberDto;
+import com.user.dto.SecurityLogDto;
 import com.user.dto.UserSecurityDto;
 import com.user.model.entities.UserSecurity;
 import com.user.service.UserSecurityService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Base64;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/user/")
@@ -79,6 +81,12 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.updateProfile(validator);
     }
 
+    @PostMapping("update/username")
+    public void updateProfile(@Valid @RequestBody UpdateUsernameValidator validator) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.updateUsername(validator);
+    }
+
     @PostMapping("add/password")
     public void addPassword(@Valid @RequestBody PasswordValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
@@ -127,8 +135,11 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.removeCookie(id);
     }
 
-    public void addPassword() {
-
+    @GetMapping("dto/security-log")
+    public List<SecurityLogDto> getAllSecurityLogDto(@RequestParam(defaultValue = "0") Integer pageIndex,
+                                                     @RequestParam(defaultValue = "10") Integer pageSize) {
+        UserSecurityService service = ((UserSecurityService) this.getService());
+        return service.getAllSecurityLogDto(pageIndex, pageSize);
     }
 
     /* Actions */
@@ -137,6 +148,12 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     public void actionConfirmEmail(@Valid @RequestBody String token) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.actionConfirmEmail(token);
+    }
+
+    @PostMapping("action/confirm/resend/email/{emailId}")
+    public void actionConfirmResendEmail(@PathVariable("emailId") long emailId) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.actionConfirmResendEmail(emailId);
     }
 
     @PostMapping("action/reset/password")
@@ -149,6 +166,12 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     public void actionForgetPassword(@Valid @RequestBody String usernameOrEmail) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.actionForgetPassword(usernameOrEmail);
+    }
+
+    @PostMapping("action/set/password")
+    public void setPassword(@Valid @RequestBody SetPasswordValidator validator) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.actionSetPassword(validator);
     }
 
 }

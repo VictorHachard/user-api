@@ -1,8 +1,6 @@
 package com.user.service;
 
-import com.user.model.entities.CookieRemember;
 import com.user.model.entities.Email;
-import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.entities.enums.PrivacyEnum;
 import com.user.model.repositories.EmailRepository;
@@ -66,6 +64,11 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
         } else {
             this.getRepository().deleteById(id);
         }
+    }
+
+    public void resendConfirmEmail(Email e) {
+        emailFacade.initToken(e);
+        this.getRepository().save(e);
     }
 
     public void confirmEmail(String token) {
