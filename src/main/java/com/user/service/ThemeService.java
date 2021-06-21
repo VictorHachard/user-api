@@ -20,12 +20,12 @@ public class ThemeService extends AbstractService<Theme, ThemeRepository> {
     @Override
     public void create(AbstractValidator abstractValidator) {
         ThemeValidator validator = (ThemeValidator) abstractValidator;
-        this.create(validator.getName(), validator.getIsActive());
+        this.create(validator.getName(), validator.getIsActive(), validator.getImageUrl());
         this.responseStatus(HttpStatus.NO_CONTENT, "Success " + this.getClass().getSimpleName().toLowerCase() + " created");
     }
 
-    public Theme create(String password, Boolean active) {
-        Theme t = themeFacade.newInstance(password, active, Math.toIntExact(this.count()));
+    public Theme create(String password, Boolean active, String imageUrl) {
+        Theme t = themeFacade.newInstance(password, active, Math.toIntExact(this.count()), imageUrl);
         this.getRepository().save(t);
         return t;
     }

@@ -21,6 +21,10 @@ public class ThemeValidator extends AbstractValidator {
     String name;
 
     @NotNull(message = "")
+    @NotEmpty
+    String imageUrl;
+
+    @NotNull(message = "")
     Boolean isActive;
 
     @Min(0)

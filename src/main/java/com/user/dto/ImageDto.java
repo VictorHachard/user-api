@@ -10,14 +10,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class ThemeDto extends Dto {
+public class ImageDto extends Dto {
 
-    String name;
-
-    String image;
-
-    boolean active;
-
-    int order;
+    String url;
 
 }

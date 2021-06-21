@@ -63,6 +63,9 @@ public class UserSecurity extends AbstractEntity {
     @ManyToOne
     Theme theme;
 
+    @Column
+    String profileImageUrl;
+
     @OneToMany(fetch = FetchType.EAGER)
     Set<CookieRemember> cookieList = new HashSet<>();
 

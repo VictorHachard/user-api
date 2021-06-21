@@ -150,7 +150,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
 
     public void updateProfile(UpdateProfileValidator validator) {
         UserSecurity u = this.getUser();
-        userSecurityFacade.updateInstance(u, validator.getFirstName(), validator.getMiddleName(), validator.getLastName(), validator.getBiography(), validator.getUrl());
+        userSecurityFacade.updateInstance(u, validator.getFirstName(), validator.getMiddleName(), validator.getLastName(), validator.getBiography(), validator.getUrl(), validator.getProfileImage());
         this.getRepository().save(u);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success update user");
     }

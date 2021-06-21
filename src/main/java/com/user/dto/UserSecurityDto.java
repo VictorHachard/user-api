@@ -37,6 +37,8 @@ public class UserSecurityDto extends Dto {
 
     ThemeSimplifiedDto themeSimplifiedDto;
 
+    String profileImage;
+
     List<EmailDto> emailList;
 
     List<GroupDto> groupDtoList;

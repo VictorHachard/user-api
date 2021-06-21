@@ -108,4 +108,16 @@ public abstract class AbstractAutowire {
     @Autowired
     SecurityLogFacade securityLogFacade;
 
+    @Autowired
+    ImageRepository imageRepository;
+
+    @Autowired
+    ImageMapper imageMapper;
+
+    @Autowired
+    ImageService imageService;
+
+    @Autowired
+    ImageFacade imageFacade;
+
 }

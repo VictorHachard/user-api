@@ -27,11 +27,12 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         return res;
     }
 
-    public void updateInstance(UserSecurity u, String firstName, String middleName, String lastName, String biography, String url) {
+    public void updateInstance(UserSecurity u, String firstName, String middleName, String lastName, String biography, String url, String profileImageUrl) {
         u.setMiddleName(middleName);
         u.setLastName(lastName);
         u.setFirstName(firstName);
         u.setBiography(biography);
+        u.setProfileImageUrl(profileImageUrl);
         u.setUrl(url);
     }
 
@@ -46,7 +47,7 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         u.setPasswordResetSet(new Timestamp(System.currentTimeMillis()));
         u.setAuthTokenCreatedAt(null);
         log.info("The reset token for the user password is " + u.getPasswordResetToken()
-                + ", the link is: http://localhost:4200/confirm/" + u.getPasswordResetToken());
+                + ", the link is: http://localhost:4200/reset/email/" + u.getPasswordResetToken());
     }
 
     public void confirmToken(UserSecurity u) {

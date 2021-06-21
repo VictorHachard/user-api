@@ -14,4 +14,6 @@ public class ThemeSimplifiedDto extends Dto {
 
     String name;
 
+    String image;
+
 }

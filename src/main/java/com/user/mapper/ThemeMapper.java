@@ -24,6 +24,7 @@ public class ThemeMapper extends AbstractMapper<ThemeDto, Theme> {
         dto.setName(e.getName());
         dto.setActive(e.isActive());
         dto.setOrder(e.getOrder());
+        dto.setImage(e.getImageUrl());
         return dto;
     }
 
@@ -40,6 +41,7 @@ public class ThemeMapper extends AbstractMapper<ThemeDto, Theme> {
         dto.setId(e.getId());
         dto.setCreatedAt(e.getCreatedAt());
         dto.setName(e.getName());
+        dto.setImage(e.getImageUrl());
         return dto;
     }
 

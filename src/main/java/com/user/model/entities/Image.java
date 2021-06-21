@@ -14,18 +14,9 @@ import javax.persistence.Entity;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class Theme extends AbstractEntity {
-
-    @Column(name = "name_a")
-    String name;
-
-    @Column
-    String imageUrl;
+public class Image extends AbstractEntity {
 
     @Column()
-    boolean active;
-
-    @Column(name = "order_a")
-    int order;
+    String url;
 
 }
