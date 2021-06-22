@@ -20,4 +20,6 @@ public class EmailDto extends Dto {
 
     boolean isConfirmed;
 
+    boolean isBackup;
+
 }

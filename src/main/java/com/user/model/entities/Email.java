@@ -25,6 +25,9 @@ public class Email extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     PriorityEnum priority;
 
+    @Column()
+    Boolean backup;
+
     @Column(name = "email_auth")
     Boolean emailConfirmed;
 

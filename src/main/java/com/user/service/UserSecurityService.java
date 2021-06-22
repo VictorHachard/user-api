@@ -55,14 +55,14 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
 
     public UserSecurity create(String username, String email, String password) {
         String emailLower = email.toLowerCase();
-        boolean existsByEmailPriority = emailRepository.existsByEmailAndPriority(emailLower, PriorityEnum.PRINCIPAL);
+        boolean existsByEmailPriority = emailRepository.existsByEmailAndPriority(emailLower, PriorityEnum.PRIMARY);
         boolean existsByUsername = this.getRepository().existsByUsername(username);
         if (existsByUsername) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "This username is already in the database");
         } else if (existsByEmailPriority) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "This email is already define in the database as PRINCIPAL");
         }
-        Email e = emailService.create(emailLower, PriorityEnum.PRINCIPAL);
+        Email e = emailService.create(emailLower, PriorityEnum.PRIMARY);
         Password p = passwordService.create(password);
 
         UserSecurity user = userSecurityFacade.newInstance(e, p, username);
@@ -138,7 +138,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
             this.responseStatus(HttpStatus.BAD_REQUEST, "The user don't have this email");
         }
         for (Email e : u.getEmailList()) {
-            if (e.getPriority() == PriorityEnum.PRINCIPAL) {
+            if (e.getPriority() == PriorityEnum.PRIMARY) {
                 e.setPriority(PriorityEnum.SECONDARY);
                 emailRepository.save(e);
             }
@@ -179,6 +179,19 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         u.setTheme(themeService.get(id));
         this.getRepository().save(u);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success update appearance");
+    }
+
+    public void updateEmailBackup(long id, UpdateEmailBackupValidator validator) {
+        UserSecurity u = this.getUser();
+        boolean contain = false;
+        Email e = null;
+        for (Email ee : u.getEmailList()) {if (ee.getId() == id) {contain = true; e = ee; break;}}
+        if (!contain) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "The user don't have this email");
+        }
+        e.setBackup(validator.getBackup());
+        emailRepository.save(e);
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success update backup email");
     }
 
     public void addPassword(PasswordValidator validator) {
@@ -242,7 +255,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
             this.responseStatus(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
         }
         Email e = emailRepository.findById(id).get();
-        if (e.getPriority() == PriorityEnum.PRINCIPAL) {
+        if (e.getPriority() == PriorityEnum.PRIMARY) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "Cannot delete PRINCIPAL email");
         } else {
             UserSecurity u = this.getRepository().findByEmailId(id).get();
@@ -268,7 +281,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
 
     public List<SecurityLogDto> getAllSecurityLogDto(Integer pageIndex, Integer pageSize) {
         UserSecurity u = this.getUser();
-        System.out.println(securityLogService.getAllDtoByUser(u, pageIndex, pageSize).getContent());
         return securityLogMapper.getAllDto(securityLogService.getAllDtoByUser(u, pageIndex, pageSize).getContent());
     }
 
@@ -308,7 +320,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         //TODO check not the first time
         userSecurityFacade.initToken(u);
         this.getRepository().save(u);
-        securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, u, "Email sent to " + u.getEmailList().stream().filter(email -> {return email.getPriority().equals(PriorityEnum.PRINCIPAL);}).collect(Collectors.toList()).get(0) + " for a password reset");
+        securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, u, "Email sent to " + u.getEmailList().stream().filter(email -> {return email.getPriority().equals(PriorityEnum.PRIMARY);}).collect(Collectors.toList()).get(0) + " for a password reset");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success password forget");
     }
 
@@ -318,9 +330,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         List<Password> passwordList = new ArrayList<>(u.getPasswordList());
         Collections.sort(passwordList);
 
-        System.out.println(validator.getOldPassword());
-        System.out.println(passwordList);
-        System.out.println(passwordList.get(passwordList.size() -1).getPassword());
         if (!passwordEncoder.matches(validator.getOldPassword(), passwordList.get(passwordList.size() -1).getPassword())) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "The password is not correct");
         }

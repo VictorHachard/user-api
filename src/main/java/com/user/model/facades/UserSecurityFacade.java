@@ -6,8 +6,11 @@ import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.EmailPreferencesEnum;
 import com.user.model.entities.enums.PrivacyEnum;
 import com.user.model.facades.commons.AbstractFacade;
+import com.user.service.commons.FileStorageService;
 import com.user.utils.Utils;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -29,13 +32,21 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         return res;
     }
 
+    @Autowired
+    FileStorageService fileStorageService;
+
     public void updateInstance(UserSecurity u, String firstName, String middleName, String lastName, String biography, String url, String profileImageUrl) {
         u.setMiddleName(middleName);
         u.setLastName(lastName);
         u.setFirstName(firstName);
         u.setBiography(biography);
-        u.setProfileImageUrl(profileImageUrl);
         u.setUrl(url);
+        if (profileImageUrl != null && !profileImageUrl.equals("")) {
+            if (u.getProfileImageUrl() != null && !u.getProfileImageUrl().equals("")) {
+                //fileStorageService.deleteFile(u.getProfileImageUrl()); //TODO
+            }
+            u.setProfileImageUrl(profileImageUrl);
+        }
     }
 
     public void updateEmailPreferences(UserSecurity u, EmailPreferencesEnum ep) {

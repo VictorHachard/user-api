@@ -33,7 +33,7 @@ public class Data extends AbstractAutowire {
         for (int i = 0; i < 50; i++) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             Password p = passwordFacade.newInstance(passwordEncoder.encode("Test123*"));
-            Email e = emailFacade.newInstance(lorem.getEmail(), PriorityEnum.PRINCIPAL, PrivacyEnum.PRIVATE);
+            Email e = emailFacade.newInstance(lorem.getEmail(), PriorityEnum.PRIMARY, PrivacyEnum.PRIVATE);
             emailFacade.initToken(e);
             String un;
             do { un = lorem.getFirstName(); } while (userSecurityRepository.existsByUsername(un));

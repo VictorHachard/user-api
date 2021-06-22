@@ -8,10 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 
 @Service
 // Lombok
@@ -34,6 +31,18 @@ public class FileStorageService {
             return fileName;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+        }
+    }
+
+    public void deleteFile(String file) {
+        try {
+            Files.deleteIfExists(Paths.get("C:\\images\\" + file));
+        } catch(NoSuchFileException e) {
+            System.out.println("No such file/directory exists");
+        } catch(DirectoryNotEmptyException e) {
+            System.out.println("Directory is not empty.");
+        } catch(IOException e) {
+            System.out.println("Invalid permissions.");
         }
     }
 

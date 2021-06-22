@@ -69,6 +69,12 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.updateEmailPriority(validator);
     }
 
+    @PostMapping("update/email/backup/{emailId}")
+    public void updateEmailBackup(@Valid @RequestBody UpdateEmailBackupValidator validator, @PathVariable("emailId") long emailId) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.updateEmailBackup(emailId, validator);
+    }
+
     @PostMapping("update/appearance/{appearanceId}")
     public void updateAppearance(@PathVariable("appearanceId") long appearanceId) {
         UserSecurityService service = (UserSecurityService) this.getService();

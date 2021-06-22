@@ -59,7 +59,7 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
     public void delete(long id) {
         if (!this.getRepository().existsById(id)) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
-        } else if (this.getRepository().findById(id).get().getPriority() == PriorityEnum.PRINCIPAL) {
+        } else if (this.getRepository().findById(id).get().getPriority() == PriorityEnum.PRIMARY) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "Cannot delete PRINCIPAL email");
         } else {
             this.getRepository().deleteById(id);
@@ -85,7 +85,8 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
             this.responseStatus(HttpStatus.BAD_REQUEST, "This email doesn't exist");
         }
         Email e = this.getRepository().findByEmail(es).get();
-        e.setPriority(PriorityEnum.PRINCIPAL);
+        e.setPriority(PriorityEnum.PRIMARY);
+        e.setBackup(false);
         this.getRepository().save(e);
     }
 

@@ -20,6 +20,7 @@ public class EmailFacade extends AbstractFacade<Email> {
         res.setEmail(email);
         res.setPriority(pe);
         res.setPrivacy(pe2);
+        res.setBackup(false);
         return res;
     }
 
