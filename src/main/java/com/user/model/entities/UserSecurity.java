@@ -1,6 +1,7 @@
 package com.user.model.entities;
 
 import com.user.model.entities.commons.AbstractEntity;
+import com.user.model.entities.enums.EmailPreferencesEnum;
 import com.user.model.entities.enums.PrivacyEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -65,6 +66,9 @@ public class UserSecurity extends AbstractEntity {
 
     @Column
     String profileImageUrl;
+
+    @Column
+    EmailPreferencesEnum emailPreferences;
 
     @OneToMany(fetch = FetchType.EAGER)
     Set<CookieRemember> cookieList = new HashSet<>();

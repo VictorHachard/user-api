@@ -45,4 +45,6 @@ public class UserSecurityDto extends Dto {
 
     List<RoleDto> roleDtoList;
 
+    String emailPreferences;
+
 }

@@ -4,6 +4,7 @@ import com.user.dto.CookieRememberDto;
 import com.user.dto.SecurityLogDto;
 import com.user.dto.UserSecurityDto;
 import com.user.model.entities.*;
+import com.user.model.entities.enums.EmailPreferencesEnum;
 import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.entities.enums.SecurityLogEnum;
 import com.user.model.repositories.UserSecurityRepository;
@@ -153,6 +154,13 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         userSecurityFacade.updateInstance(u, validator.getFirstName(), validator.getMiddleName(), validator.getLastName(), validator.getBiography(), validator.getUrl(), validator.getProfileImage());
         this.getRepository().save(u);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success update user");
+    }
+
+    public void updateEmailPreferences(UpdateEmailPreferencesValidator validator) {
+        UserSecurity u = this.getUser();
+        userSecurityFacade.updateEmailPreferences(u, EmailPreferencesEnum.valueOf(validator.getEmailPreferences()));
+        this.getRepository().save(u);
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success update email preferences");
     }
 
     public void updateUsername(UpdateUsernameValidator validator) {

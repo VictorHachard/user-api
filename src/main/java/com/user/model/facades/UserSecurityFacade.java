@@ -3,6 +3,7 @@ package com.user.model.facades;
 import com.user.model.entities.Email;
 import com.user.model.entities.Password;
 import com.user.model.entities.UserSecurity;
+import com.user.model.entities.enums.EmailPreferencesEnum;
 import com.user.model.entities.enums.PrivacyEnum;
 import com.user.model.facades.commons.AbstractFacade;
 import com.user.utils.Utils;
@@ -23,6 +24,7 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         res.addEmail(e);
 
         res.setPrivacy(PrivacyEnum.PRIVATE);
+        res.setEmailPreferences(EmailPreferencesEnum.ALL);
         res.setTheme(themeRepository.findAll().get(0));
         return res;
     }
@@ -34,6 +36,10 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         u.setBiography(biography);
         u.setProfileImageUrl(profileImageUrl);
         u.setUrl(url);
+    }
+
+    public void updateEmailPreferences(UserSecurity u, EmailPreferencesEnum ep) {
+        u.setEmailPreferences(ep);
     }
 
     public void updateInstance(UserSecurity u, String username) {
