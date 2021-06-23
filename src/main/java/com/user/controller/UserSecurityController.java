@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.*;
 import javax.validation.Valid;
 import java.util.Base64;
 import java.util.List;
@@ -169,9 +170,9 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     }
 
     @PostMapping("action/reset/password")
-    public void actionResetPassword(@Valid @RequestBody String token) {
+    public void actionResetPassword(@Valid @RequestBody ActionResetPasswordValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
-        service.actionResetPassword(token);
+        service.actionResetPassword(validator);
     }
 
     @PostMapping("action/forget/password")

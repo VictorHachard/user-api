@@ -57,17 +57,17 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         u.setUsername(username);
     }
 
-    public void initToken(UserSecurity u) {
+    public void initPasswordToken(UserSecurity u) {
         String token;
         do { token = Utils.generateNewToken(48); } while (userSecurityRepository.existsByPasswordResetToken(token));
         u.setPasswordResetToken(token);
         u.setPasswordResetSet(new Timestamp(System.currentTimeMillis()));
         u.setAuthTokenCreatedAt(null);
         log.info("The reset token for the user password is " + u.getPasswordResetToken()
-                + ", the link is: http://localhost:4200/reset/email/" + u.getPasswordResetToken());
+                + ", the link is: http://localhost:4200/reset/password/" + u.getPasswordResetToken());
     }
 
-    public void confirmToken(UserSecurity u) {
+    public void confirmPasswordToken(UserSecurity u) {
         u.setPasswordResetToken(null);
         u.setPasswordResetSet(null);
         u.setAuthTokenCreatedAt(new Timestamp(System.currentTimeMillis()));

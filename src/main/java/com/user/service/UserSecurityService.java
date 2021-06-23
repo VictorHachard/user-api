@@ -303,12 +303,15 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         emailService.resendConfirmEmail(emailService.get(id));
     }
 
-    public void actionResetPassword(String token) {
-        if (!this.getRepository().existsByPasswordResetToken(token)) {
+    public void actionResetPassword(ActionResetPasswordValidator validator) {
+        if (!this.getRepository().existsByPasswordResetToken(validator.getToken())) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "This token is doesn't not exist");
         }
-        UserSecurity u = this.getRepository().findByPasswordResetToken(token).get();
-        userSecurityFacade.confirmToken(u);
+        UserSecurity u = this.getRepository().findByPasswordResetToken(validator.getToken()).get();
+        userSecurityFacade.confirmPasswordToken(u);
+        Password p = passwordService.create(validator.getPassword());
+        u.addPassword(p);
+        passwordRepository.save(p);
         this.getRepository().save(u);
     }
 
@@ -318,9 +321,9 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         }
         UserSecurity u = this.getRepository().findByEmailOrUsername(usernameOrEmail).get();
         //TODO check not the first time
-        userSecurityFacade.initToken(u);
+        userSecurityFacade.initPasswordToken(u);
         this.getRepository().save(u);
-        securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, u, "Email sent to " + u.getEmailList().stream().filter(email -> {return email.getPriority().equals(PriorityEnum.PRIMARY);}).collect(Collectors.toList()).get(0) + " for a password reset");
+        //securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, u, "Email sent to " + u.getEmailList().stream().filter(email -> {return email.getPriority().equals(PriorityEnum.PRIMARY);}).collect(Collectors.toList()).get(0) + " for a password reset");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success password forget");
     }
 
