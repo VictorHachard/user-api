@@ -1,14 +1,19 @@
 package com.user.mapper;
 
+import com.user.dto.ThemeSimplifiedDto;
 import com.user.dto.UserSecurityDto;
+import com.user.dto.UserSecurityProfileDto;
 import com.user.mapper.commons.AbstractMapper;
+import com.user.model.entities.Theme;
 import com.user.model.entities.UserSecurity;
+import com.user.model.entities.enums.PrivacyEnum;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 // Lombok
@@ -20,10 +25,7 @@ public class UserSecurityMapper extends AbstractMapper<UserSecurityDto, UserSecu
     public UserSecurityDto getDto(UserSecurity e) {
         UserSecurityDto dto = super.getDto(e);
         dto.setUsername(e.getUsername());
-        String name = e.getFirstName() != null ? e.getFirstName() + " " : "";
-        name += e.getMiddleName() != null ? e.getMiddleName() + " " : "";
-        name += e.getLastName() != null ? e.getLastName()  : "";
-        dto.setNameFormatted(name);
+        dto.setNameFormatted(this.getName(e));
         dto.setAuthToken(e.getAuthToken());
         dto.setEmailList(emailMapper.getAllDto(new ArrayList<>(e.getEmailList())));
         dto.setGroupDtoList(groupMapper.getAllDto(new ArrayList<>(e.getGroupList())));
@@ -39,6 +41,37 @@ public class UserSecurityMapper extends AbstractMapper<UserSecurityDto, UserSecu
         dto.setProfileImage(e.getProfileImageUrl());
         dto.setEmailPreferences(e.getEmailPreferences().name());
         return dto;
+    }
+
+    public List<UserSecurityProfileDto> getAllProfileDto(List<UserSecurity> aList) {
+        List<UserSecurityProfileDto> res = new ArrayList<>();
+        aList.forEach(a -> {
+            res.add(this.getProfileDto(a));
+        });
+        return res;
+    }
+
+    public UserSecurityProfileDto getProfileDto(UserSecurity e) {
+        UserSecurityProfileDto dto = new UserSecurityProfileDto();
+        //dto.setId(e.getId());
+        dto.setCreatedAt(e.getCreatedAt());
+        dto.setPrivacy(e.getPrivacy().name());
+        dto.setUsername(e.getUsername());
+        if (e.getPrivacy() == PrivacyEnum.PUBLIC) {
+            dto.setBiography(e.getBiography());
+            dto.setBirth(e.getBirth());
+            dto.setUrl(e.getUrl());
+            dto.setNameFormatted(this.getName(e));
+            dto.setProfileImage(e.getProfileImageUrl());
+        }
+        return dto;
+    }
+
+    private String getName(UserSecurity e) {
+        String name = e.getFirstName() != null ? e.getFirstName() + " " : "";
+        name += e.getMiddleName() != null ? e.getMiddleName() + " " : "";
+        name += e.getLastName() != null ? e.getLastName()  : "";
+        return name;
     }
 
 }

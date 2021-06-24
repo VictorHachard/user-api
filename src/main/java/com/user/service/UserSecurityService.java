@@ -3,9 +3,11 @@ package com.user.service;
 import com.user.dto.CookieRememberDto;
 import com.user.dto.SecurityLogDto;
 import com.user.dto.UserSecurityDto;
+import com.user.dto.UserSecurityProfileDto;
 import com.user.model.entities.*;
 import com.user.model.entities.enums.EmailPreferencesEnum;
 import com.user.model.entities.enums.PriorityEnum;
+import com.user.model.entities.enums.PrivacyEnum;
 import com.user.model.entities.enums.SecurityLogEnum;
 import com.user.model.repositories.UserSecurityRepository;
 import com.user.service.commons.AbstractService;
@@ -163,6 +165,13 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         this.responseStatus(HttpStatus.NO_CONTENT, "Success update email preferences");
     }
 
+    public void updateProfilePrivacy(UpdateProfilePrivacyValidator validator) {
+        UserSecurity u = this.getUser();
+        userSecurityFacade.updateProfilePrivacy(u, PrivacyEnum.valueOf(validator.getProfilePrivacy()));
+        this.getRepository().save(u);
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success update privacy");
+    }
+
     public void updateUsername(UpdateUsernameValidator validator) {
         UserSecurity u = this.getUser();
         boolean existsByUsername = this.getRepository().existsByUsername(validator.getUsername());
@@ -282,6 +291,13 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
     public List<SecurityLogDto> getAllSecurityLogDto(Integer pageIndex, Integer pageSize) {
         UserSecurity u = this.getUser();
         return securityLogMapper.getAllDto(securityLogService.getAllDtoByUser(u, pageIndex, pageSize).getContent());
+    }
+
+    public UserSecurityProfileDto getUserSecurityProfileDto(String username) {
+        if (!this.getRepository().existsByUsername(username)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "The username is not correct");
+        }
+        return userSecurityMapper.getProfileDto(this.getRepository().findByUsername(username).get());
     }
 
     /* Actions */

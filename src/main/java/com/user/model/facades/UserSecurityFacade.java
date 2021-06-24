@@ -53,6 +53,10 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         u.setEmailPreferences(ep);
     }
 
+    public void updateProfilePrivacy(UserSecurity u, PrivacyEnum p) {
+        u.setPrivacy(p);
+    }
+
     public void updateInstance(UserSecurity u, String username) {
         u.setUsername(username);
     }

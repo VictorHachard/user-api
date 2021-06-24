@@ -4,6 +4,7 @@ import com.user.controller.commons.AbstractController;
 import com.user.dto.CookieRememberDto;
 import com.user.dto.SecurityLogDto;
 import com.user.dto.UserSecurityDto;
+import com.user.dto.UserSecurityProfileDto;
 import com.user.model.entities.UserSecurity;
 import com.user.service.UserSecurityService;
 import com.user.validator.*;
@@ -94,6 +95,12 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.updateEmailPreferences(validator);
     }
 
+    @PostMapping("update/profile-privacy")
+    public void updateProfilePrivacy(@Valid @RequestBody UpdateProfilePrivacyValidator validator) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.updateProfilePrivacy(validator);
+    }
+
     @PostMapping("update/username")
     public void updateProfile(@Valid @RequestBody UpdateUsernameValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
@@ -148,11 +155,26 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.removeCookie(id);
     }
 
+    /* Get */
+
     @GetMapping("dto/security-log")
     public List<SecurityLogDto> getAllSecurityLogDto(@RequestParam(defaultValue = "0") Integer pageIndex,
                                                      @RequestParam(defaultValue = "10") Integer pageSize) {
         UserSecurityService service = ((UserSecurityService) this.getService());
         return service.getAllSecurityLogDto(pageIndex, pageSize);
+    }
+
+    /*@GetMapping("dto/profile")
+    public List<UserSecurityProfileDto> getAllUserSecurityProfileDto(@RequestParam(defaultValue = "0") Integer pageIndex,
+                                                     @RequestParam(defaultValue = "10") Integer pageSize) {
+        UserSecurityService service = ((UserSecurityService) this.getService());
+        return service.getAllUserSecurityProfileDto(pageIndex, pageSize);
+    }*/
+
+    @GetMapping("dto/profile/{username}")
+    public UserSecurityProfileDto getUserSecurityProfileDto(@PathVariable("username") String username) {
+        UserSecurityService service = ((UserSecurityService) this.getService());
+        return service.getUserSecurityProfileDto(username);
     }
 
     /* Actions */
