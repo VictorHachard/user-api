@@ -53,6 +53,10 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         return repository.findAll(pageable);
     }
 
+    public List<I> getAll() {
+        return this.getAbstractRepository().findAll();
+    }
+
     public List<I> getAll(Integer pageIndex, Integer pageSize, String sortBy, String orderBy, String searchBy, String searchValue) {
         List<String> errorStrList = new ArrayList();
         if (pageIndex < 0) {
