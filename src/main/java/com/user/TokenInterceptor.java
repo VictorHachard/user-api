@@ -23,7 +23,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         if (authToken != null) {
             if (!this.userSecurityRepository.existsByAuthToken(authToken)) {
                 //TODO check date
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The token is not correct");
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is not correct");
             }
             userSecurity = this.userSecurityRepository.findByAuthToken(authToken).get();
         }
