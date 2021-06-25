@@ -10,6 +10,7 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -19,12 +20,25 @@ import java.util.List;
 public class ThemeMapper extends AbstractMapper<ThemeDto, Theme> {
 
     @Override
+    public List<ThemeDto> getAllDto(List<Theme> aList) {
+        List<ThemeDto> res = super.getAllDto(aList);
+        Collections.sort(res);
+        return res;
+    }
+
+    @Override
     public ThemeDto getDto(Theme e) {
         ThemeDto dto = super.getDto(e);
         dto.setName(e.getName());
         dto.setActive(e.isActive());
         dto.setOrder(e.getOrder());
         dto.setImage(e.getImageUrl());
+        dto.setPrimaryColor(e.getPrimaryColor());
+        dto.setSecondaryColor(e.getSecondaryColor());
+        dto.setTertiaryColor(e.getTertiaryColor());
+        dto.setQuaternaryColor(e.getQuaternaryColor());
+        dto.setPrimaryTextColor(e.getPrimaryTextColor());
+        dto.setSecondaryTextColor(e.getSecondaryTextColor());
         return dto;
     }
 
@@ -33,6 +47,7 @@ public class ThemeMapper extends AbstractMapper<ThemeDto, Theme> {
         aList.forEach(a -> {
             res.add(this.getSimplifiedDto(a));
         });
+        Collections.sort(res);
         return res;
     }
 
@@ -42,6 +57,12 @@ public class ThemeMapper extends AbstractMapper<ThemeDto, Theme> {
         dto.setCreatedAt(e.getCreatedAt());
         dto.setName(e.getName());
         dto.setImage(e.getImageUrl());
+        dto.setPrimaryColor(e.getPrimaryColor());
+        dto.setSecondaryColor(e.getSecondaryColor());
+        dto.setTertiaryColor(e.getTertiaryColor());
+        dto.setQuaternaryColor(e.getQuaternaryColor());
+        dto.setPrimaryTextColor(e.getPrimaryTextColor());
+        dto.setSecondaryTextColor(e.getSecondaryTextColor());
         return dto;
     }
 

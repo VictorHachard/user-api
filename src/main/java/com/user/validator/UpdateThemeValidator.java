@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -14,15 +13,11 @@ import javax.validation.constraints.NotNull;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class ThemeValidator extends AbstractValidator {
+public class UpdateThemeValidator extends AbstractValidator {
 
     @NotNull(message = "")
     @NotEmpty
     String name;
-
-    @NotNull(message = "")
-    @NotEmpty
-    String imageUrl;
 
     @NotNull(message = "")
     @NotEmpty
@@ -47,11 +42,5 @@ public class ThemeValidator extends AbstractValidator {
     @NotNull(message = "")
     @NotEmpty
     String secondaryTextColor;
-
-    /*@NotNull(message = "")
-    Boolean isActive;
-
-    @Min(0)
-    Integer order;*/
 
 }

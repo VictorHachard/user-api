@@ -20,4 +20,16 @@ public class ThemeDto extends Dto {
 
     int order;
 
+    String primaryColor;
+
+    String secondaryColor;
+
+    String tertiaryColor;
+
+    String quaternaryColor;
+
+    String primaryTextColor;
+
+    String secondaryTextColor;
+
 }

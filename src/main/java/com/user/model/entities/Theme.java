@@ -28,4 +28,22 @@ public class Theme extends AbstractEntity {
     @Column(name = "order_a")
     int order;
 
+    @Column
+    String primaryColor;
+
+    @Column
+    String secondaryColor;
+
+    @Column
+    String tertiaryColor;
+
+    @Column
+    String quaternaryColor;
+
+    @Column
+    String primaryTextColor;
+
+    @Column
+    String secondaryTextColor;
+
 }

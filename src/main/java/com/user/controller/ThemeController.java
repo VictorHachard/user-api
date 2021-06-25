@@ -8,6 +8,7 @@ import com.user.service.UserSecurityService;
 import com.user.validator.ThemeValidator;
 import com.user.validator.UpdateEmailBackupValidator;
 import com.user.validator.UpdateThemeActiveValidator;
+import com.user.validator.UpdateThemeValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
@@ -38,6 +39,12 @@ public class ThemeController extends AbstractController<Theme, ThemeDto> {
     public void updateActive(@Valid @RequestBody UpdateThemeActiveValidator validator, @PathVariable("id") long id) {
         ThemeService service = (ThemeService) this.getService();
         service.updateActive(id, validator);
+    }
+
+    @PostMapping("update/{id}")
+    public void updateActive(@Valid @RequestBody UpdateThemeValidator validator, @PathVariable("id") long id) {
+        ThemeService service = (ThemeService) this.getService();
+        service.updateT(id, validator);
     }
 
 }

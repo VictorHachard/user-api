@@ -26,9 +26,42 @@ public class Data extends AbstractAutowire {
     @PostConstruct
     public void init() {
 
-        themeRepository.save(themeFacade.newInstance("Default light", true, 0, "light.png"));
-        themeRepository.save(themeFacade.newInstance("Default dark", true, 0, "dark.png"));
-        themeRepository.save(themeFacade.newInstance("Dark dimmed", true, 0, "dark_dimmed.png"));
+        themeRepository.save(themeFacade.newInstance(
+                "Default light",
+                true,
+                0,
+                "light.png",
+                "#f1f1f1",
+                "#eaeaea",
+                "#e3e3e3",
+                "#d4d4d4",
+                "#1a1a1a",
+                "#3b3b3b"
+        ));
+        themeRepository.save(themeFacade.newInstance(
+                "Default dark",
+                true,
+                0,
+                "dark.png",
+                "#0d1117",
+                "#161b22",
+                "#21262f",
+                "#21252a",
+                "#eeeeee",
+                "#d4d4d4"
+        ));
+        themeRepository.save(themeFacade.newInstance(
+                "Dark dimmed",
+                true,
+                0,
+                "dark_dimmed.png",
+                "#202225",
+                "#292b2f",
+                "#2f3136",
+                "#36393f",
+                "#ececec",
+                "#c1c1c1"
+        ));
 
         for (int i = 0; i < 50; i++) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
