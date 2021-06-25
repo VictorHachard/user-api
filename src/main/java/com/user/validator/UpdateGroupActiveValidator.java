@@ -6,22 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class GroupValidator extends AbstractValidator {
+public class UpdateGroupActiveValidator extends AbstractValidator {
 
     @NotNull(message = "")
-    @NotEmpty
-    String name;
-
-    @NotNull(message = "")
-    @NotEmpty
-    String color;
+    Boolean active;
 
 }
-

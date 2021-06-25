@@ -34,10 +34,10 @@ public class ThemeService extends AbstractService<Theme, ThemeRepository> {
         return t;
     }
 
-    public List<ThemeDto> getAppearanceAllDto() {
+    public List<ThemeDto> getAllActiveDto() {
         List<Theme> themeList = this.getAll();
         themeList.removeIf(p -> !p.isActive());
-        return themeMapper.getAllDto(themeList);
+        return this.getMapper().getAllDto(themeList);
     }
 
     public void updateActive(long id, UpdateThemeActiveValidator validator) {

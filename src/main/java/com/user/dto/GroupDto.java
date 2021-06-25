@@ -14,6 +14,8 @@ public class GroupDto extends Dto {
 
     String name;
 
+    String color;
+
     boolean active;
 
     int order;

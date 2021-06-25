@@ -20,6 +20,7 @@ public class GroupMapper extends AbstractMapper<GroupDto, Group> {
         dto.setName(e.getName());
         dto.setActive(e.isActive());
         dto.setOrder(e.getOrder());
+        dto.setColor(e.getColor());
         return dto;
     }
 

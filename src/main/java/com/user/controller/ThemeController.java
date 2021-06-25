@@ -28,10 +28,10 @@ public class ThemeController extends AbstractController<Theme, ThemeDto> {
         this.getService().create(validator);
     }
 
-    @GetMapping("/dto/appearance")
-    public List<ThemeDto> getAppearanceAllDto() {
+    @GetMapping("/dto/active")
+    public List<ThemeDto> getAllActiveDto() {
         ThemeService service = (ThemeService) this.getService();
-        return service.getAppearanceAllDto();
+        return service.getAllActiveDto();
     }
 
     @PostMapping("update/active/{id}")

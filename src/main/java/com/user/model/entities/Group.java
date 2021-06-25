@@ -22,6 +22,9 @@ public class Group extends AbstractEntity {
     String name;
 
     @Column()
+    String color;
+
+    @Column()
     boolean active;
 
     @Column(name = "order_a")
