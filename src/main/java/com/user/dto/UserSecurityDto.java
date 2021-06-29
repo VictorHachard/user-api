@@ -47,4 +47,6 @@ public class UserSecurityDto extends Dto {
 
     String emailPreferences;
 
+    Boolean twoFactorEmail;
+
 }

@@ -103,6 +103,15 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         return (UserSecurityDto) getMapper().getDto(this.getUser());
     }
 
+    public void updateTwoFactorEmail(UpdateTwoFactorEmailValidator validator) {
+        UserSecurity u = this.getUser();
+        if (!u.getPrincipalEmail().getEmailConfirmed()) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "The principal email is not confirmed");
+        }
+        userSecurityFacade.updateTwoFactorEmail(u, validator.getActive());
+        this.getRepository().save(u);
+    }
+
     private void setAuthToken(UserSecurity u) {
         //If the token is not older then 1 day return the same token
         Date currentDate = new Date();
@@ -128,7 +137,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         UserSecurity u = this.getUser();
         Email e = emailService.create(validator.getEmail().toLowerCase(), PriorityEnum.SECONDARY);
         u.addEmail(e);
-        System.out.println(u.getUsername());
         this.getRepository().save(u);
         securityLogService.create(SecurityLogEnum.EMAIL_ADDED, u, "Email " + e.getEmail() + " added");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success new email added");
@@ -139,10 +147,11 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
             this.responseStatus(HttpStatus.BAD_REQUEST, "The email is not correct");
         }
         UserSecurity u = this.getUser();
-        boolean contain = false;
-        for (Email ee : u.getEmailList()) {if (ee.getEmail().equals(validator.getEmail())) {contain = true; break;}}
-        if (!contain) {
+        if (!u.hasEmail(validator.getEmail())) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "The user don't have this email");
+        }
+        if (!u.getPrincipalEmail().getEmailConfirmed()) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "The email is not confirmed");
         }
         for (Email e : u.getEmailList()) {
             if (e.getPriority() == PriorityEnum.PRIMARY) {

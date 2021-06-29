@@ -27,6 +27,7 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         res.addEmail(e);
 
         res.setPrivacy(PrivacyEnum.PRIVATE);
+        res.setTwoFactorEmail(false);
         res.setEmailPreferences(EmailPreferencesEnum.ALL);
         res.setTheme(themeRepository.findAll().get(0));
         return res;
@@ -47,6 +48,10 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
             }
             u.setProfileImageUrl(profileImageUrl);
         }
+    }
+
+    public void updateTwoFactorEmail(UserSecurity u, Boolean b) {
+        u.setTwoFactorEmail(b);
     }
 
     public void updateEmailPreferences(UserSecurity u, EmailPreferencesEnum ep) {

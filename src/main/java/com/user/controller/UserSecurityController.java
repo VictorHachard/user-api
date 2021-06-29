@@ -101,6 +101,12 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.updateProfilePrivacy(validator);
     }
 
+    @PostMapping("update/two-factor/email")
+    public void updateTwoFactorEmail(@Valid @RequestBody UpdateTwoFactorEmailValidator validator) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.updateTwoFactorEmail(validator);
+    }
+
     @PostMapping("update/username")
     public void updateProfile(@Valid @RequestBody UpdateUsernameValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();

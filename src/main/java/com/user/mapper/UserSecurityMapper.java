@@ -40,6 +40,7 @@ public class UserSecurityMapper extends AbstractMapper<UserSecurityDto, UserSecu
         dto.setUrl(e.getUrl());
         dto.setProfileImage(e.getProfileImageUrl());
         dto.setEmailPreferences(e.getEmailPreferences().name());
+        dto.setTwoFactorEmail(e.getTwoFactorEmail());
         return dto;
     }
 

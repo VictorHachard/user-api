@@ -2,15 +2,18 @@ package com.user.model.entities;
 
 import com.user.model.entities.commons.AbstractEntity;
 import com.user.model.entities.enums.EmailPreferencesEnum;
+import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.entities.enums.PrivacyEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 // Lombok
@@ -97,6 +100,9 @@ public class UserSecurity extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     Date authTokenCreatedAt;
 
+    @Column()
+    Boolean twoFactorEmail;
+
     public void addPassword(Password... passwords) {
         passwordList.addAll(Arrays.asList(passwords));
     }
@@ -115,6 +121,24 @@ public class UserSecurity extends AbstractEntity {
 
     public void addRole(Role... roles) {
         permissionList.addAll(Arrays.asList(roles));
+    }
+
+    /* Methods */
+
+    public Email getPrincipalEmail() {
+        return this.getEmailList().stream().filter(email -> {return email.getPriority().equals(PriorityEnum.PRIMARY);}).collect(Collectors.toList()).get(0);
+    }
+
+    public boolean hasEmail(Email e) {
+        boolean contain = false;
+        for (Email ee : this.getEmailList()) {if (ee.getEmail().equals(e.getEmail())) {contain = true; break;}}
+        return contain;
+    }
+
+    public boolean hasEmail(String e) {
+        boolean contain = false;
+        for (Email ee : this.getEmailList()) {if (ee.getEmail().equals(e)) {contain = true; break;}}
+        return contain;
     }
 
 }
