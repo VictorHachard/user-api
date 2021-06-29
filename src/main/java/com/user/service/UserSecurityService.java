@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,10 +104,14 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
     }
 
     private void setAuthToken(UserSecurity u) {
-        String token;
-        do { token = Utils.generateNewToken(48); } while (userSecurityRepository.existsByAuthToken(token));
-        u.setAuthToken(token);
-        u.setAuthTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
+        //If the token is not older then 1 day return the same token
+        Date currentDate = new Date();
+        if (u.getAuthToken() == null || u.getAuthToken().equals("") || u.getAuthTokenCreatedAt() == null || u.getAuthTokenCreatedAt().before(new Date(currentDate.getTime() - 1l * 24 * 60 * 60 * 1000))) {
+            String token;
+            do { token = Utils.generateNewToken(48); } while (userSecurityRepository.existsByAuthToken(token));
+            u.setAuthToken(token);
+            u.setAuthTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
+        }
         u.setLastConnection(new Timestamp(System.currentTimeMillis()));
         log.info("LOGIN " + u.getAuthToken() + " is the token of user " + u.getUsername());
         this.getRepository().save(u);
