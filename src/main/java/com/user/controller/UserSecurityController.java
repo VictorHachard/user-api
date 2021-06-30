@@ -13,7 +13,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.*;
 import javax.validation.Valid;
 import java.util.Base64;
 import java.util.List;
@@ -31,11 +30,11 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     }
 
     @PostMapping("login")
-    public UserSecurityDto login(@Valid @RequestBody String auth) {
+    public UserSecurityDto login(@Valid @RequestBody UserLoginValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
-        String token = new String(Base64.getDecoder().decode(auth));
+        String token = new String(Base64.getDecoder().decode(validator.getAuth()));
         UserSecurityDto res = service.login(token.substring(0, token.indexOf(":")),
-                token.substring(token.indexOf(":") + 1));
+                token.substring(token.indexOf(":") + 1), validator.getCode());
         return res;
     }
 

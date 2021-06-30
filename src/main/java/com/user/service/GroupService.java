@@ -1,14 +1,11 @@
 package com.user.service;
 
 import com.user.dto.GroupDto;
-import com.user.dto.ThemeDto;
 import com.user.model.entities.Group;
-import com.user.model.entities.Theme;
 import com.user.model.repositories.GroupRepository;
 import com.user.service.commons.AbstractService;
 import com.user.validator.GroupValidator;
 import com.user.validator.UpdateGroupActiveValidator;
-import com.user.validator.UpdateThemeActiveValidator;
 import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;

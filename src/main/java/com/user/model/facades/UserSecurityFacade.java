@@ -10,7 +10,6 @@ import com.user.service.commons.FileStorageService;
 import com.user.utils.Utils;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -64,6 +63,17 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
 
     public void updateInstance(UserSecurity u, String username) {
         u.setUsername(username);
+    }
+
+    public void initTwoFactorEmailToken(UserSecurity u) {
+        u.setTwoFactorEmailCode(Utils.randomNumber(6));
+        u.setTwoFactorEmailCreatedAt(new Timestamp(System.currentTimeMillis()));
+        log.info("The two-factor code for the user " + u.getPasswordResetToken() + " is " + u.getTwoFactorEmailCode());
+    }
+
+    public void confirmTwoFactorEmailToken(UserSecurity u) {
+        u.setTwoFactorEmailCode(null);
+        u.setTwoFactorEmailCreatedAt(null);
     }
 
     public void initPasswordToken(UserSecurity u) {

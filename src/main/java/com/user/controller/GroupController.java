@@ -2,13 +2,10 @@ package com.user.controller;
 
 import com.user.controller.commons.AbstractController;
 import com.user.dto.GroupDto;
-import com.user.dto.ThemeDto;
 import com.user.model.entities.Group;
 import com.user.service.GroupService;
-import com.user.service.ThemeService;
 import com.user.validator.GroupValidator;
 import com.user.validator.UpdateGroupActiveValidator;
-import com.user.validator.UpdateThemeActiveValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;

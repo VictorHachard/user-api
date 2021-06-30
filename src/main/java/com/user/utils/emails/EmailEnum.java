@@ -14,7 +14,7 @@ public enum EmailEnum {
                     "sure your password does not sound right. Do it with uppercase letters, lowercase letters," +
                     "numbers, special characters. Make sure is more than 12 characters.</p>",
             "Update Password"),
-    AUTH_CODE("Success: There Your 2-factor Login Code",
+    AUTH_CODE("Success: There Your Two-factor Login Code",
             "",
             ""),
     ;

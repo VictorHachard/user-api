@@ -1,10 +1,8 @@
 package com.user.mapper;
 
-import com.user.dto.ThemeSimplifiedDto;
 import com.user.dto.UserSecurityDto;
 import com.user.dto.UserSecurityProfileDto;
 import com.user.mapper.commons.AbstractMapper;
-import com.user.model.entities.Theme;
 import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.PrivacyEnum;
 import lombok.AccessLevel;

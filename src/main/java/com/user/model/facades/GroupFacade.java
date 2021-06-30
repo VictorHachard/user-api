@@ -1,7 +1,6 @@
 package com.user.model.facades;
 
 import com.user.model.entities.Group;
-import com.user.model.entities.Theme;
 import com.user.model.facades.commons.AbstractFacade;
 import org.springframework.stereotype.Component;
 

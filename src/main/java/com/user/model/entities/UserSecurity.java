@@ -6,7 +6,6 @@ import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.entities.enums.PrivacyEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -102,6 +101,13 @@ public class UserSecurity extends AbstractEntity {
 
     @Column()
     Boolean twoFactorEmail;
+
+    @Column()
+    String twoFactorEmailCode;
+
+    @Column()
+    @Temporal(TemporalType.TIMESTAMP)
+    Date twoFactorEmailCreatedAt;
 
     public void addPassword(Password... passwords) {
         passwordList.addAll(Arrays.asList(passwords));

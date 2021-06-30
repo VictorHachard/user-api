@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 // Lombok
@@ -73,17 +72,33 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         return user;
     }
 
-    public UserSecurityDto login(String username, String password) {
+    public UserSecurityDto login(String username, String password, String code) {
         if (!this.getRepository().existsByUsername(username)) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "The username is not correct");
         }
         UserSecurity user = this.getRepository().findByUsername(username).get();
+
         List<Password> passwordList = new ArrayList<>(user.getPasswordList());
         Collections.sort(passwordList);
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (!passwordEncoder.matches(password, passwordList.get(passwordList.size() -1).getPassword())) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "The password is not correct");
+        }
+
+        Date currentDate = new Date();
+        if (user.getTwoFactorEmail()) {
+            if ((code == null || code.equals("")) && (user.getAuthTokenCreatedAt() == null || user.getAuthTokenCreatedAt().before(new Date(currentDate.getTime() - 1l * 24 * 60 * 60 * 1000)))) {
+                userSecurityFacade.initTwoFactorEmailToken(user);
+                this.getRepository().save(user);
+                this.responseStatus(HttpStatus.BAD_REQUEST, "2FA - Need two-factor authentication");
+            } else if (code != null && !code.equals("") && user.getTwoFactorEmailCode() != null && !user.getTwoFactorEmailCode().equals("") && !user.getTwoFactorEmailCode().equals(code)) {
+                this.responseStatus(HttpStatus.BAD_REQUEST, "Two-factor authentication code is not correct");
+            }
+        }
+        if (user.getTwoFactorEmailCode() != null) {
+            userSecurityFacade.confirmTwoFactorEmailToken(user);
+            this.getRepository().save(user);
         }
         this.setAuthToken(user);
         return (UserSecurityDto) this.getMapper().getDto(user);
