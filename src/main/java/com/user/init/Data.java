@@ -30,6 +30,17 @@ public class Data extends AbstractAutowire {
                 "Default light",
                 true,
                 0,
+                "#ffffff",
+                "#f1f1f1",
+                "#eaeaea",
+                "#e3e3e3",
+                "#000000",
+                "#1a1a1a"
+        ));
+        themeRepository.save(themeFacade.newInstance(
+                "Light dimmed",
+                true,
+                1,
                 "#f1f1f1",
                 "#eaeaea",
                 "#e3e3e3",
@@ -40,7 +51,7 @@ public class Data extends AbstractAutowire {
         themeRepository.save(themeFacade.newInstance(
                 "Default dark",
                 true,
-                0,
+                2,
                 "#0d1117",
                 "#161b22",
                 "#21262f",
@@ -51,7 +62,7 @@ public class Data extends AbstractAutowire {
         themeRepository.save(themeFacade.newInstance(
                 "Dark dimmed",
                 true,
-                0,
+                3,
                 "#202225",
                 "#292b2f",
                 "#2f3136",
