@@ -26,7 +26,6 @@ public class ThemeService extends AbstractService<Theme, ThemeRepository> {
     public void create(AbstractValidator abstractValidator) {
         ThemeValidator validator = (ThemeValidator) abstractValidator;
         this.create(validator.getName(),
-                validator.getImageUrl(),
                 validator.getPrimaryColor(),
                 validator.getSecondaryColor(),
                 validator.getTertiaryColor(),
@@ -37,7 +36,6 @@ public class ThemeService extends AbstractService<Theme, ThemeRepository> {
     }
 
     public Theme create(String password,
-                        String imageUrl,
                         String primaryColor,
                         String secondaryColor,
                         String tertiaryColor,
@@ -48,7 +46,6 @@ public class ThemeService extends AbstractService<Theme, ThemeRepository> {
                 password,
                 false,
                 Math.toIntExact(this.count()),
-                imageUrl,
                 primaryColor,
                 secondaryColor,
                 tertiaryColor,

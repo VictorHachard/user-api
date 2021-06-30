@@ -10,7 +10,6 @@ public class ThemeFacade extends AbstractFacade<Theme> {
     public Theme newInstance(String name,
                              boolean active,
                              int order,
-                             String url,
                              String primaryColor,
                              String secondaryColor,
                              String tertiaryColor,
@@ -21,7 +20,6 @@ public class ThemeFacade extends AbstractFacade<Theme> {
         res.setName(name);
         res.setActive(active);
         res.setOrder(order);
-        res.setImageUrl(url);
         res.setPrimaryColor(primaryColor);
         res.setSecondaryColor(secondaryColor);
         res.setTertiaryColor(tertiaryColor);
