@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import javax.persistence.Column;
+
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -31,5 +33,23 @@ public class ThemeDto extends Dto {
     String primaryTextColor;
 
     String secondaryTextColor;
+
+    String primaryAlertSuccessColor;
+
+    String secondaryAlertSuccessColor;
+
+    String tertiaryAlertSuccessColor;
+
+    String primaryAlertWarningColor;
+
+    String secondaryAlertWarningColor;
+
+    String tertiaryAlertWarningColor;
+
+    String primaryAlertDangerColor;
+
+    String secondaryAlertDangerColor;
+
+    String tertiaryAlertDangerColor;
 
 }

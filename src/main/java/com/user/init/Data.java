@@ -52,23 +52,45 @@ public class Data extends AbstractAutowire {
                 "Default dark",
                 true,
                 2,
+                "#0a0c10",
+                "#272b33",
+                "#606873",
+                "#7a828e",
+                "#ffffff",
+                "#edf2f7"
+        ));
+        themeRepository.save(themeFacade.newInstance(
+                "Default dark blue",
+                true,
+                3,
                 "#0d1117",
                 "#161b22",
                 "#21262f",
-                "#21252a",
+                "#30363d",
                 "#eeeeee",
                 "#d4d4d4"
         ));
         themeRepository.save(themeFacade.newInstance(
                 "Dark dimmed",
                 true,
-                3,
+                4,
                 "#202225",
                 "#292b2f",
                 "#2f3136",
                 "#36393f",
                 "#ececec",
                 "#c1c1c1"
+        ));
+        themeRepository.save(themeFacade.newInstance(
+                "Dark blue dimmed",
+                true,
+                5,
+                "#22272e",
+                "#2d333b",
+                "#373e47",
+                "#3b4048",
+                "#c0c7ce",
+                "#adbac7"
         ));
 
         for (int i = 0; i < 50; i++) {

@@ -1,11 +1,13 @@
 package com.user.utils;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 public class Utils {
 
@@ -93,6 +95,14 @@ public class Utils {
 
     public static String niceDate(Date date) {
         return new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z").format(date);
+    }
+
+    /* https://www.nbdtech.com/Blog/archive/2008/04/27/Calculating-the-Perceived-Brightness-of-a-Color.aspx */
+    public static int brightness(Color c) {
+        return (int) Math.sqrt(
+            c.getRed() * c.getRed() * .241 +
+            c.getGreen() * c.getGreen() * .691 +
+            c.getBlue() * c.getBlue() * .068);
     }
 
 }
