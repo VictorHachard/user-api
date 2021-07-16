@@ -86,7 +86,7 @@ public class ThemeMapper extends AbstractMapper<ThemeDto, Theme> {
 
     private String generateSVG(Theme e) {
 
-        return "<svg style=\"width: 100%\" viewBox=\"0 0 228 120\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+        return "<svg style=\"\" viewBox=\"0 0 228 120\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                     "<path d=\"M0 0H228V120H0V0Z\" fill=\"" + e.getPrimaryColor() + "\"/>\n" +
                     "<path d=\"M-0.5 -0.5H228.5V23.5H-0.5V-0.5Z\" fill=\"" + e.getSecondaryColor() + "\" stroke=\"" + e.getQuaternaryColor() + "\"/>\n" +
                     "<rect x=\"29\" y=\"54\" width=\"144\" height=\"53\" rx=\"2\" fill=\"" + e.getSecondaryColor() + "\"/>\n" +
@@ -94,14 +94,13 @@ public class ThemeMapper extends AbstractMapper<ThemeDto, Theme> {
                     "<rect x=\"184.5\" y=\"54.5\" width=\"31\" height=\"35\" rx=\"1.5\" stroke=\"" + e.getQuaternaryColor() + "\"/>\n" +
                     "<rect x=\"29.5\" y=\"54.5\" width=\"143\" height=\"52\" rx=\"1.5\" stroke=\"" + e.getQuaternaryColor() + "\"/>\n" +
                     "<rect opacity=\"0.3\" x=\"29\" y=\"59\" width=\"144\" height=\"12\" fill=\"" + e.getPrimaryAlertSuccessColor() + "\"/>\n" +
-
-                    "<rect x=\"13\" y=\"9\" width=\"32\" height=\"6\" rx=\"3\" fill=\"" + e.getTertiaryColor() + "\"/>\n" +
-                    "<rect x=\"29\" y=\"36\" width=\"48\" height=\"6\" rx=\"3\" fill=\"" + e.getQuaternaryColor() + "\"/>\n" +
+                    "<rect x=\"29\" y=\"36\" width=\"48\" height=\"6\" rx=\"3\" fill=\"" + e.getTertiaryColor() + "\"/>\n" +
                     "<rect x=\"34\" y=\"62\" width=\"64\" height=\"6\" rx=\"3\" fill=\"" + e.getSecondaryAlertSuccessColor() + "\"/>\n" +
                     "<rect x=\"210\" y=\"36\" width=\"6\" height=\"6\" rx=\"1\" fill=\"" + e.getSecondaryAlertDangerColor() + "\"/>\n" +
                     "<rect x=\"202\" y=\"36\" width=\"6\" height=\"6\" rx=\"1\" fill=\"" + e.getSecondaryAlertSuccessColor() + "\"/>\n" +
-                    "<rect x=\"53\" y=\"9\" width=\"32\" height=\"6\" rx=\"3\" fill=\"" + e.getTertiaryColor() + "\"/>\n" +
-                    "<rect x=\"93\" y=\"9\" width=\"32\" height=\"6\" rx=\"3\" fill=\"" + e.getTertiaryColor() + "\"/>\n" +
+                    "<rect x=\"13\" y=\"9\" width=\"32\" height=\"6\" rx=\"3\" fill=\"" + e.getQuaternaryColor() + "\"/>\n" +
+                    "<rect x=\"53\" y=\"9\" width=\"32\" height=\"6\" rx=\"3\" fill=\"" + e.getQuaternaryColor() + "\"/>\n" +
+                    "<rect x=\"93\" y=\"9\" width=\"32\" height=\"6\" rx=\"3\" fill=\"" + e.getQuaternaryColor() + "\"/>\n" +
                 "</svg>";
     }
 
