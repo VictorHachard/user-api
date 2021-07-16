@@ -53,9 +53,9 @@ public class Data extends AbstractAutowire {
                 true,
                 2,
                 "#0a0c10",
-                "#272b33",
-                "#606873",
-                "#7a828e",
+                "#272a2f",
+                "#40454c",
+                "#555a63",
                 "#ffffff",
                 "#edf2f7"
         ));
@@ -88,7 +88,7 @@ public class Data extends AbstractAutowire {
                 "#22272e",
                 "#2d333b",
                 "#373e47",
-                "#3b4048",
+                "#414750",
                 "#c0c7ce",
                 "#adbac7"
         ));
