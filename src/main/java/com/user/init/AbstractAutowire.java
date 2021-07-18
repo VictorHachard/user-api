@@ -120,4 +120,28 @@ public abstract class AbstractAutowire {
     @Autowired
     ImageFacade imageFacade;
 
+    @Autowired
+    HtmlTextRepository htmlTextRepository;
+
+    @Autowired
+    HtmlTextMapper htmlTextMapper;
+
+    @Autowired
+    HtmlTextService htmlTextService;
+
+    @Autowired
+    HtmlTextFacade htmlTextFacade;
+
+    @Autowired
+    HtmlTextHistoryRepository htmlTextHistoryRepository;
+
+    @Autowired
+    HtmlTextHistoryMapper htmlTextHistoryMapper;
+
+    @Autowired
+    HtmlTextHistoryService htmlTextHistoryService;
+
+    @Autowired
+    HtmlTextHistoryFacade htmlTextHistoryFacade;
+
 }

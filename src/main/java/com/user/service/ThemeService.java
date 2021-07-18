@@ -35,7 +35,7 @@ public class ThemeService extends AbstractService<Theme, ThemeRepository> {
         this.responseStatus(HttpStatus.NO_CONTENT, "Success " + this.getClass().getSimpleName().toLowerCase() + " created");
     }
 
-    public Theme create(String password,
+    public Theme create(String name,
                         String primaryColor,
                         String secondaryColor,
                         String tertiaryColor,
@@ -43,7 +43,7 @@ public class ThemeService extends AbstractService<Theme, ThemeRepository> {
                         String primaryTextColor,
                         String secondaryTextColor) {
         Theme t = themeFacade.newInstance(
-                password,
+                name,
                 false,
                 Math.toIntExact(this.count()),
                 primaryColor,
