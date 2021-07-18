@@ -21,18 +21,18 @@ import java.util.List;
 @Log
 public class GroupController extends AbstractController<Group, GroupDto> {
 
-    @PostMapping("/create")
+    @PostMapping("create")
     public void create(@Valid @RequestBody GroupValidator validator) {
         this.getService().create(validator);
     }
 
-    @GetMapping("/dto/active")
+    @GetMapping("dto/active")
     public List<GroupDto> getAllActiveDto() {
         GroupService service = (GroupService) this.getService();
         return service.getAllActiveDto();
     }
 
-    /*@PutMapping("/{id}")
+    /*@PutMapping("{id}")
     public void update(@PathVariable("id") long id, @Valid @RequestBody GroupValidator validator) {
         if (groupRepository.existsById(id)) {
             boolean existsByName = groupRepository.existsByName(validator.getName());

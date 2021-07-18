@@ -16,4 +16,6 @@ public class HtmlTextHistoryDto extends Dto {
 
     List<HtmlTextDto> HtmlHistory;
 
+    String name;
+
 }

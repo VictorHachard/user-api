@@ -41,6 +41,9 @@ public class ThemeFacade extends AbstractFacade<Theme> {
             res.setPrimaryAlertDangerColor("#f8d7da");
             res.setSecondaryAlertDangerColor("#f5c2c7");
             res.setTertiaryAlertDangerColor("#842029");
+            res.setPrimaryAlertPrimaryColor("#cce5ff");
+            res.setSecondaryAlertPrimaryColor("#b8daff");
+            res.setTertiaryAlertPrimaryColor("#004085");
         } else { //dark
             res.setPrimaryAlertSuccessColor("#17361EFF");
             res.setSecondaryAlertSuccessColor("#296336FF");
@@ -51,6 +54,9 @@ public class ThemeFacade extends AbstractFacade<Theme> {
             res.setPrimaryAlertDangerColor("#400B10FF");
             res.setSecondaryAlertDangerColor("#811722FF");
             res.setTertiaryAlertDangerColor("#E69BA2FF");
+            res.setPrimaryAlertPrimaryColor("#262a2b");
+            res.setSecondaryAlertPrimaryColor("#003b7b");
+            res.setTertiaryAlertPrimaryColor("#7cc3ff");
         }
 
         return res;

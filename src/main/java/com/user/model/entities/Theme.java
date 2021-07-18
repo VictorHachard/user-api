@@ -73,4 +73,13 @@ public class Theme extends AbstractEntity {
     @Column
     String tertiaryAlertDangerColor;
 
+    @Column
+    String primaryAlertPrimaryColor;
+
+    @Column
+    String secondaryAlertPrimaryColor;
+
+    @Column
+    String tertiaryAlertPrimaryColor;
+
 }

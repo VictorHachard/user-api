@@ -20,6 +20,7 @@ public class HtmlTextHistoryMapper extends AbstractMapper<HtmlTextHistoryDto, Ht
     public HtmlTextHistoryDto getDto(HtmlTextHistory e) {
         HtmlTextHistoryDto dto = super.getDto(e);
         dto.setHtmlHistory(htmlTextMapper.getAllDto(new ArrayList<>(e.getHtmlHistory())));
+        dto.setName(e.getName());
         return dto;
     }
 

@@ -22,12 +22,12 @@ import java.util.List;
 @Log
 public class ThemeController extends AbstractController<Theme, ThemeDto> {
 
-    @PostMapping("/create")
+    @PostMapping("create")
     public void create(@Valid @RequestBody ThemeValidator validator) {
         this.getService().create(validator);
     }
 
-    @GetMapping("/dto/active")
+    @GetMapping("dto/active")
     public List<ThemeDto> getAllActiveDto() {
         ThemeService service = (ThemeService) this.getService();
         return service.getAllActiveDto();

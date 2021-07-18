@@ -24,7 +24,7 @@ import java.util.List;
 @Log
 public class UserSecurityController extends AbstractController<UserSecurity, UserSecurityDto> {
 
-    @PostMapping("/create")
+    @PostMapping("create")
     public void create(@Valid @RequestBody UserSecurityValidator validator) {
         this.getService().create(validator);
     }

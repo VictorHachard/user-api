@@ -48,6 +48,9 @@ public class ThemeMapper extends AbstractMapper<ThemeDto, Theme> {
         dto.setPrimaryAlertDangerColor(e.getPrimaryAlertDangerColor());
         dto.setSecondaryAlertDangerColor(e.getSecondaryAlertDangerColor());
         dto.setTertiaryAlertDangerColor(e.getTertiaryAlertDangerColor());
+        dto.setPrimaryAlertPrimaryColor(e.getPrimaryAlertPrimaryColor());
+        dto.setSecondaryAlertPrimaryColor(e.getSecondaryAlertPrimaryColor());
+        dto.setTertiaryAlertPrimaryColor(e.getTertiaryAlertPrimaryColor());
         return dto;
     }
 
@@ -81,11 +84,13 @@ public class ThemeMapper extends AbstractMapper<ThemeDto, Theme> {
         dto.setPrimaryAlertDangerColor(e.getPrimaryAlertDangerColor());
         dto.setSecondaryAlertDangerColor(e.getSecondaryAlertDangerColor());
         dto.setTertiaryAlertDangerColor(e.getTertiaryAlertDangerColor());
+        dto.setPrimaryAlertPrimaryColor(e.getPrimaryAlertPrimaryColor());
+        dto.setSecondaryAlertPrimaryColor(e.getSecondaryAlertPrimaryColor());
+        dto.setTertiaryAlertPrimaryColor(e.getTertiaryAlertPrimaryColor());
         return dto;
     }
 
     private String generateSVG(Theme e) {
-
         return "<svg style=\"\" viewBox=\"0 0 228 120\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                     "<path d=\"M0 0H228V120H0V0Z\" fill=\"" + e.getPrimaryColor() + "\"/>\n" +
                     "<path d=\"M-0.5 -0.5H228.5V23.5H-0.5V-0.5Z\" fill=\"" + e.getSecondaryColor() + "\" stroke=\"" + e.getQuaternaryColor() + "\"/>\n" +

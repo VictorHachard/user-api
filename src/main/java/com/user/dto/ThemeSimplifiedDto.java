@@ -46,4 +46,10 @@ public class ThemeSimplifiedDto extends Dto {
 
     String tertiaryAlertDangerColor;
 
+    String primaryAlertPrimaryColor;
+
+    String secondaryAlertPrimaryColor;
+
+    String tertiaryAlertPrimaryColor;
+
 }
