@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Entity
 // Lombok
+@EqualsAndHashCode(callSuper=true)
 @ToString
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)

@@ -11,6 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "group_a")
 // Lombok
+@EqualsAndHashCode
 @ToString
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)

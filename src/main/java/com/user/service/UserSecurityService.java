@@ -250,7 +250,11 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
 
     public void addBlockedUser(long userId) {
         UserSecurity u = this.getUser();
-        u.addBlockedUserSecurity(this.get(userId));
+        UserSecurity ub = this.get(userId);
+        if (u.getBlockedUserSecurity().contains(ub)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This user is already blocked");
+        }
+        u.addBlockedUserSecurity(ub);
         this.getRepository().save(u);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success blocked user added");
     }
@@ -277,11 +281,11 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
 
     public void removeBlockedUser(long userId) {
         UserSecurity ub = this.get(userId);
-        UserSecurity u = this.get(userId);
+        UserSecurity u = this.getUser();
         if (!u.getBlockedUserSecurity().contains(ub)) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "This blocked user is not define for this user");
         }
-        u.getGroupList().remove(ub);
+        u.getBlockedUserSecurity().remove(ub);
         this.getRepository().save(u);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success blocked user removed");
     }
