@@ -248,6 +248,13 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         return cookieRememberMapper.getDto(cr);
     }
 
+    public void addBlockedUser(long userId) {
+        UserSecurity u = this.getUser();
+        u.addBlockedUserSecurity(this.get(userId));
+        this.getRepository().save(u);
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success blocked user added");
+    }
+
     public void addGroup(long groupId, long userId) {
         Group g = groupService.get(groupId);
         UserSecurity u = this.get(userId);
@@ -266,6 +273,17 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         }
         u.addRole(r);
         this.getRepository().save(u);
+    }
+
+    public void removeBlockedUser(long userId) {
+        UserSecurity ub = this.get(userId);
+        UserSecurity u = this.get(userId);
+        if (!u.getBlockedUserSecurity().contains(ub)) {
+            this.responseStatus(HttpStatus.BAD_REQUEST, "This blocked user is not define for this user");
+        }
+        u.getGroupList().remove(ub);
+        this.getRepository().save(u);
+        this.responseStatus(HttpStatus.NO_CONTENT, "Success blocked user removed");
     }
 
     public void removeGroup(long groupId, long userId) {

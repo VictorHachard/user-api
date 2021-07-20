@@ -45,6 +45,8 @@ public class UserSecurityDto extends Dto {
 
     List<RoleDto> roleDtoList;
 
+    List<UserSecuritySimplifiedDto> blockedUserDtoList;
+
     String emailPreferences;
 
     Boolean twoFactorEmail;

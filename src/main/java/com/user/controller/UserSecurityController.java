@@ -130,6 +130,12 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.addRole(roleId, userId);
     }
 
+    @PostMapping("add/blocked-user/{userId}")
+    public void addBlockedUser(@PathVariable("userId") long userId) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.addBlockedUser(userId);
+    }
+
     @PostMapping("add/group/{groupId}/user/{userId}")
     public void addGroup(@PathVariable("groupId") long groupId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
@@ -140,6 +146,12 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     public void removeRole(@PathVariable("roleId") long roleId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeRole(roleId, userId);
+    }
+
+    @DeleteMapping("remove/blocked-user/{userId}")
+    public void removeBlockedUser(@PathVariable("userId") long userId) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        service.removeBlockedUser(userId);
     }
 
     @DeleteMapping("remove/group/{groupId}/user/{userId}")

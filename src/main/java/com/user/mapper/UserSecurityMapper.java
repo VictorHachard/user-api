@@ -2,6 +2,7 @@ package com.user.mapper;
 
 import com.user.dto.UserSecurityDto;
 import com.user.dto.UserSecurityProfileDto;
+import com.user.dto.UserSecuritySimplifiedDto;
 import com.user.mapper.commons.AbstractMapper;
 import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.PrivacyEnum;
@@ -28,6 +29,7 @@ public class UserSecurityMapper extends AbstractMapper<UserSecurityDto, UserSecu
         dto.setEmailList(emailMapper.getAllDto(new ArrayList<>(e.getEmailList())));
         dto.setGroupDtoList(groupMapper.getAllDto(new ArrayList<>(e.getGroupList())));
         dto.setRoleDtoList(roleMapper.getAllDto(new ArrayList<>(e.getPermissionList())));
+        dto.setBlockedUserDtoList(this.getAllUserSecuritySimplifiedDto(new ArrayList<>(e.getBlockedUserSecurity())));
         dto.setPrivacy(e.getPrivacy().name());
         dto.setThemeSimplifiedDto(e.getTheme() != null ? themeMapper.getSimplifiedDto(e.getTheme()) : null);
         dto.setBiography(e.getBiography());
@@ -63,6 +65,22 @@ public class UserSecurityMapper extends AbstractMapper<UserSecurityDto, UserSecu
             dto.setNameFormatted(this.getName(e));
             dto.setProfileImage(e.getProfileImageUrl());
         }
+        return dto;
+    }
+
+    public List<UserSecuritySimplifiedDto> getAllUserSecuritySimplifiedDto(List<UserSecurity> aList) {
+        List<UserSecuritySimplifiedDto> res = new ArrayList<>();
+        aList.forEach(a -> {
+            res.add(this.getUserSecuritySimplifiedDto(a));
+        });
+        return res;
+    }
+
+    public UserSecuritySimplifiedDto getUserSecuritySimplifiedDto(UserSecurity e) {
+        UserSecuritySimplifiedDto dto = new UserSecuritySimplifiedDto();
+        dto.setId(e.getId());
+        dto.setCreatedAt(e.getCreatedAt());
+        dto.setUsername(e.getUsername());
         return dto;
     }
 

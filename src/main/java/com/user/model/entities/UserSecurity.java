@@ -84,6 +84,9 @@ public class UserSecurity extends AbstractEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Email> emailList = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<UserSecurity> blockedUserSecurity = new HashSet<>();
+
     @Column
     @Enumerated(EnumType.STRING)
     PrivacyEnum privacy;
@@ -127,6 +130,10 @@ public class UserSecurity extends AbstractEntity {
 
     public void addRole(Role... roles) {
         permissionList.addAll(Arrays.asList(roles));
+    }
+
+    public void addBlockedUserSecurity(UserSecurity... userSecurities) {
+        blockedUserSecurity.addAll(Arrays.asList(userSecurities));
     }
 
     /* Methods */
