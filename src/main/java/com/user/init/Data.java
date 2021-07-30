@@ -91,6 +91,18 @@ public class Data extends AbstractAutowire {
                 "#adbac7"
         ));
 
+        settingRepository.save(settingFacade.newInstance("profile", true, false));
+        settingRepository.save(settingFacade.newInstance("account", true, false));
+        settingRepository.save(settingFacade.newInstance("appearance", true, true));
+        settingRepository.save(settingFacade.newInstance("security", true, false));
+        settingRepository.save(settingFacade.newInstance("emails", true, false));
+        settingRepository.save(settingFacade.newInstance("address", true, true));
+        settingRepository.save(settingFacade.newInstance("cookies", true, true));
+        settingRepository.save(settingFacade.newInstance("notifications", true, true));
+        settingRepository.save(settingFacade.newInstance("security-log", true, true));
+        settingRepository.save(settingFacade.newInstance("blocked-users", true, true));
+        settingRepository.save(settingFacade.newInstance("interaction-limits", true, true));
+
         HtmlText htmlText = htmlTextFacade.newInstance(
                 "<h2>YouTube Playlist Checker Website Terms of Service</h2>" +
                 "<h3>1. Terms</h3>" +

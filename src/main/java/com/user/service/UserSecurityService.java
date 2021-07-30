@@ -5,7 +5,6 @@ import com.user.dto.SecurityLogDto;
 import com.user.dto.UserSecurityDto;
 import com.user.dto.UserSecurityProfileDto;
 import com.user.model.entities.*;
-import com.user.model.entities.enums.EmailPreferencesEnum;
 import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.entities.enums.PrivacyEnum;
 import com.user.model.entities.enums.SecurityLogEnum;
@@ -148,38 +147,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         log.info("LOGOUT of user " + u.getUsername());
     }
 
-    public void addEmail(EmailValidator validator) {
-        UserSecurity u = this.getUser();
-        Email e = emailService.create(validator.getEmail().toLowerCase(), PriorityEnum.SECONDARY);
-        u.addEmail(e);
-        this.getRepository().save(u);
-        securityLogService.create(SecurityLogEnum.EMAIL_ADDED, u, "Email " + e.getEmail() + " added");
-        this.responseStatus(HttpStatus.NO_CONTENT, "Success new email added");
-    }
-
-    public void updateEmailPriority(EmailValidator validator) {
-        if (!this.getRepository().existsByEmail(validator.getEmail())) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "The email is not correct");
-        }
-        UserSecurity u = this.getUser();
-        if (!u.hasEmail(validator.getEmail())) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "The user don't have this email");
-        }
-        if (!u.getPrincipalEmail().getEmailConfirmed()) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "The email is not confirmed");
-        }
-        for (Email e : u.getEmailList()) {
-            if (e.getPriority() == PriorityEnum.PRIMARY) {
-                e.setPriority(PriorityEnum.SECONDARY);
-                emailRepository.save(e);
-            }
-        }
-        emailService.updateEmailPriority(validator.getEmail());
-        this.getRepository().save(u);
-        securityLogService.create(SecurityLogEnum.EMAIL_CHANGE_PRIORITY, u, "Email " + validator.getEmail() + " updated to Principal");
-        this.responseStatus(HttpStatus.NO_CONTENT, "Success new email added");
-    }
-
     public void updateProfile(UpdateProfileValidator validator) {
         UserSecurity u = this.getUser();
         userSecurityFacade.updateInstance(u, validator.getFirstName(), validator.getMiddleName(), validator.getLastName(), validator.getBiography(), validator.getUrl(), validator.getProfileImage());
@@ -187,12 +154,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         this.responseStatus(HttpStatus.NO_CONTENT, "Success update user");
     }
 
-    public void updateEmailPreferences(UpdateEmailPreferencesValidator validator) {
-        UserSecurity u = this.getUser();
-        userSecurityFacade.updateEmailPreferences(u, EmailPreferencesEnum.valueOf(validator.getEmailPreferences()));
-        this.getRepository().save(u);
-        this.responseStatus(HttpStatus.NO_CONTENT, "Success update email preferences");
-    }
+
 
     public void updateProfilePrivacy(UpdateProfilePrivacyValidator validator) {
         UserSecurity u = this.getUser();
@@ -217,19 +179,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         u.setTheme(themeService.get(id));
         this.getRepository().save(u);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success update appearance");
-    }
-
-    public void updateEmailBackup(long id, UpdateEmailBackupValidator validator) {
-        UserSecurity u = this.getUser();
-        boolean contain = false;
-        Email e = null;
-        for (Email ee : u.getEmailList()) {if (ee.getId() == id) {contain = true; e = ee; break;}}
-        if (!contain) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "The user don't have this email");
-        }
-        e.setBackup(validator.getBackup());
-        emailRepository.save(e);
-        this.responseStatus(HttpStatus.NO_CONTENT, "Success update backup email");
     }
 
     public void addPassword(PasswordValidator validator) {
@@ -310,22 +259,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         this.getRepository().save(u);
     }
 
-    public void removeEmail(long id) {
-        if (!emailRepository.existsById(id)) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "There is no " + this.getClass().getSimpleName() + " in the database");
-        }
-        Email e = emailRepository.findById(id).get();
-        if (e.getPriority() == PriorityEnum.PRIMARY) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "Cannot delete PRINCIPAL email");
-        } else {
-            UserSecurity u = this.getRepository().findByEmailId(id).get();
-            u.getEmailList().remove(e);
-            emailRepository.deleteById(id);
-            securityLogService.create(SecurityLogEnum.EMAIL_REMOVED, u, "Email " + e.getEmail() + " removed");
-            this.responseStatus(HttpStatus.NO_CONTENT, "Email deleted");
-        }
-    }
-
     public void removeCookie(long id) {
         CookieRemember cr = cookieRememberService.get(id);
         UserSecurity u = this.getUser();
@@ -352,23 +285,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
     }
 
     /* Actions */
-
-    public void actionConfirmEmail(String token) {
-        emailService.confirmEmail(token);
-    }
-
-    public void actionConfirmResendEmail(long id) {
-        if (!this.getRepository().existsByEmailId(id)) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "The email is not correct");
-        }
-        UserSecurity u = this.getUser();
-        boolean contain = false;
-        for (Email ee : u.getEmailList()) {if (ee.getId() == id) {contain = true; break;}}
-        if (!contain) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "The user don't have this email");
-        }
-        emailService.resendConfirmEmail(emailService.get(id));
-    }
 
     public void actionResetPassword(ActionResetPasswordValidator validator) {
         if (!this.getRepository().existsByPasswordResetToken(validator.getToken())) {

@@ -144,4 +144,28 @@ public abstract class AbstractAutowire {
     @Autowired
     HtmlTextHistoryFacade htmlTextHistoryFacade;
 
+    @Autowired
+    SettingRepository settingRepository;
+
+    @Autowired
+    SettingMapper settingMapper;
+
+    @Autowired
+    SettingService settingService;
+
+    @Autowired
+    SettingFacade settingFacade;
+
+    @Autowired
+    AddressRepository addressRepository;
+
+    @Autowired
+    AddressMapper addressMapper;
+
+    @Autowired
+    AddressService addressService;
+
+    @Autowired
+    AddressFacade addressFacade;
+
 }

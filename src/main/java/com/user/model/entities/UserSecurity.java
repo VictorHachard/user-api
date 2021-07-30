@@ -86,6 +86,9 @@ public class UserSecurity extends AbstractEntity {
     Set<Email> emailList = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
+    Set<Address> addressList = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<UserSecurity> blockedUserSecurity = new HashSet<>();
 
     @Column
@@ -119,6 +122,10 @@ public class UserSecurity extends AbstractEntity {
 
     public void addEmail(Email... emails) {
         emailList.addAll(Arrays.asList(emails));
+    }
+
+    public void addAddress(Address... addresses) {
+        addressList.addAll(Arrays.asList(addresses));
     }
 
     public void addCookie(CookieRemember... cookieRemembers) {

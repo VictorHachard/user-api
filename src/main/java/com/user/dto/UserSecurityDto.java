@@ -51,4 +51,6 @@ public class UserSecurityDto extends Dto {
 
     Boolean twoFactorEmail;
 
+    List<AddressDto> addressDtoList;
+
 }

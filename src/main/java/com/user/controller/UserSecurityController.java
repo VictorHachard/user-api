@@ -58,24 +58,6 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.logOut();
     }
 
-    @PostMapping("add/email")
-    public void addEmail(@Valid @RequestBody EmailValidator validator) {
-        UserSecurityService service = (UserSecurityService) this.getService();
-        service.addEmail(validator);
-    }
-
-    @PostMapping("update/email/priority")
-    public void updateEmailPriority(@Valid @RequestBody EmailValidator validator) {
-        UserSecurityService service = (UserSecurityService) this.getService();
-        service.updateEmailPriority(validator);
-    }
-
-    @PostMapping("update/email/backup/{emailId}")
-    public void updateEmailBackup(@Valid @RequestBody UpdateEmailBackupValidator validator, @PathVariable("emailId") long emailId) {
-        UserSecurityService service = (UserSecurityService) this.getService();
-        service.updateEmailBackup(emailId, validator);
-    }
-
     @PostMapping("update/appearance/{appearanceId}")
     public void updateAppearance(@PathVariable("appearanceId") long appearanceId) {
         UserSecurityService service = (UserSecurityService) this.getService();
@@ -86,12 +68,6 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     public void updateProfile(@Valid @RequestBody UpdateProfileValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateProfile(validator);
-    }
-
-    @PostMapping("update/email-preferences")
-    public void updateEmailPreferences(@Valid @RequestBody UpdateEmailPreferencesValidator validator) {
-        UserSecurityService service = (UserSecurityService) this.getService();
-        service.updateEmailPreferences(validator);
     }
 
     @PostMapping("update/profile-privacy")
@@ -160,12 +136,6 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.removeGroup(groupId, userId);
     }
 
-    @DeleteMapping("remove/email/{id}")
-    public void removeEmail(@PathVariable("id") long id) {
-        UserSecurityService service = (UserSecurityService) this.getService();
-        service.removeEmail(id);
-    }
-
     @DeleteMapping("remove/cookie/{id}")
     public void removeCookie(@PathVariable("id") long id) {
         UserSecurityService service = (UserSecurityService) this.getService();
@@ -195,18 +165,6 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     }
 
     /* Actions */
-
-    @PostMapping("action/confirm/email")
-    public void actionConfirmEmail(@Valid @RequestBody String token) {
-        UserSecurityService service = (UserSecurityService) this.getService();
-        service.actionConfirmEmail(token);
-    }
-
-    @PostMapping("action/confirm/resend/email/{emailId}")
-    public void actionConfirmResendEmail(@PathVariable("emailId") long emailId) {
-        UserSecurityService service = (UserSecurityService) this.getService();
-        service.actionConfirmResendEmail(emailId);
-    }
 
     @PostMapping("action/reset/password")
     public void actionResetPassword(@Valid @RequestBody ActionResetPasswordValidator validator) {
