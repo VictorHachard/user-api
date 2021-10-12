@@ -1,5 +1,5 @@
-[![Alpha]()](https://raster.shields.io/badge/maturity-Alpha-red.png)
-[![MIT license](https://mit-license.org/)](https://img.shields.io/badge/license-MIT-green)
+[![Alpha](https://raster.shields.io/badge/maturity-Alpha-red.png)]()
+[![MIT license](https://img.shields.io/badge/license-MIT-green)](https://mit-license.org/)
 [![BCH compliance](https://bettercodehub.com/edge/badge/VictorHachard/user-api?branch=main)](https://bettercodehub.com/)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/c3b473253d5f47f1b8eecd1b9f5f200c)](https://www.codacy.com/gh/VictorHachard/user-api/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=VictorHachard/user-api&amp;utm_campaign=Badge_Grade)
 
