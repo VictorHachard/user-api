@@ -1,5 +1,6 @@
 package com.user.service.commons;
 
+import com.user.Environment;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
@@ -16,7 +17,7 @@ import java.nio.file.*;
 @Log
 public class FileStorageService {
 
-    final Path fileStorageLocation = Paths.get("C:\\images\\");
+    final Path fileStorageLocation = Paths.get(Environment.DATA_FOLDER);
 
     public String storeFile(MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -36,7 +37,7 @@ public class FileStorageService {
 
     public void deleteFile(String file) {
         try {
-            Files.deleteIfExists(Paths.get("C:\\images\\" + file));
+            Files.deleteIfExists(Paths.get(Environment.DATA_FOLDER + file));
         } catch(NoSuchFileException e) {
             System.out.println("No such file/directory exists");
         } catch(DirectoryNotEmptyException e) {

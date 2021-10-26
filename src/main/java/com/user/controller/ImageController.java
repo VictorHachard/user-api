@@ -1,5 +1,6 @@
 package com.user.controller;
 
+import com.user.Environment;
 import com.user.service.commons.FileStorageService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -24,7 +25,7 @@ public class ImageController {
     @ResponseBody
     @GetMapping("{url}")
     public ResponseEntity<FileSystemResource> getImageAsResource(@PathVariable("url") String url) {
-        FileSystemResource res = new FileSystemResource("C:/images/" + url);
+        FileSystemResource res = new FileSystemResource(Environment.DATA_FOLDER + url);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
