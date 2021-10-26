@@ -184,7 +184,7 @@ public class Data extends AbstractAutowire {
         htmlTextHistory.addHtmlText(htmlText);
         htmlTextHistoryRepository.save(htmlTextHistory);
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 5; i++) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             Password p = passwordFacade.newInstance(passwordEncoder.encode("Test123*"));
             Email e = emailFacade.newInstance(lorem.getEmail(), PriorityEnum.PRIMARY, PrivacyEnum.PRIVATE);
