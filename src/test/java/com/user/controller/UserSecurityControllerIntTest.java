@@ -14,8 +14,4 @@ class UserSecurityControllerIntTest {
     @Autowired
     private MockMvc mvc;
 
-    @Test
-    void count() {
-    }
-
 }
