@@ -19,7 +19,13 @@ public class RequestFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
 
-        response.setHeader("Access-Control-Allow-Origin", Environment.ACCESS_CONTROL_ALLOW_ORIGIN_URL);
+        for (String url : Environment.ACCESS_CONTROL_ALLOW_ORIGIN_URL) {
+            if (request.getHeader("Origin").equals(url)) {
+                response.setHeader("Access-Control-Allow-Origin", url);
+                break;
+            }
+        }
+
         response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
         response.setHeader("Access-Control-Max-Age", "3600");
