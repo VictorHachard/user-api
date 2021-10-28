@@ -145,6 +145,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <executable>true</executable>
+                    <mainClass>com.user.RunApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
