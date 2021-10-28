@@ -15,7 +15,24 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class RunApplication {
 
+	public static boolean PRODUCTION = true;
+
+	/**
+	 * args need to be like -run prod ou -run dev
+	 * @param args
+	 */
 	public static void main(String[] args) {
+		for(int i = 0; i < args.length; i += 2) {
+			switch (args[i]) {
+				case "-run":
+					if (args[i+1].equals("prod")) {
+						PRODUCTION = true;
+					} else if (args[i+1].equals("dev")) {
+						PRODUCTION = false;
+					}
+					break;
+			}
+		}
 		SpringApplication.run(RunApplication.class, args);
 	}
 

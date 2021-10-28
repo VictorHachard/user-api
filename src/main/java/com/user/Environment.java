@@ -6,12 +6,20 @@ import java.util.List;
 
 public class Environment {
 
-    //Dev
-    public static final String DATA_FOLDER = "C:/images/";
-    public static final List<String> ACCESS_CONTROL_ALLOW_ORIGIN_URL = new ArrayList<>(List.of("http://localhost:4200"));
-
-    //Prod
-    //public static final String DATA_FOLDER = "/home/ubuntu/data/images/";
-    //public static final List<String> ACCESS_CONTROL_ALLOW_ORIGIN_URL = new ArrayList<>(Arrays.asList("http://141.94.251.48", "http://vps.ypc.yt", "http://www.vps.ypc.yt"));
+    public static final String DATA_FOLDER = !RunApplication.PRODUCTION ?
+            "C:/images/" : //dev
+            "/home/ubuntu/data/images/"; //prod
+    public static final List<String> ACCESS_CONTROL_ALLOW_ORIGIN_URL = !RunApplication.PRODUCTION ?
+            new ArrayList<>(List.of( //dev
+                    "http://localhost:4200")) :
+            new ArrayList<>(Arrays.asList( //prod
+                    "https://141.94.251.48",
+                    "https://vps.ypc.yt",
+                    "https://api.vps.ypc.yt",
+                    "https://www.vps.ypc.yt",
+                    "http://141.94.251.48",
+                    "http://vps.ypc.yt",
+                    "http://api.vps.ypc.yt",
+                    "http://www.vps.ypc.yt"));
 
 }
