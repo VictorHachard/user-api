@@ -1,5 +1,6 @@
 package com.user.utils.emails;
 
+import com.user.Environment;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
@@ -15,9 +16,6 @@ import java.util.Properties;
 public class EmailService implements Runnable {
 
     Session session;
-    final String serviceUsername = "";
-    final String servicePassword = "";
-    final String url = "http://localhost:4200/";
     final HashMap<String, String> styleHashMap = new HashMap<String, String>();
 
     EmailEnum emailEnum;
@@ -45,7 +43,7 @@ public class EmailService implements Runnable {
         session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(serviceUsername, servicePassword);
+                        return new PasswordAuthentication(Environment.EMAIL_USERNAME, Environment.EMAIL_PASSWORD);
                     }
                 });
 

@@ -21,5 +21,14 @@ public class Environment {
                     "http://vps.ypc.yt",
                     "http://api.vps.ypc.yt",
                     "http://www.vps.ypc.yt"));
+    public static final String EMAIL_USERNAME = !RunApplication.PRODUCTION ?
+            "" : //dev
+            ""; //prod
+    public static final String EMAIL_PASSWORD = !RunApplication.PRODUCTION ?
+            "" : //dev
+            ""; //prod
+    public static final String REDIRECT_FRONT_END_URL = !RunApplication.PRODUCTION ?
+            "http://localhost:4200/" : //dev
+            "http://www.vps.ypc.yt/"; //prod
 
 }
