@@ -1,0 +1,95 @@
+name: actions-ci-cd-spring-boot-app
+
+on:
+  push:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ '11' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up JDK ${{ matrix.node-version }}
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'adopt'
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Compile
+        run: |
+          mvn compile
+      - name: Build Package
+        run: |
+          mvn clean package
+      - name: Archive build
+        uses: actions/upload-artifact@v2
+        with:
+          name: deploy_dist
+          path: target/*.jar
+  cd:
+    needs: ci
+    name: Continuous Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Create folder
+        run: mkdir ~/deploy_dist
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: deploy_dist
+          path: deploy_dist
+      - name: Delete target files
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            ls -al ${{ secrets.PATH }}
+            rm -rf ${{ secrets.PATH }}*
+      - name: Copy file via ssh key
+        uses: appleboy/scp-action@master
+        with: # sudo chmod 777 target directory
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: deploy_dist/*
+          target: ${{ secrets.PATH }}
+      - name: Move files and +x
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            chmod +x ${{ secrets.PATH }}/deploy_dist/*
+            mv ${{ secrets.PATH }}/deploy_dist/* ${{ secrets.PATH }}
+      - name: Restart Service
+        uses: appleboy/ssh-action@master
+        with: # <user> ALL=(ALL) NOPASSWD:ALL
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            ${{ secrets.RESTART }}
+           
