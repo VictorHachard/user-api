@@ -168,4 +168,16 @@ public abstract class AbstractAutowire {
     @Autowired
     AddressFacade addressFacade;
 
+    @Autowired
+    RecoveryCodeFacade recoveryCodeFacade;
+
+    @Autowired
+    RecoveryCodeRepository recoveryCodeRepository;
+
+//    @Autowired
+//    RecoveryCodeMapper recoveryCodeMapper;
+//
+//    @Autowired
+//    RecoveryCodeService recoveryCodeService;
+
 }

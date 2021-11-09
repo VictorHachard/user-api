@@ -91,6 +91,9 @@ public class UserSecurity extends AbstractEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     Set<UserSecurity> blockedUserSecurity = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.EAGER)
+    Set<RecoveryCode> recoveryCodeList = new HashSet<>();
+
     @Column
     @Enumerated(EnumType.STRING)
     PrivacyEnum privacy;
