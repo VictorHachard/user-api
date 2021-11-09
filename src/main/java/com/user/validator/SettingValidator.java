@@ -13,24 +13,10 @@ import javax.validation.constraints.NotNull;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class AddressValidator extends AbstractValidator {
-
-    @NotNull(message = "")
-    @NotEmpty
-    String alias;
+public class SettingValidator extends AbstractValidator {
 
     @NotNull(message = "")
     @NotEmpty
     String name;
-
-    String building; // Building, floor...
-
-    @NotNull(message = "")
-    @NotEmpty
-    String street; // Street, house number, box number
-
-    @NotNull(message = "")
-    @NotEmpty
-    String postcode; // Postcode and name of municipality
 
 }

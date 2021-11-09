@@ -296,6 +296,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         u.addPassword(p);
         passwordRepository.save(p);
         this.getRepository().save(u);
+        securityLogService.create(SecurityLogEnum.PASSWORD_RESET, u, "Password updated with email");
     }
 
     public void actionForgetPassword(String usernameOrEmail) {
@@ -306,7 +307,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         //TODO check not the first time
         userSecurityFacade.initPasswordToken(u);
         this.getRepository().save(u);
-        //securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, u, "Email sent to " + u.getEmailList().stream().filter(email -> {return email.getPriority().equals(PriorityEnum.PRIMARY);}).collect(Collectors.toList()).get(0) + " for a password reset");
+        //securityLogService.create(SecurityLogEnum.PASSWORD_FORGET, u, "Email sent to " + u.getEmailList().stream().filter(email -> {return email.getPriority().equals(PriorityEnum.PRIMARY);}).collect(Collectors.toList()).get(0) + " for a password reset");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success password forget");
     }
 
@@ -322,7 +323,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         Password p = passwordService.create(validator.getNewPassword());
         u.addPassword(p);
         this.getRepository().save(u);
-        securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, u, "Password update (no email)");
+        securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, u, "Password updated");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success new password added");
     }
 

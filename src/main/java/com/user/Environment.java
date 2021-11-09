@@ -6,6 +6,12 @@ import java.util.List;
 
 public class Environment {
 
+    public static final String NAME = !RunApplication.PRODUCTION ?
+            "Localhost" : //dev
+            "User Application"; //prod
+    public static final String DOMAIN_NAME = !RunApplication.PRODUCTION ?
+            "http://localhost:4200" : //dev
+            "https://www.vps.ypc.yt"; //prod
     public static final String DATA_FOLDER = !RunApplication.PRODUCTION ?
             "C:/images/" : //dev
             "/home/ubuntu/data/images/"; //prod

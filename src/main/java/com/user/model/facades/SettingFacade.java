@@ -15,4 +15,12 @@ public class SettingFacade extends AbstractFacade<Setting> {
         return res;
     }
 
+    public Setting newInstance(String name, Boolean active) {
+        Setting res = super.newInstance();
+        res.setName(name);
+        res.setActive(active);
+        res.setCanUpdate(true);
+        return res;
+    }
+
 }

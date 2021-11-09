@@ -22,9 +22,9 @@ public class Setting extends AbstractEntity {
     String name;
 
     @Column
-    Boolean active;
+    boolean active;
 
     @Column
-    Boolean canUpdate;
+    boolean canUpdate;
 
 }
