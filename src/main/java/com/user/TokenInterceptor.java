@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TokenInterceptor extends HandlerInterceptorAdapter {
 
@@ -23,6 +24,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        System.out.println(handler);
         String authToken = request.getHeader("Authorization");
         boolean hasAuthorizedAnnotation;
         try {
@@ -38,9 +40,14 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 String hashAuthToken = Utils.hash256(authToken);
                 if (!this.userSecurityRepository.existsByAuthToken(hashAuthToken)) {
                     //TODO check date
+
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is not correct");
                 }
-                userSecurity = this.userSecurityRepository.findByAuthToken(hashAuthToken).get();
+                UserSecurity user = this.userSecurityRepository.findByAuthToken(hashAuthToken).get();
+                if (user.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - 1l * 24 * 60 * 60 * 1000))) { //24h
+                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is expired");
+                }
+                userSecurity = user;
                 return true;
             } else {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This access need an authentication token");
@@ -82,7 +89,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
         } catch (ClassNotFoundException e) {
-            throw new Exception("Method not found");
+            throw e;
         }
     }
 

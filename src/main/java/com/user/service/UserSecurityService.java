@@ -130,10 +130,10 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
     }
 
     private String setAuthToken(UserSecurity u) {
-        //If the token is not older than 1 day return the same token
+        //If the token is not older than 1 day return the same token //TODO To delete this is no longer needed
         Date currentDate = new Date();
         String token = "";
-        if (u.getAuthToken() == null || u.getAuthToken().equals("") || u.getAuthTokenCreatedAt() == null || u.getAuthTokenCreatedAt().before(new Date(currentDate.getTime() - 1l * 24 * 60 * 60 * 1000))) {
+        //if (u.getAuthToken() == null || u.getAuthToken().equals("") || u.getAuthTokenCreatedAt() == null /*|| u.getAuthTokenCreatedAt().before(new Date(currentDate.getTime() - 1l * 24 * 60 * 60 * 1000))*/) {
             String hashedToken;
             do {
                 token = Utils.generateNewToken(48);
@@ -142,7 +142,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
             u.setAuthToken(hashedToken);
             u.setAuthTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
             log.info("LOGIN " + token + " is the token of user " + u.getUsername());
-        }
+        //}
         u.setLastConnection(new Timestamp(System.currentTimeMillis()));
         this.getRepository().save(u);
         return token;

@@ -55,6 +55,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         return res;
     }
 
+    @Authorisation
     @PostMapping("logout")
     public void logout() {
         UserSecurityService service = ((UserSecurityService) this.getService());
