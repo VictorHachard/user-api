@@ -16,6 +16,9 @@ import javax.persistence.Entity;
 @Setter
 public class Password extends AbstractEntity implements Comparable<Password> {
 
+    /*
+    Hashed using BCrypt
+     */
     @Column
     String password;
 

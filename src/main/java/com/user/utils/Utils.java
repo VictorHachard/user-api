@@ -4,6 +4,9 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -26,6 +29,17 @@ public class Utils {
         byte[] randomBytes = new byte[i];
         secureRandom.nextBytes(randomBytes);
         return base64Encoder.encodeToString(randomBytes);
+    }
+
+    public static String hash256(String s) {
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            //TODO handle exception
+            e.printStackTrace();
+        }
+        return base64Encoder.encodeToString(digest.digest(s.getBytes(StandardCharsets.UTF_8)));
     }
 
     public static String randomNumber(int len) {

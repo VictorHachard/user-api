@@ -43,7 +43,7 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         u.setUrl(url);
         if (profileImageUrl != null && !profileImageUrl.equals("")) {
             if (u.getProfileImageUrl() != null && !u.getProfileImageUrl().equals("")) {
-                //fileStorageService.deleteFile(u.getProfileImageUrl()); //TODO
+                //fileStorageService.deleteFile(u.getProfileImageUrl()); //TODO delete old profile pic
             }
             u.setProfileImageUrl(profileImageUrl);
         }
@@ -68,7 +68,7 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
     public void initTwoFactorEmailToken(UserSecurity u) {
         u.setTwoFactorEmailCode(Utils.randomNumber(6));
         u.setTwoFactorEmailCreatedAt(new Timestamp(System.currentTimeMillis()));
-        log.info("The two-factor code for the user " + u.getPasswordResetToken() + " is " + u.getTwoFactorEmailCode());
+        log.info("The two-factor code for the user " + u.getUsername() + " is " + u.getTwoFactorEmailCode());
     }
 
     public void confirmTwoFactorEmailToken(UserSecurity u) {
@@ -78,12 +78,16 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
 
     public void initPasswordToken(UserSecurity u) {
         String token;
-        do { token = Utils.generateNewToken(48); } while (userSecurityRepository.existsByPasswordResetToken(token));
-        u.setPasswordResetToken(token);
+        String hashedToken;
+        do {
+            token = Utils.generateNewToken(48);
+            hashedToken = Utils.hash256(token);
+        } while (userSecurityRepository.existsByPasswordResetToken(hashedToken));
+        u.setPasswordResetToken(hashedToken);
         u.setPasswordResetSet(new Timestamp(System.currentTimeMillis()));
         u.setAuthTokenCreatedAt(null);
-        log.info("The reset token for the user password is " + u.getPasswordResetToken()
-                + ", the link is: http://localhost:4200/reset/password/" + u.getPasswordResetToken());
+        log.info("The reset token for the user password is " + token
+                + ", the link is: http://localhost:4200/reset/password/" + token);
     }
 
     public void confirmPasswordToken(UserSecurity u) {

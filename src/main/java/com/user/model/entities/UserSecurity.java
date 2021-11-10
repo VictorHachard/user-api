@@ -30,6 +30,9 @@ public class UserSecurity extends AbstractEntity {
     @Column(unique = true, nullable = false)
     String username;
 
+    /*
+    Hashed using SHA-256
+     */
     @Column(unique = true)
     String passwordResetToken;
 
@@ -102,6 +105,9 @@ public class UserSecurity extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     Date lastConnection;
 
+    /*
+    Hashed using SHA-256
+     */
     @Column()
     String authToken;
 
@@ -112,6 +118,7 @@ public class UserSecurity extends AbstractEntity {
     @Column()
     Boolean twoFactorEmail;
 
+    //TODO DO NOT STORE THE PERSISTENT CODE IN YOUR DATABASE, ONLY A HASH OF IT!
     @Column()
     String twoFactorEmailCode;
 

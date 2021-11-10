@@ -16,6 +16,7 @@ import javax.persistence.Entity;
 @Setter
 public class CookieRemember extends AbstractEntity {
 
+    //TODO DO NOT STORE THE PERSISTENT LOGIN COOKIE (TOKEN) IN YOUR DATABASE, ONLY A HASH OF IT!
     @Column(unique = true)
     String token;
 

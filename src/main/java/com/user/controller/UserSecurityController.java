@@ -31,6 +31,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
 
     @PostMapping("login")
     public UserSecurityDto login(@Valid @RequestBody UserLoginValidator validator) {
+        //TODO Add a login throttling. A short time delay that increases with the number of failed attempts.
         UserSecurityService service = (UserSecurityService) this.getService();
         String token = new String(Base64.getDecoder().decode(validator.getAuth()));
         UserSecurityDto res = service.login(token.substring(0, token.indexOf(":")),

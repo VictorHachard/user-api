@@ -1,5 +1,6 @@
 package com.user.model.entities;
 
+import com.user.model.entities.commons.AbstractEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,8 +17,9 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class RecoveryCode {
+public class RecoveryCode extends AbstractEntity {
 
+    //TODO DO NOT STORE THE PERSISTENT TOKEN IN YOUR DATABASE, ONLY A HASH OF IT!
     @Column(unique = true)
     String token;
 

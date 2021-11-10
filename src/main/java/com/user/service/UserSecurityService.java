@@ -99,14 +99,17 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
             userSecurityFacade.confirmTwoFactorEmailToken(user);
             this.getRepository().save(user);
         }
-        this.setAuthToken(user);
-        return (UserSecurityDto) this.getMapper().getDto(user);
+        String token = this.setAuthToken(user);
+        UserSecurityDto userSecurityDto = (UserSecurityDto) this.getMapper().getDto(user);
+        userSecurityDto.setAuthToken(token);
+        return userSecurityDto;
     }
 
     public UserSecurityDto connectCookie(LoginFromCookieValidator validator) {
         if (!this.getRepository().existsByCookieRemember(validator.getToken())) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "The token is not correct");
         }
+
         UserSecurity user = this.getRepository().findByCookieRemember(validator.getToken()).get();
         //TODO check if token not expired
         this.setAuthToken(user);
@@ -126,18 +129,23 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         this.getRepository().save(u);
     }
 
-    private void setAuthToken(UserSecurity u) {
-        //If the token is not older then 1 day return the same token
+    private String setAuthToken(UserSecurity u) {
+        //If the token is not older than 1 day return the same token
         Date currentDate = new Date();
+        String token = "";
         if (u.getAuthToken() == null || u.getAuthToken().equals("") || u.getAuthTokenCreatedAt() == null || u.getAuthTokenCreatedAt().before(new Date(currentDate.getTime() - 1l * 24 * 60 * 60 * 1000))) {
-            String token;
-            do { token = Utils.generateNewToken(48); } while (userSecurityRepository.existsByAuthToken(token));
-            u.setAuthToken(token);
+            String hashedToken;
+            do {
+                token = Utils.generateNewToken(48);
+                hashedToken = Utils.hash256(token);
+            } while (userSecurityRepository.existsByAuthToken(hashedToken));
+            u.setAuthToken(hashedToken);
             u.setAuthTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
+            log.info("LOGIN " + token + " is the token of user " + u.getUsername());
         }
         u.setLastConnection(new Timestamp(System.currentTimeMillis()));
-        log.info("LOGIN " + u.getAuthToken() + " is the token of user " + u.getUsername());
         this.getRepository().save(u);
+        return token;
     }
 
     public void logOut() {
@@ -287,10 +295,12 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
     /* Actions */
 
     public void actionResetPassword(ActionResetPasswordValidator validator) {
-        if (!this.getRepository().existsByPasswordResetToken(validator.getToken())) {
+        String token = validator.getToken();
+        String hashToken = Utils.hash256(token);
+        if (!this.getRepository().existsByPasswordResetToken(hashToken)) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "This token is doesn't not exist");
         }
-        UserSecurity u = this.getRepository().findByPasswordResetToken(validator.getToken()).get();
+        UserSecurity u = this.getRepository().findByPasswordResetToken(hashToken).get();
         userSecurityFacade.confirmPasswordToken(u);
         Password p = passwordService.create(validator.getPassword());
         u.addPassword(p);
@@ -304,7 +314,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
             this.responseStatus(HttpStatus.BAD_REQUEST, "Cannot find an user witch this email or username");
         }
         UserSecurity u = this.getRepository().findByEmailOrUsername(usernameOrEmail).get();
-        //TODO check not the first time
+        //TODO check not the first time, need confirmed account
         userSecurityFacade.initPasswordToken(u);
         this.getRepository().save(u);
         //securityLogService.create(SecurityLogEnum.PASSWORD_FORGET, u, "Email sent to " + u.getEmailList().stream().filter(email -> {return email.getPriority().equals(PriorityEnum.PRIMARY);}).collect(Collectors.toList()).get(0) + " for a password reset");
