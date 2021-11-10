@@ -1,5 +1,6 @@
 package com.user.controller;
 
+import com.user.Authorisation;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.CookieRememberDto;
 import com.user.dto.SecurityLogDto;
@@ -46,6 +47,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         return res;
     }
 
+    @Authorisation
     @PostMapping("login/update")
     public UserSecurityDto loginUpdate() {
         UserSecurityService service = ((UserSecurityService) this.getService());
@@ -59,84 +61,98 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.logOut();
     }
 
+    @Authorisation
     @PostMapping("update/appearance/{appearanceId}")
     public void updateAppearance(@PathVariable("appearanceId") long appearanceId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateAppearance(appearanceId);
     }
 
+    @Authorisation
     @PostMapping("update/profile")
     public void updateProfile(@Valid @RequestBody UpdateProfileValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateProfile(validator);
     }
 
+    @Authorisation
     @PostMapping("update/profile-privacy")
     public void updateProfilePrivacy(@Valid @RequestBody UpdateProfilePrivacyValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateProfilePrivacy(validator);
     }
 
+    @Authorisation
     @PostMapping("update/two-factor/email")
     public void updateTwoFactorEmail(@Valid @RequestBody UpdateTwoFactorEmailValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateTwoFactorEmail(validator);
     }
 
+    @Authorisation
     @PostMapping("update/username")
     public void updateProfile(@Valid @RequestBody UpdateUsernameValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateUsername(validator);
     }
 
+    @Authorisation
     @PostMapping("add/password")
     public void addPassword(@Valid @RequestBody PasswordValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.addPassword(validator);
     }
 
+    @Authorisation
     @PostMapping("add/cookie")
     public CookieRememberDto addCookie(@Valid @RequestBody CookieRememberValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         return service.addCookie(validator);
     }
 
+    @Authorisation
     @PostMapping("add/role/{roleId}/user/{userId}")
     public void addRole(@PathVariable("roleId") long roleId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.addRole(roleId, userId);
     }
 
+    @Authorisation
     @PostMapping("add/blocked-user/{userId}")
     public void addBlockedUser(@PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.addBlockedUser(userId);
     }
 
+    @Authorisation
     @PostMapping("add/group/{groupId}/user/{userId}")
     public void addGroup(@PathVariable("groupId") long groupId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.addGroup(groupId, userId);
     }
 
+    @Authorisation
     @DeleteMapping("remove/role/{roleId}/user/{userId}")
     public void removeRole(@PathVariable("roleId") long roleId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeRole(roleId, userId);
     }
 
+    @Authorisation
     @DeleteMapping("remove/blocked-user/{userId}")
     public void removeBlockedUser(@PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeBlockedUser(userId);
     }
 
+    @Authorisation
     @DeleteMapping("remove/group/{groupId}/user/{userId}")
     public void removeGroup(@PathVariable("groupId") long groupId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeGroup(groupId, userId);
     }
 
+    @Authorisation
     @DeleteMapping("remove/cookie/{id}")
     public void removeCookie(@PathVariable("id") long id) {
         UserSecurityService service = (UserSecurityService) this.getService();
@@ -145,6 +161,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
 
     /* Get */
 
+    @Authorisation
     @GetMapping("dto/security-log")
     public List<SecurityLogDto> getAllSecurityLogDto(@RequestParam(defaultValue = "0") Integer pageIndex,
                                                      @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -159,6 +176,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         return service.getAllUserSecurityProfileDto(pageIndex, pageSize);
     }*/
 
+    @Authorisation
     @GetMapping("dto/profile/{username}")
     public UserSecurityProfileDto getUserSecurityProfileDto(@PathVariable("username") String username) {
         UserSecurityService service = ((UserSecurityService) this.getService());

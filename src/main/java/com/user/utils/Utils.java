@@ -33,13 +33,20 @@ public class Utils {
 
     public static String hash256(String s) {
         MessageDigest digest = null;
+        if (s == null) {
+            throw new IllegalArgumentException("String to hash cannot be null");
+        } else if (s.isEmpty()) {
+            throw new IllegalArgumentException("String to hash cannot be empty");
+        }
         try {
             digest = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
             //TODO handle exception
+            System.out.println("No such algorithm");
             e.printStackTrace();
         }
-        return base64Encoder.encodeToString(digest.digest(s.getBytes(StandardCharsets.UTF_8)));
+        byte[] hash = digest.digest(s.getBytes(StandardCharsets.UTF_8));
+        return base64Encoder.encodeToString(hash);
     }
 
     public static String randomNumber(int len) {
