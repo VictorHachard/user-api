@@ -31,7 +31,7 @@ public class RunApplication {
 						runEnum = RunEnum.PRODUCTION;
 					} else if (args[i+1].equals("dev")) {
 						runEnum = RunEnum.DEVELOPMENT;
-					} else if (args[i+1].equals("test")) {
+					} else if (args[i+1].equals("test-run")) {
 						runEnum = RunEnum.TEST_RUN;
 					}
 					break;
