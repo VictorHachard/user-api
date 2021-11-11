@@ -17,7 +17,7 @@ import java.nio.file.*;
 @Log
 public class FileStorageService {
 
-    final Path fileStorageLocation = Paths.get(Environment.DATA_FOLDER);
+    final Path fileStorageLocation = Paths.get(Environment.getInstance().DATA_FOLDER);
 
     public String storeFile(MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -37,7 +37,7 @@ public class FileStorageService {
 
     public void deleteFile(String file) {
         try {
-            Files.deleteIfExists(Paths.get(Environment.DATA_FOLDER + file));
+            Files.deleteIfExists(Paths.get(Environment.getInstance().DATA_FOLDER + file));
         } catch(NoSuchFileException e) {
             System.out.println("No such file/directory exists");
         } catch(DirectoryNotEmptyException e) {

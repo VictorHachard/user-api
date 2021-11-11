@@ -1,10 +1,12 @@
 package com.user.controller;
 
+import com.user.Authorisation;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.SettingDto;
 import com.user.dto.ThemeDto;
 import com.user.model.entities.Setting;
 import com.user.model.entities.Theme;
+import com.user.model.entities.enums.RoleEnum;
 import com.user.service.SettingService;
 import com.user.service.ThemeService;
 import com.user.validator.*;
@@ -23,23 +25,27 @@ import java.util.List;
 @Log
 public class SettingController extends AbstractController<Setting, SettingDto> {
 
+    @Authorisation(roles = {RoleEnum.ROLE_OWNER})
     @PostMapping("create")
     public void create(@Valid @RequestBody SettingValidator validator) {
         this.getService().create(validator);
     }
 
+    @Authorisation(roles = {RoleEnum.ROLE_OWNER})
     @GetMapping("dto/active")
     public List<SettingDto> getAllActiveDto() {
         SettingService service = (SettingService) this.getService();
         return service.getAllActiveDto();
     }
 
+    @Authorisation(roles = {RoleEnum.ROLE_OWNER})
     @PostMapping("update/active/{id}")
     public void updateActive(@Valid @RequestBody UpdateSettingActiveValidator validator, @PathVariable("id") long id) {
         SettingService service = (SettingService) this.getService();
         service.updateActive(id, validator);
     }
 
+//    @Authorisation(roles = {RoleEnum.ROLE_OWNER})
 //    @PostMapping("update/{id}")
 //    public void updateActive(@Valid @RequestBody UpdateThemeValidator validator, @PathVariable("id") long id) {
 //        SettingService service = (SettingService) this.getService();

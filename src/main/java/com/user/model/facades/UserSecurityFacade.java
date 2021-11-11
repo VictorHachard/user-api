@@ -2,9 +2,11 @@ package com.user.model.facades;
 
 import com.user.model.entities.Email;
 import com.user.model.entities.Password;
+import com.user.model.entities.Role;
 import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.EmailPreferencesEnum;
 import com.user.model.entities.enums.PrivacyEnum;
+import com.user.model.entities.enums.RoleEnum;
 import com.user.model.facades.commons.AbstractFacade;
 import com.user.service.commons.FileStorageService;
 import com.user.utils.Utils;
@@ -19,12 +21,12 @@ import java.sql.Timestamp;
 @Log
 public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
 
-    public UserSecurity newInstance(Email e, Password p, String u) {
+    public UserSecurity newInstance(Email e, Password p, Role r, String u) {
         UserSecurity res = super.newInstance();
         res.setUsername(u);
         res.addPassword(p);
         res.addEmail(e);
-
+        res.addRole(r);
         res.setPrivacy(PrivacyEnum.PRIVATE);
         res.setTwoFactorEmail(false);
         res.setEmailPreferences(EmailPreferencesEnum.ALL);

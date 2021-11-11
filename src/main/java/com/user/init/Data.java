@@ -6,6 +6,7 @@ import com.user.Environment;
 import com.user.model.entities.*;
 import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.entities.enums.PrivacyEnum;
+import com.user.model.entities.enums.RoleEnum;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.omnifaces.cdi.Startup;
@@ -92,6 +93,10 @@ public class Data extends AbstractAutowire {
                 "#adbac7"
         ));
 
+        roleRepository.save(roleFacade.newInstance(RoleEnum.ROLE_USER));
+        roleRepository.save(roleFacade.newInstance(RoleEnum.ROLE_ADMINISTRATOR));
+        roleRepository.save(roleFacade.newInstance(RoleEnum.ROLE_OWNER));
+
         settingRepository.save(settingFacade.newInstance("profile", true, false));
         settingRepository.save(settingFacade.newInstance("account", true, false));
         settingRepository.save(settingFacade.newInstance("appearance", true, true));
@@ -104,8 +109,8 @@ public class Data extends AbstractAutowire {
         settingRepository.save(settingFacade.newInstance("blocked-users", true, true));
         settingRepository.save(settingFacade.newInstance("interaction-limits", true, true));
 
-        String name = Environment.NAME;
-        String domainName = Environment.DOMAIN_NAME;
+        String name = Environment.getInstance().NAME;
+        String domainName = Environment.getInstance().DOMAIN_NAME;
         
         HtmlText htmlText = htmlTextFacade.newInstance(
                 "<h2>" + name + " Website Terms of Service</h2>" +
@@ -195,7 +200,8 @@ public class Data extends AbstractAutowire {
             emailFacade.initToken(e);
             String un;
             do { un = lorem.getFirstName(); } while (userSecurityRepository.existsByUsername(un));
-            UserSecurity u = userSecurityFacade.newInstance(e, p, un);
+            Role r = roleRepository.findByRole(RoleEnum.ROLE_USER).get();
+            UserSecurity u = userSecurityFacade.newInstance(e, p, r, un);
             u.setFirstName(lorem.getFirstName());
             u.setLastName(lorem.getLastName());
             u.setMiddleName("");

@@ -7,6 +7,7 @@ import com.user.dto.UserSecurityProfileDto;
 import com.user.model.entities.*;
 import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.entities.enums.PrivacyEnum;
+import com.user.model.entities.enums.RoleEnum;
 import com.user.model.entities.enums.SecurityLogEnum;
 import com.user.model.repositories.UserSecurityRepository;
 import com.user.service.commons.AbstractService;
@@ -63,10 +64,11 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         } else if (existsByEmailPriority) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "This email is already define in the database as PRINCIPAL");
         }
+        Role r = roleRepository.findByRole(RoleEnum.ROLE_USER).get();
         Email e = emailService.create(emailLower, PriorityEnum.PRIMARY);
         Password p = passwordService.create(password);
 
-        UserSecurity user = userSecurityFacade.newInstance(e, p, username);
+        UserSecurity user = userSecurityFacade.newInstance(e, p, r, username);
         this.getRepository().save(user);
         return user;
     }
@@ -148,10 +150,11 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         return token;
     }
 
-    public void logOut() {
+    public void logout() {
         UserSecurity u = this.getUser();
         u.setAuthToken(null);
         u.setAuthTokenCreatedAt(null);
+        this.getRepository().save(u);
         log.info("LOGOUT of user " + u.getUsername());
     }
 

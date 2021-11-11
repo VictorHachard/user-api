@@ -1,5 +1,7 @@
 package com.user;
 
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -15,10 +17,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class RunApplication {
 
-	public static boolean PRODUCTION = true;
+	public static RunEnum runEnum = RunEnum.PRODUCTION;
 
 	/**
-	 * args need to be like -run prod ou -run dev
+	 * args need to be like -run prod, -run dev, -run test-run
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -26,14 +28,24 @@ public class RunApplication {
 			switch (args[i]) {
 				case "-run":
 					if (args[i+1].equals("prod")) {
-						PRODUCTION = true;
+						runEnum = RunEnum.PRODUCTION;
 					} else if (args[i+1].equals("dev")) {
-						PRODUCTION = false;
+						runEnum = RunEnum.DEVELOPMENT;
+					} else if (args[i+1].equals("test")) {
+						runEnum = RunEnum.TEST_RUN;
 					}
 					break;
 			}
 		}
-		SpringApplication.run(RunApplication.class, args);
+		if (runEnum == RunEnum.TEST_RUN) {
+			try {
+				System.exit(SpringApplication.exit(SpringApplication.run(RunApplication.class, args)));
+			} catch (Exception e) {
+				System.exit(1);
+			}
+		} else {
+			SpringApplication.run(RunApplication.class, args);
+		}
 	}
 
 	@Bean

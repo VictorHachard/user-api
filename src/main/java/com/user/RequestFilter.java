@@ -19,7 +19,7 @@ public class RequestFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
 
-        for (String url : Environment.ACCESS_CONTROL_ALLOW_ORIGIN_URL) {
+        for (String url : Environment.getInstance().ACCESS_CONTROL_ALLOW_ORIGIN_URL) {
             if (request.getHeader("Origin") == null) {
                 //TODO fix this when request.getHeader("Origin") is null throw an exception and kick the connection
                 response.setHeader("Access-Control-Allow-Origin", "*");

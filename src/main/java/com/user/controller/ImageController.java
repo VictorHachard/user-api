@@ -25,7 +25,7 @@ public class ImageController {
     @ResponseBody
     @GetMapping("{url}")
     public ResponseEntity<FileSystemResource> getImageAsResource(@PathVariable("url") String url) {
-        FileSystemResource res = new FileSystemResource(Environment.DATA_FOLDER + url);
+        FileSystemResource res = new FileSystemResource(Environment.getInstance().DATA_FOLDER + url);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 

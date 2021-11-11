@@ -43,7 +43,7 @@ public class EmailService implements Runnable {
         session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(Environment.EMAIL_USERNAME, Environment.EMAIL_PASSWORD);
+                        return new PasswordAuthentication(Environment.getInstance().EMAIL_USERNAME, Environment.getInstance().EMAIL_PASSWORD);
                     }
                 });
 

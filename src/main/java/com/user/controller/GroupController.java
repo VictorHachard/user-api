@@ -1,8 +1,10 @@
 package com.user.controller;
 
+import com.user.Authorisation;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.GroupDto;
 import com.user.model.entities.Group;
+import com.user.model.entities.enums.RoleEnum;
 import com.user.service.GroupService;
 import com.user.validator.GroupValidator;
 import com.user.validator.UpdateGroupActiveValidator;
@@ -21,11 +23,13 @@ import java.util.List;
 @Log
 public class GroupController extends AbstractController<Group, GroupDto> {
 
+    @Authorisation(roles = {RoleEnum.ROLE_OWNER})
     @PostMapping("create")
     public void create(@Valid @RequestBody GroupValidator validator) {
         this.getService().create(validator);
     }
 
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @GetMapping("dto/active")
     public List<GroupDto> getAllActiveDto() {
         GroupService service = (GroupService) this.getService();
@@ -49,6 +53,7 @@ public class GroupController extends AbstractController<Group, GroupDto> {
         }
     }*/
 
+    @Authorisation(roles = {RoleEnum.ROLE_OWNER})
     @PostMapping("update/active/{id}")
     public void updateActive(@Valid @RequestBody UpdateGroupActiveValidator validator, @PathVariable("id") long id) {
         GroupService service = (GroupService) this.getService();

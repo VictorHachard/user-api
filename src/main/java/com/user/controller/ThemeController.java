@@ -1,8 +1,10 @@
 package com.user.controller;
 
+import com.user.Authorisation;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.ThemeDto;
 import com.user.model.entities.Theme;
+import com.user.model.entities.enums.RoleEnum;
 import com.user.service.ThemeService;
 import com.user.validator.ThemeValidator;
 import com.user.validator.UpdateThemeActiveValidator;
@@ -22,23 +24,27 @@ import java.util.List;
 @Log
 public class ThemeController extends AbstractController<Theme, ThemeDto> {
 
+    @Authorisation(roles = {RoleEnum.ROLE_OWNER})
     @PostMapping("create")
     public void create(@Valid @RequestBody ThemeValidator validator) {
         this.getService().create(validator);
     }
 
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @GetMapping("dto/active")
     public List<ThemeDto> getAllActiveDto() {
         ThemeService service = (ThemeService) this.getService();
         return service.getAllActiveDto();
     }
 
+    @Authorisation(roles = {RoleEnum.ROLE_OWNER})
     @PostMapping("update/active/{id}")
     public void updateActive(@Valid @RequestBody UpdateThemeActiveValidator validator, @PathVariable("id") long id) {
         ThemeService service = (ThemeService) this.getService();
         service.updateActive(id, validator);
     }
 
+    @Authorisation(roles = {RoleEnum.ROLE_OWNER})
     @PostMapping("update/{id}")
     public void updateActive(@Valid @RequestBody UpdateThemeValidator validator, @PathVariable("id") long id) {
         ThemeService service = (ThemeService) this.getService();

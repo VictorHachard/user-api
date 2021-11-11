@@ -7,6 +7,7 @@ import com.user.dto.SecurityLogDto;
 import com.user.dto.UserSecurityDto;
 import com.user.dto.UserSecurityProfileDto;
 import com.user.model.entities.UserSecurity;
+import com.user.model.entities.enums.RoleEnum;
 import com.user.service.UserSecurityService;
 import com.user.validator.*;
 import lombok.AccessLevel;
@@ -47,7 +48,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         return res;
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("login/update")
     public UserSecurityDto loginUpdate() {
         UserSecurityService service = ((UserSecurityService) this.getService());
@@ -55,105 +56,105 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         return res;
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("logout")
     public void logout() {
         UserSecurityService service = ((UserSecurityService) this.getService());
-        service.logOut();
+        service.logout();
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("update/appearance/{appearanceId}")
     public void updateAppearance(@PathVariable("appearanceId") long appearanceId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateAppearance(appearanceId);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("update/profile")
     public void updateProfile(@Valid @RequestBody UpdateProfileValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateProfile(validator);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("update/profile-privacy")
     public void updateProfilePrivacy(@Valid @RequestBody UpdateProfilePrivacyValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateProfilePrivacy(validator);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("update/two-factor/email")
     public void updateTwoFactorEmail(@Valid @RequestBody UpdateTwoFactorEmailValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateTwoFactorEmail(validator);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("update/username")
     public void updateProfile(@Valid @RequestBody UpdateUsernameValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.updateUsername(validator);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("add/password")
     public void addPassword(@Valid @RequestBody PasswordValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.addPassword(validator);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("add/cookie")
     public CookieRememberDto addCookie(@Valid @RequestBody CookieRememberValidator validator) {
         UserSecurityService service = (UserSecurityService) this.getService();
         return service.addCookie(validator);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("add/role/{roleId}/user/{userId}")
     public void addRole(@PathVariable("roleId") long roleId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.addRole(roleId, userId);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("add/blocked-user/{userId}")
     public void addBlockedUser(@PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.addBlockedUser(userId);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("add/group/{groupId}/user/{userId}")
     public void addGroup(@PathVariable("groupId") long groupId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.addGroup(groupId, userId);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @DeleteMapping("remove/role/{roleId}/user/{userId}")
     public void removeRole(@PathVariable("roleId") long roleId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeRole(roleId, userId);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @DeleteMapping("remove/blocked-user/{userId}")
     public void removeBlockedUser(@PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeBlockedUser(userId);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @DeleteMapping("remove/group/{groupId}/user/{userId}")
     public void removeGroup(@PathVariable("groupId") long groupId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeGroup(groupId, userId);
     }
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @DeleteMapping("remove/cookie/{id}")
     public void removeCookie(@PathVariable("id") long id) {
         UserSecurityService service = (UserSecurityService) this.getService();
@@ -162,7 +163,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
 
     /* Get */
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @GetMapping("dto/security-log")
     public List<SecurityLogDto> getAllSecurityLogDto(@RequestParam(defaultValue = "0") Integer pageIndex,
                                                      @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -177,7 +178,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         return service.getAllUserSecurityProfileDto(pageIndex, pageSize);
     }*/
 
-    @Authorisation
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @GetMapping("dto/profile/{username}")
     public UserSecurityProfileDto getUserSecurityProfileDto(@PathVariable("username") String username) {
         UserSecurityService service = ((UserSecurityService) this.getService());

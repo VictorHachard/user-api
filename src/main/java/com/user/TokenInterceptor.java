@@ -1,6 +1,8 @@
 package com.user;
 
+import com.user.model.entities.Role;
 import com.user.model.entities.UserSecurity;
+import com.user.model.entities.enums.RoleEnum;
 import com.user.model.repositories.UserSecurityRepository;
 import com.user.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class TokenInterceptor extends HandlerInterceptorAdapter {
@@ -26,26 +29,39 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         System.out.println(handler);
         String authToken = request.getHeader("Authorization");
-        boolean hasAuthorizedAnnotation;
+        Method handlerMethod = null;
         try {
-            hasAuthorizedAnnotation = this.hasAuthorizedAnnotation(handler.toString());
+            handlerMethod = this.hasAuthorizedAnnotation(handler.toString());
         } catch (Exception e) {
             System.out.println("Not Found");
             return true;
         }
 
         userSecurity = null; //TODO Better understand why the value is not null
-        if (hasAuthorizedAnnotation) {
+        if (handlerMethod != null && handlerMethod.isAnnotationPresent(Authorisation.class)) {
+
             if (authToken != null) {
                 String hashAuthToken = Utils.hash256(authToken);
                 if (!this.userSecurityRepository.existsByAuthToken(hashAuthToken)) {
-                    //TODO check date
-
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is not correct");
                 }
                 UserSecurity user = this.userSecurityRepository.findByAuthToken(hashAuthToken).get();
                 if (user.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - 1l * 24 * 60 * 60 * 1000))) { //24h
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is expired");
+                }
+                Authorisation annotation = handlerMethod.getAnnotation(Authorisation.class);
+
+                boolean hasPermission = false;
+                for (RoleEnum r : annotation.roles()) {
+                    for (Role role : user.getPermissionList()) {
+                        if (role.getRole().equals(r)) {
+                            hasPermission = true;
+                            break;
+                        }
+                    }
+                }
+                if (!hasPermission) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The user has not permission");
                 }
                 userSecurity = user;
                 return true;
@@ -56,15 +72,22 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    private boolean hasAuthorizedAnnotation(String handler) throws Exception {
+    /**
+     *
+     * @param handler like "com.user.controller.UserController#getUser(String)"
+     * @return the method
+     * @throws Exception
+     */
+    private Method hasAuthorizedAnnotation(String handler) throws Exception {
         Class<?> cls = null;
         try {
             cls = Class.forName(handler.split("#")[0]);
-            String[] parameterNameList = handler.split("#")[1].split("\\(")[1].replaceFirst(".$","").split(",");
             Method thisIsTheOne = null;
-            if (parameterNameList.length == 1 && parameterNameList[0].equals("")) {
+            // There is no argument
+            if (handler.split("#")[1].split("\\(")[1].replaceFirst(".$","").equals("")) {
                 thisIsTheOne = cls.getMethod(handler.split("#")[1].split("\\(")[0], null);
-            } else {
+            } else { //There is an argument
+                String[] parameterNameList = handler.split("#")[1].split("\\(")[1].replaceFirst(".$","").split(",");
                 for (Method m : cls.getMethods()) {
                     if (m.getName().equals(handler.split("#")[1].split("\\(")[0])) {
                         int i = 0;
@@ -83,10 +106,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             }
             if (thisIsTheOne == null) {
                 throw new Exception("Method not found");
-            } else if (thisIsTheOne.isAnnotationPresent(Authorisation.class)) {
-                return true;
             } else {
-                return false;
+                return thisIsTheOne;
             }
         } catch (ClassNotFoundException e) {
             throw e;
