@@ -1,9 +1,6 @@
 package com.user.service;
 
-import com.user.dto.CookieRememberDto;
-import com.user.dto.SecurityLogDto;
-import com.user.dto.UserSecurityDto;
-import com.user.dto.UserSecurityProfileDto;
+import com.user.dto.*;
 import com.user.model.entities.*;
 import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.entities.enums.PrivacyEnum;
@@ -89,7 +86,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
 
         Date currentDate = new Date();
         if (user.getTwoFactorEmail()) {
-            if ((code == null || code.equals("")) && (user.getAuthTokenCreatedAt() == null || user.getAuthTokenCreatedAt().before(new Date(currentDate.getTime() - 1l * 24 * 60 * 60 * 1000)))) {
+            if ((code == null || code.equals("")) /*&& (user.getAuthTokenCreatedAt() == null || user.getAuthTokenCreatedAt().before(new Date(currentDate.getTime() - 1l * 24 * 60 * 60 * 1000)))*/) {
                 userSecurityFacade.initTwoFactorEmailToken(user);
                 this.getRepository().save(user);
                 this.responseStatus(HttpStatus.BAD_REQUEST, "2FA - Need two-factor authentication");
@@ -101,9 +98,17 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
             userSecurityFacade.confirmTwoFactorEmailToken(user);
             this.getRepository().save(user);
         }
-        String token = this.setAuthToken(user);
+
+        Session session = sessionService.create();
         UserSecurityDto userSecurityDto = (UserSecurityDto) this.getMapper().getDto(user);
-        userSecurityDto.setAuthToken(token);
+        user.addSession(session);
+        String token = sessionService.setAuthToken(session);
+        log.info("LOGIN " + token + " is the token of user " + user.getUsername());
+        user.setLastConnection(new Timestamp(System.currentTimeMillis()));
+        this.getRepository().save(user);
+        SessionDto sessionDto = sessionMapper.getDto(session);
+        sessionDto.setAuthToken(token);
+        userSecurityDto.setActualSessionDto(sessionDto);
         return userSecurityDto;
     }
 
@@ -114,7 +119,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
 
         UserSecurity user = this.getRepository().findByCookieRemember(validator.getToken()).get();
         //TODO check if token not expired
-        this.setAuthToken(user);
+        //this.setAuthToken(user);
         return (UserSecurityDto) this.getMapper().getDto(user);
     }
 
@@ -131,30 +136,10 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         this.getRepository().save(u);
     }
 
-    private String setAuthToken(UserSecurity u) {
-        //If the token is not older than 1 day return the same token //TODO To delete this is no longer needed
-        Date currentDate = new Date();
-        String token = "";
-        //if (u.getAuthToken() == null || u.getAuthToken().equals("") || u.getAuthTokenCreatedAt() == null /*|| u.getAuthTokenCreatedAt().before(new Date(currentDate.getTime() - 1l * 24 * 60 * 60 * 1000))*/) {
-            String hashedToken;
-            do {
-                token = Utils.generateNewToken(48);
-                hashedToken = Utils.hash256(token);
-            } while (userSecurityRepository.existsByAuthToken(hashedToken));
-            u.setAuthToken(hashedToken);
-            u.setAuthTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
-            log.info("LOGIN " + token + " is the token of user " + u.getUsername());
-        //}
-        u.setLastConnection(new Timestamp(System.currentTimeMillis()));
-        this.getRepository().save(u);
-        return token;
-    }
-
     public void logout() {
         UserSecurity u = this.getUser();
-        u.setAuthToken(null);
-        u.setAuthTokenCreatedAt(null);
-        this.getRepository().save(u);
+        Session s = this.getSession();
+        sessionService.delete(s);
         log.info("LOGOUT of user " + u.getUsername());
     }
 

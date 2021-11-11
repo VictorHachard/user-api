@@ -49,6 +49,18 @@ public abstract class AbstractAutowire {
     UserSecurityFacade userSecurityFacade;
 
     @Autowired
+    SessionRepository sessionRepository;
+
+    @Autowired
+    SessionMapper sessionMapper;
+
+    @Autowired
+    SessionService sessionService;
+
+    @Autowired
+    SessionFacade sessionFacade;
+
+    @Autowired
     PasswordRepository passwordRepository;
 
     @Autowired

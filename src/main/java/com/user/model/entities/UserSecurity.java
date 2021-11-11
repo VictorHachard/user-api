@@ -79,6 +79,9 @@ public class UserSecurity extends AbstractEntity {
     @OneToMany(fetch = FetchType.EAGER)
     Set<CookieRemember> cookieList = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.EAGER)
+    Set<Session> sessionList = new HashSet<>();
+
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> permissionList = new HashSet<>();
 
@@ -105,16 +108,6 @@ public class UserSecurity extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     Date lastConnection;
 
-    /*
-    Hashed using SHA-256
-     */
-    @Column()
-    String authToken;
-
-    @Column()
-    @Temporal(TemporalType.TIMESTAMP)
-    Date authTokenCreatedAt;
-
     @Column()
     Boolean twoFactorEmail;
 
@@ -125,6 +118,10 @@ public class UserSecurity extends AbstractEntity {
     @Column()
     @Temporal(TemporalType.TIMESTAMP)
     Date twoFactorEmailCreatedAt;
+
+    public void addSession(Session... sessions) {
+        sessionList.addAll(Arrays.asList(sessions));
+    }
 
     public void addPassword(Password... passwords) {
         passwordList.addAll(Arrays.asList(passwords));

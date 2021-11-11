@@ -6,6 +6,7 @@ import com.user.init.AbstractAutowire;
 import com.user.init.InitMap;
 import com.user.init.MapTypeEnum;
 import com.user.mapper.commons.AbstractMapper;
+import com.user.model.entities.Session;
 import com.user.model.entities.UserSecurity;
 import com.user.model.repositories.commons.AbstractRepository;
 import com.user.validator.commons.AbstractValidator;
@@ -42,6 +43,10 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
 
     protected UserSecurity getUser() {
         return TokenInterceptor.userSecurity;
+    }
+
+    protected Session getSession() {
+        return TokenInterceptor.userSession;
     }
 
     public long count() {

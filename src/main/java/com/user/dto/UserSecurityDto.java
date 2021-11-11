@@ -15,11 +15,14 @@ import java.util.List;
 @Setter
 public class UserSecurityDto extends Dto {
 
+    /*
+    Is only used for the login process.
+     */
+    SessionDto actualSessionDto;
+
     String username;
 
     String nameFormatted;
-
-    String authToken;
 
     String privacy;
 

@@ -1,5 +1,6 @@
 package com.user.model.repositories;
 
+import com.user.model.entities.Session;
 import com.user.model.entities.UserSecurity;
 import com.user.model.repositories.commons.AbstractRepository;
 import org.springframework.data.domain.Page;
@@ -45,8 +46,16 @@ public interface UserSecurityRepository extends AbstractRepository<UserSecurity,
 
     Boolean existsByUsername(@Param("username") String username);
 
+    @Query("SELECT u FROM UserSecurity u join u.sessionList s where s =?1")
+    Optional<UserSecurity> findBySession(@Param("session") Session session);
+
+    @Query("SELECT case when count(u)> 0 then true else false end FROM UserSecurity u join u.sessionList s where s =?1")
+    Boolean existsBySession(@Param("session") Session session);
+
+    @Query("SELECT u FROM UserSecurity u join u.sessionList s where s.authToken =?1")
     Optional<UserSecurity> findByAuthToken(@Param("authToken") String authToken);
 
+    @Query("SELECT case when count(u)> 0 then true else false end FROM UserSecurity u join u.sessionList s where s.authToken =?1")
     Boolean existsByAuthToken(@Param("authToken") String authToken);
 
     Page<UserSecurity> findByUsernameContaining(String username, Pageable pageable);

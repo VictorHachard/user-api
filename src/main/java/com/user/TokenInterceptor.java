@@ -1,8 +1,10 @@
 package com.user;
 
 import com.user.model.entities.Role;
+import com.user.model.entities.Session;
 import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.RoleEnum;
+import com.user.model.repositories.SessionRepository;
 import com.user.model.repositories.UserSecurityRepository;
 import com.user.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,13 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     public static UserSecurity userSecurity = null;
 
+    public static Session userSession = null;
+
     @Autowired
     UserSecurityRepository userSecurityRepository;
+
+    @Autowired
+    SessionRepository sessionRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -38,6 +45,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         }
 
         userSecurity = null; //TODO Better understand why the value is not null
+        userSession = null;
         if (handlerMethod != null && handlerMethod.isAnnotationPresent(Authorisation.class)) {
 
             if (authToken != null) {
@@ -46,7 +54,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is not correct");
                 }
                 UserSecurity user = this.userSecurityRepository.findByAuthToken(hashAuthToken).get();
-                if (user.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - 1l * 24 * 60 * 60 * 1000))) { //24h
+                Session session = this.sessionRepository.findByAuthToken(hashAuthToken).get();
+                if (session.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - 1l * 24 * 60 * 60 * 1000))) { //24h
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is expired");
                 }
                 Authorisation annotation = handlerMethod.getAnnotation(Authorisation.class);
@@ -64,6 +73,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The user has not permission");
                 }
                 userSecurity = user;
+                userSession = session;
                 return true;
             } else {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This access need an authentication token");

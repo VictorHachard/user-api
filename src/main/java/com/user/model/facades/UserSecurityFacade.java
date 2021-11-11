@@ -87,7 +87,7 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         } while (userSecurityRepository.existsByPasswordResetToken(hashedToken));
         u.setPasswordResetToken(hashedToken);
         u.setPasswordResetSet(new Timestamp(System.currentTimeMillis()));
-        u.setAuthTokenCreatedAt(null);
+        u.setPasswordResetAt(null);
         log.info("The reset token for the user password is " + token
                 + ", the link is: http://localhost:4200/reset/password/" + token);
     }
@@ -95,7 +95,7 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
     public void confirmPasswordToken(UserSecurity u) {
         u.setPasswordResetToken(null);
         u.setPasswordResetSet(null);
-        u.setAuthTokenCreatedAt(new Timestamp(System.currentTimeMillis()));
+        u.setPasswordResetAt(new Timestamp(System.currentTimeMillis()));
     }
 
 }
