@@ -6,7 +6,6 @@ import com.user.model.entities.Role;
 import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.EmailPreferencesEnum;
 import com.user.model.entities.enums.PrivacyEnum;
-import com.user.model.entities.enums.RoleEnum;
 import com.user.model.facades.commons.AbstractFacade;
 import com.user.service.commons.FileStorageService;
 import com.user.utils.Utils;

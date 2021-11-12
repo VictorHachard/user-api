@@ -1,6 +1,8 @@
 package com.user.controller;
 
+import com.user.Authorisation;
 import com.user.Environment;
+import com.user.model.entities.enums.RoleEnum;
 import com.user.service.commons.FileStorageService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +24,7 @@ public class ImageController {
     @Autowired
     FileStorageService fileStorageService;
 
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @ResponseBody
     @GetMapping("{url}")
     public ResponseEntity<FileSystemResource> getImageAsResource(@PathVariable("url") String url) {
@@ -29,6 +32,7 @@ public class ImageController {
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("upload")
     public void add(MultipartFile file) {
         fileStorageService.storeFile(file);

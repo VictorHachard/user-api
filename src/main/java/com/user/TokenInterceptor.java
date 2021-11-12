@@ -16,15 +16,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Set;
 
 public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     public static UserSecurity userSecurity = null;
 
     public static Session userSession = null;
+
+    public static String ip = null;
 
     @Autowired
     UserSecurityRepository userSecurityRepository;
@@ -34,7 +36,14 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        // Reset attributes
+        userSecurity = null; //TODO Better understand why the value is not null
+        userSession = null;
+        ip = null;
+
+        ip = Utils.getClientIp(request);
         System.out.println(handler);
+        System.out.println(ip);
         String authToken = request.getHeader("Authorization");
         Method handlerMethod = null;
         try {
@@ -44,10 +53,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        userSecurity = null; //TODO Better understand why the value is not null
-        userSession = null;
         if (handlerMethod != null && handlerMethod.isAnnotationPresent(Authorisation.class)) {
-
             if (authToken != null) {
                 String hashAuthToken = Utils.hash256(authToken);
                 if (!this.userSecurityRepository.existsByAuthToken(hashAuthToken)) {
@@ -60,18 +66,11 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 }
                 Authorisation annotation = handlerMethod.getAnnotation(Authorisation.class);
 
-                boolean hasPermission = false;
-                for (RoleEnum r : annotation.roles()) {
-                    for (Role role : user.getPermissionList()) {
-                        if (role.getRole().equals(r)) {
-                            hasPermission = true;
-                            break;
-                        }
-                    }
-                }
-                if (!hasPermission) {
+                if (!this.hasPermission(annotation.roles(), user.getPermissionList())) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The user has not permission");
                 }
+                session.setLastConnection(new Timestamp(System.currentTimeMillis()));
+                sessionRepository.save(session);
                 userSecurity = user;
                 userSession = session;
                 return true;
@@ -80,6 +79,19 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             }
         }
         return true;
+    }
+
+    private boolean hasPermission(RoleEnum[] rolesList, Set<Role> roleSet) {
+        boolean hasPermission = false;
+        for (RoleEnum r : rolesList) {
+            for (Role role : roleSet) {
+                if (role.getRole().equals(r)) {
+                    hasPermission = true;
+                    break;
+                }
+            }
+        }
+        return hasPermission;
     }
 
     /**

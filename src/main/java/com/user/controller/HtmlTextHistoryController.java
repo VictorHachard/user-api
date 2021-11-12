@@ -13,7 +13,6 @@ import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/html-text-history/")

@@ -1,17 +1,11 @@
 package com.user.service;
 
 import com.user.dto.SettingDto;
-import com.user.dto.ThemeDto;
-import com.user.model.entities.Email;
 import com.user.model.entities.Setting;
-import com.user.model.entities.Theme;
-import com.user.model.repositories.EmailRepository;
 import com.user.model.repositories.SettingRepository;
 import com.user.service.commons.AbstractService;
 import com.user.validator.SettingValidator;
-import com.user.validator.ThemeValidator;
 import com.user.validator.UpdateSettingActiveValidator;
-import com.user.validator.UpdateThemeActiveValidator;
 import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;

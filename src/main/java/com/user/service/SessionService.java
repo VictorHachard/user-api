@@ -1,17 +1,13 @@
 package com.user.service;
 
-import com.user.model.entities.Email;
 import com.user.model.entities.Session;
 import com.user.model.entities.UserSecurity;
-import com.user.model.entities.enums.PriorityEnum;
-import com.user.model.entities.enums.SecurityLogEnum;
 import com.user.model.repositories.SessionRepository;
 import com.user.service.commons.AbstractService;
 import com.user.utils.Utils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -24,7 +20,7 @@ import java.util.Date;
 public class SessionService extends AbstractService<Session, SessionRepository> {
 
     public Session create() {
-        Session s = sessionFacade.newInstance();
+        Session s = sessionFacade.newInstance(this.getIp());
         this.getRepository().save(s);
         return s;
     }

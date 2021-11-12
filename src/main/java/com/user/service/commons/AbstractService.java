@@ -49,6 +49,10 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         return TokenInterceptor.userSession;
     }
 
+    protected String getIp() {
+        return TokenInterceptor.ip;
+    }
+
     public long count() {
         return this.getAbstractRepository().count();
     }

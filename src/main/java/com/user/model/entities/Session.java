@@ -1,18 +1,14 @@
 package com.user.model.entities;
 
 import com.user.model.entities.commons.AbstractEntity;
-import com.user.model.entities.enums.EmailPreferencesEnum;
-import com.user.model.entities.enums.PriorityEnum;
-import com.user.model.entities.enums.PrivacyEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.*;
-import java.util.Arrays;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 // Lombok
@@ -26,14 +22,24 @@ public class Session extends AbstractEntity {
     /*
     Hashed using SHA-256
      */
-    @Column()
+    @Column(unique = true)
     String authToken;
 
-    @Column
+    @Column()
     @Temporal(TemporalType.TIMESTAMP)
     Date authTokenCreatedAt;
 
-    @Column()
+    @Column(unique = true)
     String token;
+
+    @Column()
+    String ip;
+
+    @Column()
+    Boolean rememberMe;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    Date lastConnection;
 
 }
