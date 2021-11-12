@@ -10,6 +10,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * This class is the base class for all entities.
+ * The base class contains the common attributes for all entities like id and creation date.
+ */
 @MappedSuperclass
 // Lombok
 @EqualsAndHashCode

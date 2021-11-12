@@ -81,6 +81,12 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
+    /**
+     * Check if the user has the permission
+     * @param rolesList
+     * @param roleSet
+     * @return
+     */
     private boolean hasPermission(RoleEnum[] rolesList, Set<Role> roleSet) {
         boolean hasPermission = false;
         for (RoleEnum r : rolesList) {

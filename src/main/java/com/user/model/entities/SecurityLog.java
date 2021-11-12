@@ -7,6 +7,9 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
+/**
+ * This class represents log for a user.
+ */
 @Entity
 // Lombok
 @ToString

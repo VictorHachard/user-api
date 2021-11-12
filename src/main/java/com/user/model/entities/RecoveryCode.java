@@ -10,6 +10,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
+/**
+ * This class represents a recovery code.
+ */
 @Entity
 // Lombok
 @ToString

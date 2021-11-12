@@ -8,6 +8,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * This class represents a group.
+ * A group can be created and attributed to a user.
+ */
 @Entity
 @Table(name = "group_a")
 // Lombok

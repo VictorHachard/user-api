@@ -7,6 +7,10 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+/**
+ * This class represents a password.
+ * Password are hatched using Bcrypt.
+ */
 @Entity
 // Lombok
 @ToString

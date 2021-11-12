@@ -14,6 +14,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * This class represents a user.
+ */
 @Entity
 // Lombok
 @EqualsAndHashCode(callSuper=true)

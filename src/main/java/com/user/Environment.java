@@ -30,22 +30,6 @@ public class Environment {
                 REDIRECT_FRONT_END_URL = "http://localhost:4200/";
                 break;
             case PRODUCTION:
-                NAME = "User Application";
-                DOMAIN_NAME = "https://www.vps.ypc.yt";
-                DATA_FOLDER = "/home/ubuntu/data/images/";
-                ACCESS_CONTROL_ALLOW_ORIGIN_URL = new ArrayList<>(Arrays.asList(
-                        "https://141.94.251.48",
-                        "https://vps.ypc.yt",
-                        "https://api.vps.ypc.yt",
-                        "https://www.vps.ypc.yt",
-                        "http://141.94.251.48",
-                        "http://vps.ypc.yt",
-                        "http://api.vps.ypc.yt",
-                        "http://www.vps.ypc.yt"));
-                EMAIL_USERNAME = "";
-                EMAIL_PASSWORD = "";
-                REDIRECT_FRONT_END_URL = "https://www.vps.ypc.yt/";
-                break;
             case TEST_RUN:
                 NAME = "User Application";
                 DOMAIN_NAME = "https://www.vps.ypc.yt";

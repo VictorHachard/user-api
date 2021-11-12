@@ -8,6 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * This class represents an address.
+ */
 @Entity
 @Table()
 // Lombok

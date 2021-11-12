@@ -36,6 +36,11 @@ public class Utils {
         return base64Encoder.encodeToString(randomBytes);
     }
 
+    /**
+     * This methode return the given string hash value.
+     * @param s
+     * @return
+     */
     public static String hash256(String s) {
         MessageDigest digest = null;
         if (s == null) {
@@ -98,6 +103,7 @@ public class Utils {
     }
 
     public static String lowerFirstChar(String str) {
+        //TODO handle exception
         String retStr = str;
         try {
             retStr = str.substring(0, 1).toLowerCase() + str.substring(1);
@@ -112,6 +118,7 @@ public class Utils {
     }
 
     public static int stringToInt(String str) {
+        //TODO handle exception
         int id = 0;
         try {
             id = Integer.parseInt(str);
@@ -119,6 +126,12 @@ public class Utils {
         return id;
     }
 
+    /**
+     * This methode return the given date into a string format like:
+     * E, dd MMM yyyy HH:mm:ss z
+     * @param date
+     * @return
+     */
     public static String niceDate(Date date) {
         return new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z").format(date);
     }

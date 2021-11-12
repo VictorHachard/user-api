@@ -8,6 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * This class represents the setting allowed by the application.
+ */
 @Entity
 @Table()
 // Lombok

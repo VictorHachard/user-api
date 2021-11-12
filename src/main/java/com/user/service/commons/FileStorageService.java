@@ -20,6 +20,7 @@ public class FileStorageService {
     final Path fileStorageLocation = Paths.get(Environment.getInstance().DATA_FOLDER);
 
     public String storeFile(MultipartFile file) {
+        //TODO handle exception
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             // Check if the file's name contains invalid characters
@@ -36,6 +37,7 @@ public class FileStorageService {
     }
 
     public void deleteFile(String file) {
+        //TODO handle exception
         try {
             Files.deleteIfExists(Paths.get(Environment.getInstance().DATA_FOLDER + file));
         } catch(NoSuchFileException e) {

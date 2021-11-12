@@ -24,6 +24,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is the abstract class for all services.
+ * @param <I>
+ * @param <T>
+ */
 // Lombok
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Log
@@ -41,14 +46,26 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         return InitMap.get(this.getClass(), MapTypeEnum.MAPPER);
     }
 
+    /**
+     * This method is used to get the current user.
+     * @return
+     */
     protected UserSecurity getUser() {
         return TokenInterceptor.userSecurity;
     }
 
+    /**
+     * This method is used to get the current session.
+     * @return
+     */
     protected Session getSession() {
         return TokenInterceptor.userSession;
     }
 
+    /**
+     * This method is used to get the current ip.
+     * @return
+     */
     protected String getIp() {
         return TokenInterceptor.ip;
     }

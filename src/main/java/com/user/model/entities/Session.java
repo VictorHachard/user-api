@@ -10,6 +10,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
+/**
+ * This class represents a session.
+ * A session is a connection between the front end and the back end.
+ * It also stores if this session need to persist longer like a connection cookie.
+ */
 @Entity
 // Lombok
 @ToString

@@ -9,6 +9,9 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * This class represents an email.
+ */
 @Entity
 // Lombok
 @ToString

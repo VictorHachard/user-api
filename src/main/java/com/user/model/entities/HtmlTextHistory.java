@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class represents a history of the class HtmlText.
+ */
 @Entity
 @Table()
 // Lombok

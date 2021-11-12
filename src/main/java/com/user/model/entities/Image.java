@@ -7,6 +7,9 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+/**
+ * This class represents an image.
+ */
 @Entity
 // Lombok
 @ToString
