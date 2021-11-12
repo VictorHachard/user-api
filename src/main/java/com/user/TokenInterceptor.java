@@ -23,10 +23,10 @@ import java.util.Set;
 public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     public static UserSecurity userSecurity = null;
-
     public static Session userSession = null;
 
     public static String ip = null;
+    public static boolean onMobile = false;
 
     @Autowired
     UserSecurityRepository userSecurityRepository;
@@ -40,10 +40,20 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         userSecurity = null; //TODO Better understand why the value is not null
         userSession = null;
         ip = null;
+        onMobile = false;
+
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//        if (headerNames != null) {
+//            while (headerNames.hasMoreElements()) {
+//                System.out.println("Header: " + request.getHeader(headerNames.nextElement()));
+//            }
+//        }
 
         ip = Utils.getClientIp(request);
-        System.out.println(handler);
-        System.out.println(ip);
+        if (request.getHeader("User-Agent").contains("Mobi")) {
+            onMobile = true;
+        }
+
         String authToken = request.getHeader("Authorization");
         Method handlerMethod = null;
         try {

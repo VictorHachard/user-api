@@ -1,5 +1,6 @@
 package com.user.service;
 
+import com.user.TokenInterceptor;
 import com.user.model.entities.Session;
 import com.user.model.entities.UserSecurity;
 import com.user.model.repositories.SessionRepository;
@@ -19,8 +20,8 @@ import java.util.Date;
 @Log
 public class SessionService extends AbstractService<Session, SessionRepository> {
 
-    public Session create() {
-        Session s = sessionFacade.newInstance(this.getIp());
+    public Session create(boolean rememberMe) {
+        Session s = sessionFacade.newInstance(this.getIp(), TokenInterceptor.onMobile, rememberMe);
         this.getRepository().save(s);
         return s;
     }

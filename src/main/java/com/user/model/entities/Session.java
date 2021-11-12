@@ -43,6 +43,9 @@ public class Session extends AbstractEntity {
     @Column()
     Boolean rememberMe;
 
+    @Column()
+    Boolean onMobile;
+
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     Date lastConnection;

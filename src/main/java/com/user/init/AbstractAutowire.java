@@ -85,18 +85,6 @@ public abstract class AbstractAutowire {
     RoleFacade roleFacade;
 
     @Autowired
-    CookieRememberRepository cookieRememberRepository;
-
-    @Autowired
-    CookieRememberMapper cookieRememberMapper;
-
-    @Autowired
-    CookieRememberService cookieRememberService;
-
-    @Autowired
-    CookieRememberFacade cookieRememberFacade;
-
-    @Autowired
     ThemeRepository themeRepository;
 
     @Autowired

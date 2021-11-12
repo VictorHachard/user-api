@@ -147,19 +147,17 @@ public class Utils {
     /* https://simplesolution.dev/spring-boot-web-get-client-ip-address/ */
     public static String getClientIp(HttpServletRequest request) {
         String ipAddress = request.getHeader("X-Forwarded-For");
-        if(StringUtils.isEmpty(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (StringUtils.isEmpty(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
         }
-
-        if(StringUtils.isEmpty(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (StringUtils.isEmpty(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("WL-Proxy-Client-IP");
         }
-
-        if(StringUtils.isEmpty(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (StringUtils.isEmpty(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
             String LOCALHOST_IPV4 = "127.0.0.1";
             String LOCALHOST_IPV6 = "0:0:0:0:0:0:0:1";
-            if(LOCALHOST_IPV4.equals(ipAddress) || LOCALHOST_IPV6.equals(ipAddress)) {
+            if (LOCALHOST_IPV4.equals(ipAddress) || LOCALHOST_IPV6.equals(ipAddress)) {
                 try {
                     InetAddress inetAddress = InetAddress.getLocalHost();
                     ipAddress = inetAddress.getHostAddress();
@@ -168,9 +166,7 @@ public class Utils {
                 }
             }
         }
-        if(!StringUtils.isEmpty(ipAddress)
-                && ipAddress.length() > 15
-                && ipAddress.indexOf(",") > 0) {
+        if (!StringUtils.isEmpty(ipAddress) && ipAddress.length() > 15 && ipAddress.indexOf(",") > 0) {
             ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
         }
         return ipAddress;

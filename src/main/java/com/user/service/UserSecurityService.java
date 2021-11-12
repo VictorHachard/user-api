@@ -1,6 +1,9 @@
 package com.user.service;
 
-import com.user.dto.*;
+import com.user.dto.SecurityLogDto;
+import com.user.dto.SessionDto;
+import com.user.dto.UserSecurityDto;
+import com.user.dto.UserSecurityProfileDto;
 import com.user.model.entities.*;
 import com.user.model.entities.enums.PriorityEnum;
 import com.user.model.entities.enums.PrivacyEnum;
@@ -70,7 +73,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         return user;
     }
 
-    public UserSecurityDto login(String username, String password, String code) {
+    public UserSecurityDto login(String username, String password, boolean rememberMe, String code) {
         if (!this.getRepository().existsByUsername(username)) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "The username is not correct");
         }
@@ -99,7 +102,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
             this.getRepository().save(user);
         }
 
-        Session session = sessionService.create();
+        Session session = sessionService.create(rememberMe);
         UserSecurityDto userSecurityDto = (UserSecurityDto) this.getMapper().getDto(user);
         user.addSession(session);
         String token = sessionService.setAuthToken(session);
@@ -110,17 +113,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         sessionDto.setAuthToken(token);
         userSecurityDto.setActualSessionDto(sessionDto);
         return userSecurityDto;
-    }
-
-    public UserSecurityDto connectCookie(LoginFromCookieValidator validator) {
-        if (!this.getRepository().existsByCookieRemember(validator.getToken())) {
-            this.responseStatus(HttpStatus.BAD_REQUEST, "The token is not correct");
-        }
-
-        UserSecurity user = this.getRepository().findByCookieRemember(validator.getToken()).get();
-        //TODO check if token not expired
-        //this.setAuthToken(user);
-        return (UserSecurityDto) this.getMapper().getDto(user);
     }
 
     public UserSecurityDto loginUpdate() {
@@ -185,14 +177,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         this.responseStatus(HttpStatus.NO_CONTENT, "Success new password added");
     }
 
-    public CookieRememberDto addCookie(CookieRememberValidator validator) {
-        UserSecurity u = this.getUser();
-        CookieRemember cr = cookieRememberService.create(validator);
-        u.addCookie(cr);
-        this.getRepository().save(u);
-        return cookieRememberMapper.getDto(cr);
-    }
-
     public void addBlockedUser(long userId) {
         UserSecurity u = this.getUser();
         UserSecurity ub = this.get(userId);
@@ -253,13 +237,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         }
         u.getPermissionList().remove(r);
         this.getRepository().save(u);
-    }
-
-    public void removeCookie(long id) {
-        CookieRemember cr = cookieRememberService.get(id);
-        UserSecurity u = this.getUser();
-        u.getCookieList().remove(cr);
-        cookieRememberService.delete(id);
     }
 
     /*public boolean checkToken(Users user, String token) {

@@ -1,10 +1,8 @@
 package com.user.mapper;
 
 import com.user.dto.SessionDto;
-import com.user.dto.ThemeDto;
 import com.user.mapper.commons.AbstractMapper;
 import com.user.model.entities.Session;
-import com.user.model.entities.Theme;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
@@ -27,6 +25,8 @@ public class SessionMapper extends AbstractMapper<SessionDto, Session> {
         SessionDto dto = super.getDto(e);
         dto.setToken(e.getToken());
         dto.setIp(e.getIp());
+        dto.setOnMobile(e.getOnMobile());
+        dto.setLastConnection(e.getLastConnection());
         return dto;
     }
 

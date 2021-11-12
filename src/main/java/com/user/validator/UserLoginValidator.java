@@ -19,6 +19,9 @@ public class UserLoginValidator extends AbstractValidator {
     @NotEmpty
     String auth;
 
+    @NotNull(message = "")
+    boolean rememberMe;
+
     String code;
 
 }

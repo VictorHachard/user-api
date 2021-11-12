@@ -2,7 +2,6 @@ package com.user.controller;
 
 import com.user.Authorisation;
 import com.user.controller.commons.AbstractController;
-import com.user.dto.CookieRememberDto;
 import com.user.dto.SecurityLogDto;
 import com.user.dto.UserSecurityDto;
 import com.user.dto.UserSecurityProfileDto;
@@ -37,14 +36,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         UserSecurityService service = (UserSecurityService) this.getService();
         String token = new String(Base64.getDecoder().decode(validator.getAuth()));
         UserSecurityDto res = service.login(token.substring(0, token.indexOf(":")),
-                token.substring(token.indexOf(":") + 1), validator.getCode());
-        return res;
-    }
-
-    @PostMapping("login/cookie")
-    public UserSecurityDto loginCookie(@Valid @RequestBody LoginFromCookieValidator validator) {
-        UserSecurityService service = ((UserSecurityService) this.getService());
-        UserSecurityDto res = service.connectCookie(validator);
+                token.substring(token.indexOf(":") + 1), validator.isRememberMe(), validator.getCode());
         return res;
     }
 
@@ -106,13 +98,6 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     }
 
     @Authorisation(roles = {RoleEnum.ROLE_USER})
-    @PostMapping("add/cookie")
-    public CookieRememberDto addCookie(@Valid @RequestBody CookieRememberValidator validator) {
-        UserSecurityService service = (UserSecurityService) this.getService();
-        return service.addCookie(validator);
-    }
-
-    @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("add/role/{roleId}/user/{userId}")
     public void addRole(@PathVariable("roleId") long roleId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
@@ -152,13 +137,6 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     public void removeGroup(@PathVariable("groupId") long groupId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.removeGroup(groupId, userId);
-    }
-
-    @Authorisation(roles = {RoleEnum.ROLE_USER})
-    @DeleteMapping("remove/cookie/{id}")
-    public void removeCookie(@PathVariable("id") long id) {
-        UserSecurityService service = (UserSecurityService) this.getService();
-        service.removeCookie(id);
     }
 
     /* Get */

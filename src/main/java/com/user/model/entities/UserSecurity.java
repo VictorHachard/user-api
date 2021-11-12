@@ -80,9 +80,6 @@ public class UserSecurity extends AbstractEntity {
     EmailPreferencesEnum emailPreferences;
 
     @OneToMany(fetch = FetchType.EAGER)
-    Set<CookieRemember> cookieList = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.EAGER)
     Set<Session> sessionList = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -136,10 +133,6 @@ public class UserSecurity extends AbstractEntity {
 
     public void addAddress(Address... addresses) {
         addressList.addAll(Arrays.asList(addresses));
-    }
-
-    public void addCookie(CookieRemember... cookieRemembers) {
-        cookieList.addAll(Arrays.asList(cookieRemembers));
     }
 
     public void addGroup(Group... groups) {
