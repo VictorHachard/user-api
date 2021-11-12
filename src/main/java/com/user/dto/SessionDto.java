@@ -10,10 +10,12 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class SessionDto extends Dto {
+public class SessionDto extends Dto{
 
     String token;
 
     String authToken;
+
+    String ip;
 
 }

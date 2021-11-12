@@ -20,6 +20,8 @@ public class UserSecurityDto extends Dto {
      */
     SessionDto actualSessionDto;
 
+    List<SessionDto> sessionDtoList;
+
     String username;
 
     String nameFormatted;
