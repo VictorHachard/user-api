@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Set;
 
 public class TokenInterceptor extends HandlerInterceptorAdapter {
@@ -45,7 +46,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 //        Enumeration<String> headerNames = request.getHeaderNames();
 //        if (headerNames != null) {
 //            while (headerNames.hasMoreElements()) {
-//                System.out.println("Header: " + request.getHeader(headerNames.nextElement()));
+//                String headerName = headerNames.nextElement();
+//                System.out.println("Header: " + headerName + " - " + request.getHeader(headerName));
 //            }
 //        }
 
@@ -71,7 +73,9 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 }
                 UserSecurity user = this.userSecurityRepository.findByAuthToken(hashAuthToken).get();
                 Session session = this.sessionRepository.findByAuthToken(hashAuthToken).get();
-                if (session.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - 1l * 24 * 60 * 60 * 1000))) { //24h
+                if (!session.getRememberMe() && session.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - Environment.getInstance().SESSION_TIMEOUT))) { //24h
+                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is expired");
+                } else if (session.getRememberMe() && session.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - Environment.getInstance().SESSION_REMEMBER_ME_TIMEOUT))) { //30 days
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is expired");
                 }
                 Authorisation annotation = handlerMethod.getAnnotation(Authorisation.class);

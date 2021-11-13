@@ -1,6 +1,8 @@
 package com.user.service;
 
 import com.user.dto.SettingDto;
+import com.user.dto.SettingSimplifiedDto;
+import com.user.mapper.SettingMapper;
 import com.user.model.entities.Setting;
 import com.user.model.repositories.SettingRepository;
 import com.user.service.commons.AbstractService;
@@ -36,10 +38,10 @@ public class SettingService extends AbstractService<Setting, SettingRepository> 
         return t;
     }
 
-    public List<SettingDto> getAllActiveDto() {
+    public List<SettingSimplifiedDto> getAllActiveDto() {
         List<Setting> settingList = this.getAll();
         settingList.removeIf(p -> !p.isActive());
-        return this.getMapper().getAllDto(settingList);
+        return settingMapper.getAllSimplifiedDto(settingList);
     }
 
     public void updateActive(long id, UpdateSettingActiveValidator validator) {
