@@ -30,8 +30,8 @@ public class Environment {
                 EMAIL_USERNAME = "";
                 EMAIL_PASSWORD = "";
                 REDIRECT_FRONT_END_URL = "http://localhost:4200/";
-                SESSION_TIMEOUT = (long) 86400; // 24 hours
-                SESSION_REMEMBER_ME_TIMEOUT = (long) 2629800; // 1 month
+                SESSION_TIMEOUT = (long) 1000 * 86400; // 24 hours
+                SESSION_REMEMBER_ME_TIMEOUT = (long) 1000 * 2629800; // 1 month
                 break;
             case PRODUCTION:
             case TEST_RUN:
@@ -50,8 +50,8 @@ public class Environment {
                 EMAIL_USERNAME = "";
                 EMAIL_PASSWORD = "";
                 REDIRECT_FRONT_END_URL = "https://www.vps.ypc.yt/";
-                SESSION_TIMEOUT = (long) 86400; // 24 hours
-                SESSION_REMEMBER_ME_TIMEOUT = (long) 2629800; // 1 month
+                SESSION_TIMEOUT = (long) 1000 * 86400; // 24 hours
+                SESSION_REMEMBER_ME_TIMEOUT = (long) 1000 * 2629800; // 1 month
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + runEnum);
