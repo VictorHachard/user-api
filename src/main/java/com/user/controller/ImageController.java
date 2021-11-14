@@ -14,6 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("api/v1/image/")
 // Lombok
@@ -27,10 +32,20 @@ public class ImageController {
     @Authorisation(roles = {RoleEnum.ROLE_USER})
     @ResponseBody
     @GetMapping("{url}")
-    public ResponseEntity<FileSystemResource> getImageAsResource(@PathVariable("url") String url) {
+    public ResponseEntity<Map<String, String>> getImageAsResource(@PathVariable("url") String url) throws IOException {
         FileSystemResource res = new FileSystemResource(Environment.getInstance().DATA_FOLDER + url);
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
+        Map<String, String> jsonMap = new HashMap<>();
+        jsonMap.put("content", Base64.getEncoder().withoutPadding().encodeToString(res.getInputStream().readAllBytes()));
+        return new ResponseEntity<>(jsonMap, HttpStatus.CREATED);
     }
+
+//    @Authorisation(roles = {RoleEnum.ROLE_USER})
+//    @ResponseBody
+//    @GetMapping("{url}")
+//    public ResponseEntity<FileSystemResource> getImageAsResource(@PathVariable("url") String url) {
+//        FileSystemResource res = new FileSystemResource(Environment.getInstance().DATA_FOLDER + url);
+//        return new ResponseEntity<>(res, HttpStatus.CREATED);
+//    }
 
     @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("upload")
