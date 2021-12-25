@@ -29,6 +29,7 @@ public class ImageController {
     @Autowired
     FileStorageService fileStorageService;
 
+    //TODO Cannot get profile image if the profile is private
     @Authorisation(roles = {RoleEnum.ROLE_USER})
     @ResponseBody
     @GetMapping("{url}")
