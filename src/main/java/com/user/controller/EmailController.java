@@ -3,6 +3,8 @@ package com.user.controller;
 import com.user.interceptor.Authorisation;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.GroupDto;
+import com.user.interceptor.AuthorisationForOverride;
+import com.user.interceptor.AuthorisationForOverrideColumn;
 import com.user.model.entities.Group;
 import com.user.model.entities.enums.RoleEnum;
 import com.user.service.EmailService;
@@ -21,18 +23,21 @@ import javax.validation.Valid;
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Log
+// Authorisation
+@AuthorisationForOverrideColumn(table = {
+        @AuthorisationForOverride(name = "count", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
+        @AuthorisationForOverride(name = "delete", roles = {RoleEnum.ROLE_USER}),
+        @AuthorisationForOverride(name = "getDto", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
+        @AuthorisationForOverride(name = "getAllDto", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
+        @AuthorisationForOverride(name = "get", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
+        @AuthorisationForOverride(name = "getAll", roles = {RoleEnum.ROLE_ADMINISTRATOR})
+})
 public class EmailController extends AbstractController<Group, GroupDto> {
 
     @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("create")
     public void create(@Valid @RequestBody EmailValidator validator) {
         this.getService().create(validator);
-    }
-
-    @Authorisation(roles = {RoleEnum.ROLE_USER})
-    @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") long id) {
-        this.getService().delete(id);
     }
 
     @Authorisation(roles = {RoleEnum.ROLE_USER})

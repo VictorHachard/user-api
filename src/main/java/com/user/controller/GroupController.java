@@ -3,6 +3,8 @@ package com.user.controller;
 import com.user.interceptor.Authorisation;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.GroupDto;
+import com.user.interceptor.AuthorisationForOverride;
+import com.user.interceptor.AuthorisationForOverrideColumn;
 import com.user.model.entities.Group;
 import com.user.model.entities.enums.RoleEnum;
 import com.user.service.GroupService;
@@ -21,6 +23,15 @@ import java.util.List;
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Log
+// Authorisation
+@AuthorisationForOverrideColumn(table = {
+        @AuthorisationForOverride(name = "count", roles = {RoleEnum.ROLE_OWNER}),
+        @AuthorisationForOverride(name = "delete", roles = {RoleEnum.ROLE_OWNER}),
+        @AuthorisationForOverride(name = "getDto", roles = {RoleEnum.ROLE_OWNER}),
+        @AuthorisationForOverride(name = "getAllDto", roles = {RoleEnum.ROLE_OWNER}),
+        @AuthorisationForOverride(name = "get", roles = {RoleEnum.ROLE_OWNER}),
+        @AuthorisationForOverride(name = "getAll", roles = {RoleEnum.ROLE_OWNER})
+})
 public class GroupController extends AbstractController<Group, GroupDto> {
 
     @Authorisation(roles = {RoleEnum.ROLE_OWNER})

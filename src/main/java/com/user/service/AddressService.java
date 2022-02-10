@@ -2,6 +2,7 @@ package com.user.service;
 
 import com.user.model.entities.Address;
 import com.user.model.entities.UserSecurity;
+import com.user.model.entities.enums.SecurityLogEnum;
 import com.user.model.repositories.AddressRepository;
 import com.user.service.commons.AbstractService;
 import com.user.validator.AddressValidator;
@@ -40,6 +41,7 @@ public class AddressService extends AbstractService<Address, AddressRepository> 
         Address a = this.create(validator.getAlias(), false, validator.getName(), validator.getBuilding(), validator.getStreet(), validator.getPostcode());
         u.addAddress(a);
         userSecurityRepository.save(u);
+        securityLogService.create(SecurityLogEnum.ADDRESS_ADDED, u, "Address " + a.getAlias() + " added");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success " + this.getClass().getSimpleName().toLowerCase() + " created");
     }
 
@@ -66,6 +68,7 @@ public class AddressService extends AbstractService<Address, AddressRepository> 
             } else {
                 u.getAddressList().remove(a);
                 this.getRepository().deleteById(id);
+                securityLogService.create(SecurityLogEnum.ADDRESS_REMOVED, u, "Address " + a.getAlias() + " deleted");
                 this.responseStatus(HttpStatus.NO_CONTENT, "Success " + this.getClass().getSimpleName().toLowerCase() + " deleted");
             }
         }

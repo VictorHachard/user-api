@@ -97,6 +97,7 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
             this.responseStatus(HttpStatus.BAD_REQUEST, "The user don't have this email");
         }
         emailFacade.initToken(e);
+        securityLogService.create(SecurityLogEnum.EMAIL_RESEND_CONFIRMATION, u, "Send a confirmation email for the email " + e.getEmail());
         this.getRepository().save(e);
     }
 
@@ -106,6 +107,8 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
         }
         Email e = this.getRepository().findByEmailConfirmedToken(token).get();
         emailFacade.confirmToken(e);
+        UserSecurity u = userSecurityRepository.findByEmail(e.getEmail()).get();
+        securityLogService.create(SecurityLogEnum.EMAIL_CONFIRMED, u, e.getEmail() + " is confirmed");
         this.getRepository().save(e);
     }
 
@@ -131,7 +134,7 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
         e.setBackup(false);
         this.getRepository().save(e);
         userSecurityRepository.save(u);
-        securityLogService.create(SecurityLogEnum.EMAIL_CHANGE_PRIORITY, u, "Email " + validator.getEmail() + " updated to Principal");
+        securityLogService.create(SecurityLogEnum.EMAIL_CHANGE_PRIORITY, u, "Email " + validator.getEmail() + " updated to principal");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success new email added");
     }
 
@@ -145,6 +148,11 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
         }
         e.setBackup(validator.getBackup());
         this.getRepository().save(e);
+        if (validator.getBackup()) {
+            securityLogService.create(SecurityLogEnum.EMAIL_ADDED_BACKUP, u, "Email " + e.getEmail() + " was added to the backup emails");
+        } else {
+            securityLogService.create(SecurityLogEnum.EMAIL_REMOVED_BACKUP, u, "Email " + e.getEmail() + " was removed from the backup emails");
+        }
         this.responseStatus(HttpStatus.NO_CONTENT, "Success update backup email");
     }
 
@@ -152,6 +160,7 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
         UserSecurity u = this.getUser();
         userSecurityFacade.updateEmailPreferences(u, EmailPreferencesEnum.valueOf(validator.getEmailPreferences()));
         userSecurityRepository.save(u);
+        securityLogService.create(SecurityLogEnum.EMAIL_CHANGE_PREFERENCE, u, "Email " + validator.getEmailPreferences() + " updated to preference");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success update email preferences");
     }
 
