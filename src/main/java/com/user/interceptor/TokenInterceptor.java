@@ -59,12 +59,11 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             handlerClass = Class.forName(handler.toString().split("#")[0]);
             handlerMethod = this.foundTheMethode(handler.toString());
         } catch (Exception e) {
-            System.out.println("Not Found");
+            System.out.println("The API path was not found");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The API path was not found");
         }
 
         RoleEnum[] roles = this.getRoles(handlerClass, handlerMethod);
-        System.out.println("Roles: " + roles);
 
         if (roles != null && roles.length > 0) {
             if (authToken != null) {
@@ -75,15 +74,14 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 UserSecurity user = this.userSecurityRepository.findByAuthToken(hashAuthToken).get();
                 Session session = this.sessionRepository.findByAuthToken(hashAuthToken).get();
                 if (!session.getRememberMe() && session.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - Environment.getInstance().SESSION_TIMEOUT))) { //24h
+                    this.sessionRepository.delete(session);
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is expired");
                 } else if (session.getRememberMe() && session.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - Environment.getInstance().SESSION_REMEMBER_ME_TIMEOUT))) { //30 days
+                    this.sessionRepository.delete(session);
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is expired");
                 }
 
-                System.out.println(this.userHasPermission(roles, user.getPermissionList()));
-
                 if (!this.userHasPermission(roles, user.getPermissionList())) {
-                    System.out.println("The user has not permission");
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The user has not permission");
                 }
                 session.setLastConnection(new Timestamp(System.currentTimeMillis()));
@@ -147,7 +145,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
      * @throws Exception
      */
     private Method foundTheMethode(String handler) throws ClassNotFoundException, NoSuchMethodException {
-        System.out.println("Handler: " + handler);
         Class<?> cls = null;
         try {
             cls = Class.forName(handler.split("#")[0]);

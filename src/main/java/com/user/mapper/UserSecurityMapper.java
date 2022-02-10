@@ -86,9 +86,9 @@ public class UserSecurityMapper extends AbstractMapper<UserSecurityDto, UserSecu
     }
 
     private String getName(UserSecurity e) {
-        String name = e.getFirstName() != null ? e.getFirstName() + " " : "";
-        name += e.getMiddleName() != null ? e.getMiddleName() + " " : "";
-        name += e.getLastName() != null ? e.getLastName()  : "";
+        String name = e.getFirstName() != null && !e.getFirstName().equals("") ? e.getFirstName() + " " : "";
+        name += e.getMiddleName() != null && !e.getMiddleName().equals("") ? e.getMiddleName() + " " : "";
+        name += e.getLastName() != null && !e.getLastName().equals("") ? e.getLastName() : "";
         return name;
     }
 

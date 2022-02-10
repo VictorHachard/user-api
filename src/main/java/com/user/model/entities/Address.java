@@ -40,4 +40,7 @@ public class Address extends AbstractEntity {
     @Column
     String postcode; // Postcode and name of municipality
 
+    @Column
+    String country; // Country //TODO have a table with a country list
+
 }

@@ -18,6 +18,10 @@ import java.util.stream.Collectors;
  * This class represents a user.
  */
 @Entity
+//@Table(indexes = { // JPA by default will create index on username and token
+//        @Index(columnList = "username"),
+//        @Index(columnList = "passwordResetToken"),
+//})
 // Lombok
 @EqualsAndHashCode(callSuper=true)
 @ToString

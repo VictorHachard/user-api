@@ -44,6 +44,9 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         }
         return null;
     }
+    public List<UserSecurityProfileDto> getAllDtoBlockedUser(Integer pageIndex, Integer pageSize, String sortBy, String orderBy, String searchBy, String searchValue) {
+        return userSecurityMapper.getAllProfileDto(this.getAll(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue));
+    }
 
     @Override
     public void create(AbstractValidator abstractValidator) {
@@ -138,8 +141,6 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         this.getRepository().save(u);
         this.responseStatus(HttpStatus.NO_CONTENT, "Success update user");
     }
-
-
 
     public void updateProfilePrivacy(UpdateProfilePrivacyValidator validator) {
         UserSecurity u = this.getUser();

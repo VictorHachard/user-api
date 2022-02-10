@@ -68,6 +68,19 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.logout();
     }
 
+    //TODO create a new DTO for this method
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
+    @GetMapping("dto/blocked-user")
+    public List<UserSecurityProfileDto> getAllDtoBlockedUser(@RequestParam(defaultValue = "0") Integer pageIndex,
+                             @RequestParam(defaultValue = "10") Integer pageSize,
+                             @RequestParam(defaultValue = "id") String sortBy,
+                             @RequestParam(defaultValue = "asc") String orderBy,
+                             @RequestParam(defaultValue = "null") String searchBy,
+                             @RequestParam(defaultValue = "null") String searchValue) {
+        UserSecurityService service = (UserSecurityService) this.getService();
+        return service.getAllDtoBlockedUser(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue);
+    }
+
     @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("update/appearance/{appearanceId}")
     public void updateAppearance(@PathVariable("appearanceId") long appearanceId) {

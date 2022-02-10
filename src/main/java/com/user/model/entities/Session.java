@@ -4,10 +4,7 @@ import com.user.model.entities.commons.AbstractEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -16,6 +13,7 @@ import java.util.Date;
  * It also stores if this session need to persist longer like a connection cookie.
  */
 @Entity
+//@Table(indexes = @Index(columnList = "authToken")) // JPA by default will create on token
 // Lombok
 @ToString
 @NoArgsConstructor
