@@ -1,6 +1,8 @@
 package com.user.controller;
 
-import com.user.Authorisation;
+import com.user.interceptor.Authorisation;
+import com.user.interceptor.AuthorisationForOverride;
+import com.user.interceptor.AuthorisationForOverrideColumn;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.SecurityLogDto;
 import com.user.dto.UserSecurityDto;
@@ -17,12 +19,22 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/user/")
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Log
+// Authorisation
+@AuthorisationForOverrideColumn(table = {
+    @AuthorisationForOverride(name = "count", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
+    @AuthorisationForOverride(name = "delete", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
+    @AuthorisationForOverride(name = "getDto", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
+    @AuthorisationForOverride(name = "getAllDto", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
+    @AuthorisationForOverride(name = "get", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
+    @AuthorisationForOverride(name = "getAll", roles = {RoleEnum.ROLE_ADMINISTRATOR})
+})
 public class UserSecurityController extends AbstractController<UserSecurity, UserSecurityDto> {
 
     @PostMapping("create")
@@ -31,11 +43,12 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     }
 
     @PostMapping("login")
-    public UserSecurityDto login(@Valid @RequestBody UserLoginValidator validator) {
+    public UserSecurityDto login(@Valid @RequestBody UserLoginValidator validator, @RequestHeader Map<String, String> headers) {
         //TODO Add a login throttling. A short time delay that increases with the number of failed attempts.
         UserSecurityService service = (UserSecurityService) this.getService();
         String token = new String(Base64.getDecoder().decode(validator.getAuth()));
-        UserSecurityDto res = service.login(token.substring(0, token.indexOf(":")),
+        UserSecurityDto res = service.login(headers,
+                token.substring(0, token.indexOf(":")),
                 token.substring(token.indexOf(":") + 1), validator.isRememberMe(), validator.getCode());
         return res;
     }
@@ -97,7 +110,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.addPassword(validator);
     }
 
-    @Authorisation(roles = {RoleEnum.ROLE_USER})
+    @Authorisation(roles = {RoleEnum.ROLE_ADMINISTRATOR})
     @PostMapping("add/role/{roleId}/user/{userId}")
     public void addRole(@PathVariable("roleId") long roleId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
@@ -111,14 +124,14 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.addBlockedUser(userId);
     }
 
-    @Authorisation(roles = {RoleEnum.ROLE_USER})
+    @Authorisation(roles = {RoleEnum.ROLE_ADMINISTRATOR})
     @PostMapping("add/group/{groupId}/user/{userId}")
     public void addGroup(@PathVariable("groupId") long groupId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
         service.addGroup(groupId, userId);
     }
 
-    @Authorisation(roles = {RoleEnum.ROLE_USER})
+    @Authorisation(roles = {RoleEnum.ROLE_ADMINISTRATOR})
     @DeleteMapping("remove/role/{roleId}/user/{userId}")
     public void removeRole(@PathVariable("roleId") long roleId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();
@@ -132,7 +145,7 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         service.removeBlockedUser(userId);
     }
 
-    @Authorisation(roles = {RoleEnum.ROLE_USER})
+    @Authorisation(roles = {RoleEnum.ROLE_ADMINISTRATOR})
     @DeleteMapping("remove/group/{groupId}/user/{userId}")
     public void removeGroup(@PathVariable("groupId") long groupId, @PathVariable("userId") long userId) {
         UserSecurityService service = (UserSecurityService) this.getService();

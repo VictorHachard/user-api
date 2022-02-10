@@ -1,6 +1,6 @@
 package com.user.controller;
 
-import com.user.Authorisation;
+import com.user.interceptor.Authorisation;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.GroupDto;
 import com.user.model.entities.Group;

@@ -137,6 +137,12 @@ public class Utils {
     }
 
     /* https://www.nbdtech.com/Blog/archive/2008/04/27/Calculating-the-Perceived-Brightness-of-a-Color.aspx */
+
+    /**
+     * This methode return the perceived brightness of a color.
+     * @param c Color
+     * @return
+     */
     public static int brightness(Color c) {
         return (int) Math.sqrt(
             c.getRed() * c.getRed() * .241 +

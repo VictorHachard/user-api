@@ -41,6 +41,12 @@ public class Session extends AbstractEntity {
     String ip;
 
     @Column()
+    String userAgent;
+
+    @Column()
+    String platform;
+
+    @Column()
     Boolean rememberMe;
 
     @Column()

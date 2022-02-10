@@ -1,6 +1,6 @@
 package com.user.controller;
 
-import com.user.Authorisation;
+import com.user.interceptor.Authorisation;
 import com.user.Environment;
 import com.user.model.entities.enums.RoleEnum;
 import com.user.service.commons.FileStorageService;

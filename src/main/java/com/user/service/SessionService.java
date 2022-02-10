@@ -1,6 +1,5 @@
 package com.user.service;
 
-import com.user.TokenInterceptor;
 import com.user.model.entities.Session;
 import com.user.model.entities.UserSecurity;
 import com.user.model.repositories.SessionRepository;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Map;
 
 @Service
 // Lombok
@@ -20,8 +20,8 @@ import java.util.Date;
 @Log
 public class SessionService extends AbstractService<Session, SessionRepository> {
 
-    public Session create(boolean rememberMe) {
-        Session s = sessionFacade.newInstance(this.getIp(), TokenInterceptor.onMobile, rememberMe);
+    public Session create(boolean rememberMe, Map<String, String> headers) {
+        Session s = sessionFacade.newInstance(this.getIp(), headers, rememberMe);
         this.getRepository().save(s);
         return s;
     }

@@ -1,5 +1,6 @@
-package com.user;
+package com.user.interceptor;
 
+import com.user.Environment;
 import com.user.model.entities.Role;
 import com.user.model.entities.Session;
 import com.user.model.entities.UserSecurity;
@@ -18,7 +19,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Enumeration;
+import java.util.Objects;
 import java.util.Set;
 
 public class TokenInterceptor extends HandlerInterceptorAdapter {
@@ -27,7 +28,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     public static Session userSession = null;
 
     public static String ip = null;
-    public static boolean onMobile = false;
 
     @Autowired
     UserSecurityRepository userSecurityRepository;
@@ -41,7 +41,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         userSecurity = null; //TODO Better understand why the value is not null
         userSession = null;
         ip = null;
-        onMobile = false;
 
 //        Enumeration<String> headerNames = request.getHeaderNames();
 //        if (headerNames != null) {
@@ -52,20 +51,22 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 //        }
 
         ip = Utils.getClientIp(request);
-        if (request.getHeader("User-Agent").contains("Mobi")) {
-            onMobile = true;
-        }
 
         String authToken = request.getHeader("Authorization");
         Method handlerMethod = null;
+        Class<?> handlerClass = null;
         try {
-            handlerMethod = this.hasAuthorizedAnnotation(handler.toString());
+            handlerClass = Class.forName(handler.toString().split("#")[0]);
+            handlerMethod = this.foundTheMethode(handler.toString());
         } catch (Exception e) {
             System.out.println("Not Found");
-            return true;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The API path was not found");
         }
 
-        if (handlerMethod != null && handlerMethod.isAnnotationPresent(Authorisation.class)) {
+        RoleEnum[] roles = this.getRoles(handlerClass, handlerMethod);
+        System.out.println("Roles: " + roles);
+
+        if (roles != null && roles.length > 0) {
             if (authToken != null) {
                 String hashAuthToken = Utils.hash256(authToken);
                 if (!this.userSecurityRepository.existsByAuthToken(hashAuthToken)) {
@@ -78,9 +79,11 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 } else if (session.getRememberMe() && session.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - Environment.getInstance().SESSION_REMEMBER_ME_TIMEOUT))) { //30 days
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is expired");
                 }
-                Authorisation annotation = handlerMethod.getAnnotation(Authorisation.class);
 
-                if (!this.hasPermission(annotation.roles(), user.getPermissionList())) {
+                System.out.println(this.userHasPermission(roles, user.getPermissionList()));
+
+                if (!this.userHasPermission(roles, user.getPermissionList())) {
+                    System.out.println("The user has not permission");
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The user has not permission");
                 }
                 session.setLastConnection(new Timestamp(System.currentTimeMillis()));
@@ -101,7 +104,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
      * @param roleSet
      * @return
      */
-    private boolean hasPermission(RoleEnum[] rolesList, Set<Role> roleSet) {
+    private boolean userHasPermission(RoleEnum[] rolesList, Set<Role> roleSet) {
         boolean hasPermission = false;
         for (RoleEnum r : rolesList) {
             for (Role role : roleSet) {
@@ -115,12 +118,36 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     }
 
     /**
+     * This methode return the role of the methode.
+     * If the methode is not annotated, return role.
+     * If the methode is in the abstract, return the role of the class.
+     * @param handlerClass
+     * @param handlerMethod
+     * @return
+     */
+    private RoleEnum[] getRoles(Class<?> handlerClass, Method handlerMethod) {
+        RoleEnum[] roles = null;
+        // Check if the user has the right to access the method (if the method has the right annotation)
+        if (handlerMethod.isAnnotationPresent(Authorisation.class)) {
+            return handlerMethod.getAnnotation(Authorisation.class).roles();
+        } else if (handlerClass.isAnnotationPresent(AuthorisationForOverrideColumn.class)) { // Check if the user has the right to access the method in the abstract (if the class has the right annotation)
+            for (AuthorisationForOverride a : handlerClass.getAnnotation(AuthorisationForOverrideColumn.class).table()) {
+                if (Objects.equals(a.name(), handlerMethod.getName())) {
+                    return a.roles();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      *
      * @param handler like "com.user.controller.UserController#getUser(String)"
      * @return the method
      * @throws Exception
      */
-    private Method hasAuthorizedAnnotation(String handler) throws Exception {
+    private Method foundTheMethode(String handler) throws ClassNotFoundException, NoSuchMethodException {
+        System.out.println("Handler: " + handler);
         Class<?> cls = null;
         try {
             cls = Class.forName(handler.split("#")[0]);
@@ -147,11 +174,10 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 }
             }
             if (thisIsTheOne == null) {
-                throw new Exception("Method not found");
-            } else {
-                return thisIsTheOne;
+                throw new NoSuchMethodException("The method " + handler + " is not found");
             }
-        } catch (ClassNotFoundException e) {
+            return thisIsTheOne;
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
             throw e;
         }
     }

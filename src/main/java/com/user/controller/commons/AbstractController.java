@@ -31,10 +31,10 @@ public abstract class AbstractController<E, D> {
         this.getService().delete(id);
     }
 
-    @PutMapping("{id}")
-    public void update(@Valid @RequestBody AbstractValidator abstractValidator, @PathVariable("id") long id) {
-        this.getService().update(abstractValidator, id);
-    }
+//    @PutMapping("{id}")
+//    public void update(@Valid @RequestBody AbstractValidator abstractValidator, @PathVariable("id") long id) {
+//        this.getService().update(abstractValidator, id);
+//    }
 
     @GetMapping("dto/{id}")
     public D getDto(@PathVariable("id") long id) {

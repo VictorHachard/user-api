@@ -1,6 +1,6 @@
 package com.user.service.commons;
 
-import com.user.TokenInterceptor;
+import com.user.interceptor.TokenInterceptor;
 import com.user.dto.commons.Dto;
 import com.user.init.AbstractAutowire;
 import com.user.init.InitMap;

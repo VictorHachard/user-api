@@ -24,10 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 // Lombok
@@ -73,7 +70,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         return user;
     }
 
-    public UserSecurityDto login(String username, String password, boolean rememberMe, String code) {
+    public UserSecurityDto login(Map<String, String> headers, String username, String password, boolean rememberMe, String code) {
         if (!this.getRepository().existsByUsername(username)) {
             this.responseStatus(HttpStatus.BAD_REQUEST, "The username is not correct");
         }
@@ -102,7 +99,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
             this.getRepository().save(user);
         }
 
-        Session session = sessionService.create(rememberMe);
+        Session session = sessionService.create(rememberMe, headers);
         UserSecurityDto userSecurityDto = (UserSecurityDto) this.getMapper().getDto(user);
         user.addSession(session);
         String token = sessionService.setAuthToken(session);
