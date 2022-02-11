@@ -169,6 +169,18 @@ public abstract class AbstractAutowire {
     AddressFacade addressFacade;
 
     @Autowired
+    CountryRepository countryRepository;
+
+    @Autowired
+    CountryMapper countryMapper;
+
+    @Autowired
+    CountryService countryService;
+
+    @Autowired
+    CountryFacade countryFacade;
+
+    @Autowired
     RecoveryCodeFacade recoveryCodeFacade;
 
     @Autowired

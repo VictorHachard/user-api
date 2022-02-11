@@ -23,6 +23,7 @@ public class AddressMapper extends AbstractMapper<AddressDto, Address> {
         dto.setBuilding(e.getBuilding());
         dto.setStreet(e.getStreet());
         dto.setPostcode(e.getPostcode());
+        dto.setCountryDto(countryMapper.getDto(e.getCountry()));
         return dto;
     }
 
@@ -31,7 +32,8 @@ public class AddressMapper extends AbstractMapper<AddressDto, Address> {
                 "<p>" + e.getName() + "<\\p>\n" +
                 "<p>" + e.getBuilding() + "<\\p>\n" +
                 "<p>" + e.getStreet() + "<\\p>\n" +
-                "<p>" + e.getPostcode() + "<\\p>\n";
+                "<p>" + e.getPostcode() + "<\\p>\n" +
+                "<p>" + e.getCountry() + "<\\p>\n";
     }
 
 }

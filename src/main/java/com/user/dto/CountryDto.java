@@ -10,20 +10,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class AddressDto extends Dto {
+public class CountryDto extends Dto {
 
-    String alias;
-
-    Boolean _default;
-
-    String name;
-
-    String building;
-
-    String street;
-
-    String postcode;
-
-    CountryDto countryDto;
+    String country;
 
 }
