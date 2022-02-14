@@ -23,8 +23,8 @@ import java.util.Date;
 @Setter
 public class Session extends AbstractEntity {
 
-    /*
-    Hashed using SHA-256
+    /**
+     * Hashed using SHA-256
      */
     @Column(unique = true)
     String authToken;
@@ -33,12 +33,14 @@ public class Session extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     Date authTokenCreatedAt;
 
-    /*
-    If the session expire set active to False and remove the authToken.
+    /**
+     * False if the session expire.
+     * (remove the authToken if False)
      */
     @Column()
     Boolean active;
 
+    //TODO: remove this field?
     @Column(unique = true)
     String token;
 
@@ -57,6 +59,10 @@ public class Session extends AbstractEntity {
     @Column()
     Boolean onMobile;
 
+    /**
+     * The last time this session was used.
+     * Any call with the associate token will update this field.
+     */
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     Date lastConnection;

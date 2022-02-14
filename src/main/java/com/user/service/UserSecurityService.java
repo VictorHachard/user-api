@@ -1,5 +1,6 @@
 package com.user.service;
 
+import com.user.Environment;
 import com.user.dto.SecurityLogDto;
 import com.user.dto.SessionDto;
 import com.user.dto.UserSecurityDto;
@@ -79,11 +80,18 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         }
         UserSecurity user = this.getRepository().findByUsername(username).get();
 
+        if (user.getLastConnectionAttempt() != null && user.getLastConnectionAttempt().before(new Date(new Date().getTime() - (long) 1000 * 60 * user.getFailConnectionAttempt()))) { // 1 minute * failedAttempts
+            this.responseStatus(HttpStatus.BAD_REQUEST, "You have to wait " + user.getFailConnectionAttempt() + " minutes before you can try again");
+        }
+
         List<Password> passwordList = new ArrayList<>(user.getPasswordList());
         Collections.sort(passwordList);
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (!passwordEncoder.matches(password, passwordList.get(passwordList.size() -1).getPassword())) {
+            user.setFailConnectionAttempt(user.getFailConnectionAttempt() + 1);
+            user.setLastConnectionAttempt(new Timestamp(System.currentTimeMillis()));
+            this.getRepository().save(user);
             this.responseStatus(HttpStatus.BAD_REQUEST, "The password is not correct");
         }
 
@@ -108,6 +116,8 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         String token = sessionService.setAuthToken(session);
         log.info("LOGIN " + token + " is the token of user " + user.getUsername());
         user.setLastConnection(new Timestamp(System.currentTimeMillis()));
+        user.setFailConnectionAttempt(0);
+        user.setLastConnectionAttempt(null);
         this.getRepository().save(user);
         SessionDto sessionDto = sessionMapper.getDto(session);
         sessionDto.setAuthToken(token);

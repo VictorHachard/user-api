@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 /**
  * This class represents a user.
+ * TODO: have a other class user (1to1) to have the security information split.
  */
 @Entity
 //@Table(indexes = { // JPA by default will create index on username and token
@@ -37,8 +38,8 @@ public class UserSecurity extends AbstractEntity {
     @Column(unique = true, nullable = false)
     String username;
 
-    /*
-    Hashed using SHA-256
+    /**
+     * Hashed using SHA-256
      */
     @Column(unique = true)
     String passwordResetToken;
@@ -108,6 +109,24 @@ public class UserSecurity extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     PrivacyEnum privacy;
 
+    /**
+     * The last time the user fail to logged in (fail password authentication).
+     * This is used to block brute force attacks.
+     */
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    Date lastConnectionAttempt;
+
+    /**
+     * Count how many times user has fail to logged in (fail password authentication).
+     * This is used to block brute force attacks.
+     */
+    @Column
+    Integer failConnectionAttempt;
+
+    /**
+     * The last time the user successfully logged in.
+     */
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     Date lastConnection;
