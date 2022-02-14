@@ -59,6 +59,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             handlerClass = Class.forName(handler.toString().split("#")[0]);
             handlerMethod = this.foundTheMethode(handler.toString());
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("The API path was not found");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The API path was not found");
         }

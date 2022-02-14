@@ -93,6 +93,9 @@ public class Data extends AbstractAutowire {
                 "#adbac7"
         ));
 
+        countryRepository.save(countryFacade.newInstance("France"));
+        countryRepository.save(countryFacade.newInstance("Belgium"));
+
         roleRepository.save(roleFacade.newInstance(RoleEnum.ROLE_USER));
         roleRepository.save(roleFacade.newInstance(RoleEnum.ROLE_ADMINISTRATOR));
         roleRepository.save(roleFacade.newInstance(RoleEnum.ROLE_OWNER));

@@ -23,14 +23,18 @@ public class AddressValidator extends AbstractValidator {
     @NotEmpty
     String name;
 
-    String building; // Building, floor...
+    String building;
 
     @NotNull(message = "")
     @NotEmpty
-    String street; // Street, house number, box number
+    String street;
 
     @NotNull(message = "")
     @NotEmpty
-    String postcode; // Postcode and name of municipality
+    String postcode;
+
+    @NotNull(message = "")
+    @NotEmpty
+    String country;
 
 }

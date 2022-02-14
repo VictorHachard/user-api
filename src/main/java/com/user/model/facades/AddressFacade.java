@@ -1,6 +1,7 @@
 package com.user.model.facades;
 
 import com.user.model.entities.Address;
+import com.user.model.entities.Country;
 import com.user.model.facades.commons.AbstractFacade;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,8 @@ public class AddressFacade extends AbstractFacade<Address> {
                                String name,
                                String building,
                                String street,
-                               String postcode) {
+                               String postcode,
+                               Country country) {
         Address res = super.newInstance();
         res.setName(name);
         res.set_default(_default);
@@ -20,6 +22,7 @@ public class AddressFacade extends AbstractFacade<Address> {
         res.setBuilding(building);
         res.setStreet(street);
         res.setPostcode(postcode);
+        res.setCountry(country);
         return res;
     }
 

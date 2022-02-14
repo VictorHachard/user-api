@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class CountryFacade extends AbstractFacade<Country> {
 
-    public Country newInstance(String country) {
+    public Country newInstance(String name) {
         Country res = super.newInstance();
-        res.setCountry(country);
+        res.setName(name);
         return res;
     }
 

@@ -12,6 +12,6 @@ import lombok.experimental.FieldDefaults;
 @Setter
 public class CountryDto extends Dto {
 
-    String country;
+    String name;
 
 }

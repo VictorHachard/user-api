@@ -1,7 +1,10 @@
 package com.user.service;
 
+import com.user.dto.CountryDto;
+import com.user.dto.GroupDto;
 import com.user.model.entities.Address;
 import com.user.model.entities.Country;
+import com.user.model.entities.Group;
 import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.SecurityLogEnum;
 import com.user.model.repositories.AddressRepository;
@@ -16,6 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Service
 // Lombok
@@ -26,12 +32,11 @@ public class CountryService extends AbstractService<Country, CountryRepository> 
     @Override
     public Page<Country> getAllBy(Pageable pageable, String searchBy, String searchValue) {
         switch (searchBy) {
-            case "country":
-                return this.getRepository().findByCountryContaining(searchValue, pageable);
+            case "name":
+                return this.getRepository().findByNameContaining(searchValue, pageable);
             default:
-                this.responseStatus(HttpStatus.BAD_REQUEST, "By " + searchBy + " is incorrect");
+                return super.getAllBy(pageable, searchBy, searchValue);
         }
-        return null;
     }
 
     @Override
@@ -43,6 +48,20 @@ public class CountryService extends AbstractService<Country, CountryRepository> 
         Country c = countryFacade.newInstance(country);
         this.getRepository().save(c);
         return c;
+    }
+
+    public List<CountryDto> getAllActiveDto(Integer pageIndex,
+                                            Integer pageSize,
+                                            String sortBy,
+                                            String orderBy,
+                                            String searchBy,
+                                            String searchValue) {
+        if (!searchValue.equals("null")) {
+            searchValue = searchValue.toUpperCase();
+        }
+        List<Country> countryList = this.getAll(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue);
+//        groupList.removeIf(p -> !p.isActive());
+        return this.getMapper().getAllDto(countryList);
     }
 
 }

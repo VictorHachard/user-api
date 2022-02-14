@@ -9,16 +9,17 @@ import com.user.interceptor.AuthorisationForOverrideColumn;
 import com.user.model.entities.Country;
 import com.user.model.entities.Group;
 import com.user.model.entities.enums.RoleEnum;
+import com.user.service.CountryService;
+import com.user.service.GroupService;
+import com.user.service.UserSecurityService;
 import com.user.validator.AddressValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/country/")
@@ -40,6 +41,18 @@ public class CountryController extends AbstractController<Country, CountryDto> {
     @PostMapping("create")
     public void create(@Valid @RequestBody AddressValidator validator) {
         this.getService().create(validator);
+    }
+
+    @Authorisation(roles = {RoleEnum.ROLE_USER})
+    @GetMapping("dto/active")
+    public List<CountryDto> getAllActiveDto(@RequestParam(defaultValue = "0") Integer pageIndex,
+                                            @RequestParam(defaultValue = "10") Integer pageSize,
+                                            @RequestParam(defaultValue = "id") String sortBy,
+                                            @RequestParam(defaultValue = "asc") String orderBy,
+                                            @RequestParam(defaultValue = "null") String searchBy,
+                                            @RequestParam(defaultValue = "null") String searchValue) {
+        CountryService service = (CountryService) this.getService();
+        return service.getAllActiveDto(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue);
     }
 
 }

@@ -26,8 +26,19 @@ public abstract class AbstractEntity implements Serializable {
     @GeneratedValue
     long id;
 
+    /**
+     * The creation date of the entity.
+     */
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     Date createdAt;
+
+    /**
+     * The last modification date.
+     * TODO: This field is not used yet.
+     */
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    Date updatedAt;
 
 }

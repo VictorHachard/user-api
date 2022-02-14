@@ -1,12 +1,15 @@
 package com.user.controller;
 
+import com.user.dto.AddressDto;
 import com.user.interceptor.Authorisation;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.GroupDto;
 import com.user.interceptor.AuthorisationForOverride;
 import com.user.interceptor.AuthorisationForOverrideColumn;
+import com.user.model.entities.Address;
 import com.user.model.entities.Group;
 import com.user.model.entities.enums.RoleEnum;
+import com.user.model.repositories.AddressRepository;
 import com.user.validator.AddressValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +32,7 @@ import javax.validation.Valid;
         @AuthorisationForOverride(name = "get", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
         @AuthorisationForOverride(name = "getAll", roles = {RoleEnum.ROLE_ADMINISTRATOR})
 })
-public class AddressController extends AbstractController<Group, GroupDto> {
+public class AddressController extends AbstractController<Address, AddressDto> {
 
     @Authorisation(roles = {RoleEnum.ROLE_USER})
     @PostMapping("create")

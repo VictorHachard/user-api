@@ -38,12 +38,9 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         switch (searchBy) {
             case "username":
                 return this.getRepository().findByUsernameContaining(searchValue, pageable);
-            case "null":
-                return super.getAllBy(pageable, searchBy, searchValue);
             default:
-                this.responseStatus(HttpStatus.BAD_REQUEST, "By " + searchBy + " is incorrect");
+                return super.getAllBy(pageable, searchBy, searchValue);
         }
-        return null;
     }
     public List<UserSecurityProfileDto> getAllDtoBlockedUser(Integer pageIndex, Integer pageSize, String sortBy, String orderBy, String searchBy, String searchValue) {
         return userSecurityMapper.getAllProfileDto(this.getAll(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue));
@@ -80,8 +77,8 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         }
         UserSecurity user = this.getRepository().findByUsername(username).get();
 
-        if (user.getLastConnectionAttempt() != null && user.getLastConnectionAttempt().after(new Date(new Date().getTime() - (long) 1000 * 60 * user.getFailConnectionAttempt()))) { // 1 minute * failedAttempts
-            this.responseStatus(HttpStatus.BAD_REQUEST, "You have to wait " + user.getFailConnectionAttempt() + " minutes before you can try again");
+        if (user.getLastConnectionAttempt() != null && user.getFailConnectionAttempt() >= 2 && user.getLastConnectionAttempt().after(new Date(new Date().getTime() - (long) 1000 * 60 * user.getFailConnectionAttempt() - 1))) { // 1 minute * failedAttempts
+            this.responseStatus(HttpStatus.BAD_REQUEST, "You have to wait " + (user.getFailConnectionAttempt() - 1) + " minutes before you can try again");
         }
 
         List<Password> passwordList = new ArrayList<>(user.getPasswordList());
@@ -141,7 +138,9 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
     public void logout() {
         UserSecurity u = this.getUser();
         Session s = this.getSession();
-        sessionService.delete(s);
+        s.setActive(false);
+        s.setAuthToken(null);
+        sessionRepository.save(s);
         log.info("LOGOUT of user " + u.getUsername());
     }
 

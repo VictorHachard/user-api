@@ -10,7 +10,6 @@ import javax.persistence.*;
  * This class represents an address.
  */
 @Entity
-@Table()
 // Lombok
 @EqualsAndHashCode(callSuper=true)
 @ToString

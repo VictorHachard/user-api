@@ -33,7 +33,7 @@ public class AddressMapper extends AbstractMapper<AddressDto, Address> {
                 "<p>" + e.getBuilding() + "<\\p>\n" +
                 "<p>" + e.getStreet() + "<\\p>\n" +
                 "<p>" + e.getPostcode() + "<\\p>\n" +
-                "<p>" + e.getCountry() + "<\\p>\n";
+                "<p>" + e.getCountry().getName() + "<\\p>\n";
     }
 
 }

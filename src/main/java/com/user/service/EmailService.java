@@ -35,12 +35,9 @@ public class EmailService extends AbstractService<Email, EmailRepository> {
                 return this.getRepository().findByPriorityContaining(PriorityEnum.valueOf(searchValue), pageable);
             case "privacy":
                 return this.getRepository().findByPrivacyContaining(PrivacyEnum.valueOf(searchValue), pageable);
-            case "null":
-                super.getAllBy(pageable, searchBy, searchValue);
             default:
-                this.responseStatus(HttpStatus.BAD_REQUEST, "By " + searchBy + " is incorrect");
+                return super.getAllBy(pageable, searchBy, searchValue);
         }
-        return null;
     }
 
     @Override

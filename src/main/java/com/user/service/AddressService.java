@@ -1,6 +1,7 @@
 package com.user.service;
 
 import com.user.model.entities.Address;
+import com.user.model.entities.Country;
 import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.SecurityLogEnum;
 import com.user.model.repositories.AddressRepository;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 // Lombok
@@ -38,7 +40,11 @@ public class AddressService extends AbstractService<Address, AddressRepository> 
     public void create(AbstractValidator abstractValidator) {
         AddressValidator validator = (AddressValidator) abstractValidator;
         UserSecurity u = this.getUser();
-        Address a = this.create(validator.getAlias(), false, validator.getName(), validator.getBuilding(), validator.getStreet(), validator.getPostcode());
+        if (!countryRepository.existsByName(validator.getCountry())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Country " + validator.getCountry() + " is not in the database");
+        }
+        Country c = countryRepository.findByName(validator.getCountry()).get();
+        Address a = this.create(validator.getAlias(), false, validator.getName(), validator.getBuilding(), validator.getStreet(), validator.getPostcode(), c);
         u.addAddress(a);
         userSecurityRepository.save(u);
         securityLogService.create(SecurityLogEnum.ADDRESS_ADDED, "Address " + a.getAlias() + " added");
@@ -50,8 +56,9 @@ public class AddressService extends AbstractService<Address, AddressRepository> 
                           String name,
                           String building,
                           String street,
-                          String postcode) {
-        Address a = addressFacade.newInstance(alias, _default, name, building, street, postcode);
+                          String postcode,
+                          Country country) {
+        Address a = addressFacade.newInstance(alias, _default, name, building, street, postcode, country);
         this.getRepository().save(a);
         return a;
     }

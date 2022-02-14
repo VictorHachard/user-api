@@ -49,7 +49,9 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
         String token = new String(Base64.getDecoder().decode(validator.getAuth()));
         UserSecurityDto res = service.login(headers,
                 token.substring(0, token.indexOf(":")),
-                token.substring(token.indexOf(":") + 1), validator.isRememberMe(), validator.getCode());
+                token.substring(token.indexOf(":") + 1),
+                validator.isRememberMe(),
+                validator.getCode());
         return res;
     }
 
@@ -72,11 +74,11 @@ public class UserSecurityController extends AbstractController<UserSecurity, Use
     @Authorisation(roles = {RoleEnum.ROLE_USER})
     @GetMapping("dto/blocked-user")
     public List<UserSecurityProfileDto> getAllDtoBlockedUser(@RequestParam(defaultValue = "0") Integer pageIndex,
-                             @RequestParam(defaultValue = "10") Integer pageSize,
-                             @RequestParam(defaultValue = "id") String sortBy,
-                             @RequestParam(defaultValue = "asc") String orderBy,
-                             @RequestParam(defaultValue = "null") String searchBy,
-                             @RequestParam(defaultValue = "null") String searchValue) {
+                                                             @RequestParam(defaultValue = "10") Integer pageSize,
+                                                             @RequestParam(defaultValue = "id") String sortBy,
+                                                             @RequestParam(defaultValue = "asc") String orderBy,
+                                                             @RequestParam(defaultValue = "null") String searchBy,
+                                                             @RequestParam(defaultValue = "null") String searchValue) {
         UserSecurityService service = (UserSecurityService) this.getService();
         return service.getAllDtoBlockedUser(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue);
     }

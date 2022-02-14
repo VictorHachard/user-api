@@ -10,7 +10,6 @@ import javax.persistence.*;
  * This class represents an address.
  */
 @Entity
-@Table()
 // Lombok
 @EqualsAndHashCode(callSuper=true)
 @ToString
@@ -21,6 +20,6 @@ import javax.persistence.*;
 public class Country extends AbstractEntity {
 
     @Column
-    String country;
+    String name;
 
 }

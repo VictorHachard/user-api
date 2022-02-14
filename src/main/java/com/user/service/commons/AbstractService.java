@@ -75,8 +75,12 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
     }
 
     public Page<I> getAllBy(Pageable pageable, String searchBy, String searchValue) {
-        AbstractRepository repository = this.getAbstractRepository();
-        return repository.findAll(pageable);
+//        if (searchBy.equals("null")  && searchValue.equals("null")) {
+            AbstractRepository repository = this.getAbstractRepository();
+            return repository.findAll(pageable);
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "By " + searchBy + " is incorrect");
+//        }
     }
 
     public List<I> getAll() {
@@ -106,8 +110,8 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         try {
             pagedResult = this.getAllBy(paging, searchBy, searchValue);
             //pagedResult = repository.findAll(paging);
-        } catch (PropertyReferenceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        } catch (PropertyReferenceException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         if (pagedResult.hasContent()) {
             return pagedResult.getContent();
