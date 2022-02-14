@@ -80,7 +80,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         }
         UserSecurity user = this.getRepository().findByUsername(username).get();
 
-        if (user.getLastConnectionAttempt() != null && user.getLastConnectionAttempt().before(new Date(new Date().getTime() - (long) 1000 * 60 * user.getFailConnectionAttempt()))) { // 1 minute * failedAttempts
+        if (user.getLastConnectionAttempt() != null && user.getLastConnectionAttempt().after(new Date(new Date().getTime() - (long) 1000 * 60 * user.getFailConnectionAttempt()))) { // 1 minute * failedAttempts
             this.responseStatus(HttpStatus.BAD_REQUEST, "You have to wait " + user.getFailConnectionAttempt() + " minutes before you can try again");
         }
 

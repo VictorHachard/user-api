@@ -24,6 +24,7 @@ public class UserSecurityFacade extends AbstractFacade<UserSecurity> {
         UserSecurity res = super.newInstance();
         res.setUsername(u);
         res.addPassword(p);
+        res.setFailConnectionAttempt(0);
         res.addEmail(e);
         res.addRole(r);
         res.setPrivacy(PrivacyEnum.PRIVATE);
