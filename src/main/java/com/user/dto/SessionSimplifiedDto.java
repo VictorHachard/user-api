@@ -6,16 +6,20 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Date;
+
 // Lombok
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class SecurityLogDto extends Dto {
+public class SessionSimplifiedDto extends Dto {
 
-    String securityLog;
+    String ip;
 
-    String info;
+    String userAgent;
 
-    SessionSimplifiedDto sessionSimplifiedDto;
+    String platform;
+
+    Date lastConnection;
 
 }

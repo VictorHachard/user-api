@@ -74,10 +74,14 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 UserSecurity user = this.userSecurityRepository.findByAuthToken(hashAuthToken).get();
                 Session session = this.sessionRepository.findByAuthToken(hashAuthToken).get();
                 if (!session.getRememberMe() && session.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - Environment.getInstance().SESSION_TIMEOUT))) { //24h
-                    this.sessionRepository.delete(session);
+                    session.setActive(false);
+                    session.setAuthToken(null);
+                    this.sessionRepository.save(session);
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is expired");
                 } else if (session.getRememberMe() && session.getAuthTokenCreatedAt().before(new Date(new Date().getTime() - Environment.getInstance().SESSION_REMEMBER_ME_TIMEOUT))) { //30 days
-                    this.sessionRepository.delete(session);
+                    session.setActive(false);
+                    session.setAuthToken(null);
+                    this.sessionRepository.save(session);
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token is expired");
                 }
 

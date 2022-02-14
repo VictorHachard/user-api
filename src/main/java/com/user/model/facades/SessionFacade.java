@@ -22,6 +22,7 @@ public class SessionFacade extends AbstractFacade<Session> {
         res.setPlatform(headers.get("sec-ch-ua-platform"));
         res.setUserAgent(headers.get("user-agent"));
         res.setOnMobile(headers.get("user-agent").contains("Mobi"));
+        res.setActive(true);
         return res;
     }
 

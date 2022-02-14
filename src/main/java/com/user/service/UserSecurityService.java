@@ -269,7 +269,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         u.addPassword(p);
         passwordRepository.save(p);
         this.getRepository().save(u);
-        securityLogService.create(SecurityLogEnum.PASSWORD_RESET, u, "Password updated with email");
+        securityLogService.create(SecurityLogEnum.PASSWORD_RESET, "Password updated with email");
     }
 
     public void actionForgetPassword(String usernameOrEmail) {
@@ -296,7 +296,7 @@ public class UserSecurityService extends AbstractService<UserSecurity, UserSecur
         Password p = passwordService.create(validator.getNewPassword());
         u.addPassword(p);
         this.getRepository().save(u);
-        securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, u, "Password updated");
+        securityLogService.create(SecurityLogEnum.PASSWORD_CHANGE, "Password updated");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success new password added");
     }
 

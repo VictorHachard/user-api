@@ -11,6 +11,7 @@ import java.util.Date;
  * This class represents a session.
  * A session is a connection between the front end and the back end.
  * It also stores if this session need to persist longer like a connection cookie.
+ * TODO: have a cron that set active to false if the session is no longer valid.
  */
 @Entity
 //@Table(indexes = @Index(columnList = "authToken")) // JPA by default will create on token
@@ -31,6 +32,12 @@ public class Session extends AbstractEntity {
     @Column()
     @Temporal(TemporalType.TIMESTAMP)
     Date authTokenCreatedAt;
+
+    /*
+    If the session expire set active to False and remove the authToken.
+     */
+    @Column()
+    Boolean active;
 
     @Column(unique = true)
     String token;

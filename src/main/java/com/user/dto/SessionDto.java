@@ -22,6 +22,10 @@ public class SessionDto extends Dto {
 
     Boolean onMobile;
 
+    String userAgent;
+
+    String platform;
+
     Date lastConnection;
 
 }

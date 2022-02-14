@@ -41,7 +41,7 @@ public class AddressService extends AbstractService<Address, AddressRepository> 
         Address a = this.create(validator.getAlias(), false, validator.getName(), validator.getBuilding(), validator.getStreet(), validator.getPostcode());
         u.addAddress(a);
         userSecurityRepository.save(u);
-        securityLogService.create(SecurityLogEnum.ADDRESS_ADDED, u, "Address " + a.getAlias() + " added");
+        securityLogService.create(SecurityLogEnum.ADDRESS_ADDED, "Address " + a.getAlias() + " added");
         this.responseStatus(HttpStatus.NO_CONTENT, "Success " + this.getClass().getSimpleName().toLowerCase() + " created");
     }
 
@@ -68,7 +68,7 @@ public class AddressService extends AbstractService<Address, AddressRepository> 
             } else {
                 u.getAddressList().remove(a);
                 this.getRepository().deleteById(id);
-                securityLogService.create(SecurityLogEnum.ADDRESS_REMOVED, u, "Address " + a.getAlias() + " deleted");
+                securityLogService.create(SecurityLogEnum.ADDRESS_REMOVED, "Address " + a.getAlias() + " deleted");
                 this.responseStatus(HttpStatus.NO_CONTENT, "Success " + this.getClass().getSimpleName().toLowerCase() + " deleted");
             }
         }

@@ -1,6 +1,7 @@
 package com.user.service;
 
 import com.user.model.entities.SecurityLog;
+import com.user.model.entities.Session;
 import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.SecurityLogEnum;
 import com.user.model.repositories.SecurityLogRepository;
@@ -29,8 +30,14 @@ public class SecurityLogService extends AbstractService<SecurityLog, SecurityLog
     @Override
     public void create(AbstractValidator abstractValidator) { }
 
-    public SecurityLog create(SecurityLogEnum sl, UserSecurity us, String info) {
-        SecurityLog s = securityLogFacade.newInstance(sl, us, info);
+    public SecurityLog create(SecurityLogEnum sl, UserSecurity us, Session se, String info) {
+        SecurityLog s = securityLogFacade.newInstance(sl, us, se, info);
+        this.getRepository().save(s);
+        return s;
+    }
+
+    public SecurityLog create(SecurityLogEnum sl, String info) {
+        SecurityLog s = securityLogFacade.newInstance(sl, this.getUser(), this.getSession(), info);
         this.getRepository().save(s);
         return s;
     }

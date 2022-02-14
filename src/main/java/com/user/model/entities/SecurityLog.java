@@ -30,6 +30,10 @@ public class SecurityLog extends AbstractEntity implements Comparable<SecurityLo
     @ManyToOne
     UserSecurity userSecurity;
 
+    @JoinColumn()
+    @ManyToOne
+    Session session;
+
     @Override
     public int compareTo(SecurityLog o) {
         return Long.compare(this.getId(), o.getId());

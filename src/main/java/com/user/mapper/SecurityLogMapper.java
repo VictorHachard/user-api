@@ -19,6 +19,7 @@ public class SecurityLogMapper extends AbstractMapper<SecurityLogDto, SecurityLo
         SecurityLogDto dto = super.getDto(e);
         dto.setSecurityLog(e.getSecurityLog().name().replace('_', ' '));
         dto.setInfo(e.getInfo());
+        dto.setSessionSimplifiedDto(sessionMapper.getSimplifiedDto(e.getSession()));
         return dto;
     }
 
