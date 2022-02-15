@@ -1,10 +1,10 @@
 package com.user.service.commons;
 
-import com.user.interceptor.TokenInterceptor;
 import com.user.dto.commons.Dto;
 import com.user.init.AbstractAutowire;
 import com.user.init.InitMap;
 import com.user.init.MapTypeEnum;
+import com.user.interceptor.TokenInterceptor;
 import com.user.mapper.commons.AbstractMapper;
 import com.user.model.entities.Session;
 import com.user.model.entities.UserSecurity;

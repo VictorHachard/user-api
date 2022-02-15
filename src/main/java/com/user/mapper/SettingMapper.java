@@ -2,10 +2,8 @@ package com.user.mapper;
 
 import com.user.dto.SettingDto;
 import com.user.dto.SettingSimplifiedDto;
-import com.user.dto.ThemeSimplifiedDto;
 import com.user.mapper.commons.AbstractMapper;
 import com.user.model.entities.Setting;
-import com.user.model.entities.Theme;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;

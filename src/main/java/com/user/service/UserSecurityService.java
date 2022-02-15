@@ -1,6 +1,5 @@
 package com.user.service;
 
-import com.user.Environment;
 import com.user.dto.SecurityLogDto;
 import com.user.dto.SessionDto;
 import com.user.dto.UserSecurityDto;

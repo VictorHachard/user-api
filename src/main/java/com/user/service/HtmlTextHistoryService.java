@@ -25,12 +25,9 @@ public class HtmlTextHistoryService extends AbstractService<HtmlTextHistory, Htm
         switch (searchBy) {
             case "name":
                 return this.getRepository().findByNameContaining(searchValue, pageable);
-            case "null":
-                return super.getAllBy(pageable, searchBy, searchValue);
             default:
-                this.responseStatus(HttpStatus.BAD_REQUEST, "By " + searchBy + " is incorrect");
+                return super.getAllBy(pageable, searchBy, searchValue);
         }
-        return null;
     }
 
     /*@Override

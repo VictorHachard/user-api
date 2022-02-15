@@ -1,9 +1,9 @@
 package com.user.controller;
 
-import com.user.interceptor.Authorisation;
 import com.user.controller.commons.AbstractController;
 import com.user.dto.SettingDto;
 import com.user.dto.SettingSimplifiedDto;
+import com.user.interceptor.Authorisation;
 import com.user.interceptor.AuthorisationForOverride;
 import com.user.interceptor.AuthorisationForOverrideColumn;
 import com.user.model.entities.Setting;

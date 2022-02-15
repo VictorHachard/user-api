@@ -1,25 +1,16 @@
 package com.user.service;
 
 import com.user.dto.CountryDto;
-import com.user.dto.GroupDto;
-import com.user.model.entities.Address;
 import com.user.model.entities.Country;
-import com.user.model.entities.Group;
-import com.user.model.entities.UserSecurity;
-import com.user.model.entities.enums.SecurityLogEnum;
-import com.user.model.repositories.AddressRepository;
 import com.user.model.repositories.CountryRepository;
 import com.user.service.commons.AbstractService;
-import com.user.validator.AddressValidator;
 import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 

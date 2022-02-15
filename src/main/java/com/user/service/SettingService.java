@@ -1,8 +1,6 @@
 package com.user.service;
 
-import com.user.dto.SettingDto;
 import com.user.dto.SettingSimplifiedDto;
-import com.user.mapper.SettingMapper;
 import com.user.model.entities.Setting;
 import com.user.model.repositories.SettingRepository;
 import com.user.service.commons.AbstractService;
