@@ -48,7 +48,7 @@ public class CountryService extends AbstractService<Country, CountryRepository> 
                                             String searchBy,
                                             String searchValue) {
         if (!searchValue.equals("null")) {
-            searchValue = searchValue.toUpperCase();
+            searchValue = searchValue.toLowerCase(); //This trick is to avoid case sensitive search in the repository
         }
         List<Country> countryList = this.getAll(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue);
 //        groupList.removeIf(p -> !p.isActive());

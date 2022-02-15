@@ -106,7 +106,7 @@ public class Data extends AbstractAutowire {
         settingRepository.save(settingFacade.newInstance("security", true, false));
         settingRepository.save(settingFacade.newInstance("emails", true, false));
         settingRepository.save(settingFacade.newInstance("address", true, true));
-        settingRepository.save(settingFacade.newInstance("cookies", true, true));
+        settingRepository.save(settingFacade.newInstance("cookies", false, true));
         settingRepository.save(settingFacade.newInstance("notifications", true, true));
         settingRepository.save(settingFacade.newInstance("security-log", true, true));
         settingRepository.save(settingFacade.newInstance("blocked-users", true, true));
