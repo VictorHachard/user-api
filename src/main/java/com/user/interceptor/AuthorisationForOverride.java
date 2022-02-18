@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface AuthorisationForOverride {
-    /*
-    The name of the methode.
+    /**
+     * The name of the methode.
      */
     String name();
     RoleEnum[] roles();

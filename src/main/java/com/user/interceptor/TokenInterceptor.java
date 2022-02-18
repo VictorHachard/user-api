@@ -35,6 +35,16 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     SessionRepository sessionRepository;
 
+    /**
+     * This methode intercept all the request and check if the user (token) has the right to access the method.
+     * - If the token is not found in the header 'Authorization', return a 401 error.
+     * - If the token as expired, return a 401 error.
+     * - If the user associated with the token has not the right to access the method, return a 403 error.
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // Reset attributes
@@ -102,10 +112,10 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     }
 
     /**
-     * Check if the user has the permission
+     * Check if the user has the permission.
      * @param rolesList
      * @param roleSet
-     * @return
+     * @return true if the user has the permission, false otherwise.
      */
     private boolean userHasPermission(RoleEnum[] rolesList, Set<Role> roleSet) {
         boolean hasPermission = false;
@@ -126,7 +136,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
      * If the methode is in the abstract, return the role of the class.
      * @param handlerClass
      * @param handlerMethod
-     * @return
+     * @return RoleEnum[] or null
      */
     private RoleEnum[] getRoles(Class<?> handlerClass, Method handlerMethod) {
         RoleEnum[] roles = null;
@@ -144,10 +154,10 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     }
 
     /**
-     *
+     * This methode return the Methode found in the handler.
      * @param handler like "com.user.controller.UserController#getUser(String)"
      * @return the method
-     * @throws Exception
+     * @throws Exception if the methode is not found in the handler throw an ClassNotFoundException or a NoSuchMethodException
      */
     private Method foundTheMethode(String handler) throws ClassNotFoundException, NoSuchMethodException {
         Class<?> cls = null;

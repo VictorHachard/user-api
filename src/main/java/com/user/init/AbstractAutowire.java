@@ -8,6 +8,9 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * A class that is used to autowire all the beans.
+ */
 // Lombok
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public abstract class AbstractAutowire {
