@@ -26,6 +26,8 @@ import javax.validation.Valid;
 // Authorisation
 @AuthorisationForOverrideColumn(table = {
         @AuthorisationForOverride(name = "count", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
+        @AuthorisationForOverride(name = "create", roles = {RoleEnum.ROLE_USER}),
+        @AuthorisationForOverride(name = "update", roles = {RoleEnum.ROLE_USER}),
         @AuthorisationForOverride(name = "delete", roles = {RoleEnum.ROLE_USER}),
         @AuthorisationForOverride(name = "getDto", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
         @AuthorisationForOverride(name = "getAllDto", roles = {RoleEnum.ROLE_ADMINISTRATOR}),
@@ -33,11 +35,5 @@ import javax.validation.Valid;
         @AuthorisationForOverride(name = "getAll", roles = {RoleEnum.ROLE_ADMINISTRATOR})
 })
 public class AddressController extends AbstractController<Address, AddressDto> {
-
-    @Authorisation(roles = {RoleEnum.ROLE_USER})
-    @PostMapping("create")
-    public void create(@Valid @RequestBody AddressValidator validator) {
-        this.getService().create(validator);
-    }
 
 }

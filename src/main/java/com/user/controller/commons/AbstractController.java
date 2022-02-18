@@ -3,14 +3,14 @@ package com.user.controller.commons;
 import com.user.init.InitMap;
 import com.user.init.MapTypeEnum;
 import com.user.service.commons.AbstractService;
+import com.user.validator.AddressValidator;
+import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 // Lombok
@@ -27,15 +27,20 @@ public abstract class AbstractController<E, D> {
         return this.getService().count();
     }
 
+    @PostMapping("create")
+    public void create(@Valid @RequestBody AbstractValidator abstractValidator) {
+        this.getService().create(abstractValidator);
+    }
+
+    @PutMapping("{id}")
+    public void update(@Valid @RequestBody AbstractValidator abstractValidator, @PathVariable("id") long id) {
+        this.getService().update(abstractValidator, id);
+    }
+
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") long id) {
         this.getService().delete(id);
     }
-
-//    @PutMapping("{id}")
-//    public void update(@Valid @RequestBody AbstractValidator abstractValidator, @PathVariable("id") long id) {
-//        this.getService().update(abstractValidator, id);
-//    }
 
     @GetMapping("dto/{id}")
     public D getDto(@PathVariable("id") long id) {

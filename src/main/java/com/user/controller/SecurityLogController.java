@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 // Authorisation
 @AuthorisationForOverrideColumn(table = {
         @AuthorisationForOverride(name = "count", roles = {RoleEnum.ROLE_USER}),
-        @AuthorisationForOverride(name = "delete", roles = {RoleEnum.ROLE_OWNER}),
-        @AuthorisationForOverride(name = "getDto", roles = {RoleEnum.ROLE_OWNER}),
+        @AuthorisationForOverride(name = "create", roles = {RoleEnum.ROLE_OWNER}), // Block
+        @AuthorisationForOverride(name = "update", roles = {RoleEnum.ROLE_OWNER}), // Block
+        @AuthorisationForOverride(name = "delete", roles = {RoleEnum.ROLE_OWNER}), // Block
+        @AuthorisationForOverride(name = "getDto", roles = {RoleEnum.ROLE_OWNER}), // Block
         @AuthorisationForOverride(name = "getAllDto", roles = {RoleEnum.ROLE_USER}),
-        @AuthorisationForOverride(name = "get", roles = {RoleEnum.ROLE_OWNER}),
-        @AuthorisationForOverride(name = "getAll", roles = {RoleEnum.ROLE_OWNER})
+        @AuthorisationForOverride(name = "get", roles = {RoleEnum.ROLE_OWNER}), // Block
+        @AuthorisationForOverride(name = "getAll", roles = {RoleEnum.ROLE_OWNER}) // Block
 })
 public class SecurityLogController extends AbstractController<SecurityLog, SecurityLogDto> {
 
