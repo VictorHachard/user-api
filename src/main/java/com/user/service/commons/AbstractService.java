@@ -137,8 +137,7 @@ public abstract class AbstractService<I, T> extends AbstractAutowire {
         return (List<Dto>) this.getMapper().getAllDto(this.getAll(pageIndex, pageSize, sortBy, orderBy, searchBy, searchValue));
     }
 
-    public void create(AbstractValidator abstractValidator) {
-    }
+    public void create(AbstractValidator abstractValidator) { }
 
     public void update(AbstractValidator abstractValidator, long id) {
         if (!this.getAbstractRepository().existsById(id)) {

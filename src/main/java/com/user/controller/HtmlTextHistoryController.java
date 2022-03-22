@@ -28,7 +28,7 @@ import javax.validation.Valid;
         @AuthorisationForOverride(name = "update", roles = {RoleEnum.ROLE_OWNER}), // Block
         @AuthorisationForOverride(name = "delete", roles = {RoleEnum.ROLE_OWNER}),
         @AuthorisationForOverride(name = "getDto", roles = {RoleEnum.ROLE_OWNER}),
-        @AuthorisationForOverride(name = "getAllDto", roles = {RoleEnum.ROLE_USER}), // Block
+        @AuthorisationForOverride(name = "getAllDto", roles = {}), // Block
         @AuthorisationForOverride(name = "get", roles = {RoleEnum.ROLE_OWNER}),
         @AuthorisationForOverride(name = "getAll", roles = {RoleEnum.ROLE_OWNER})
 })
