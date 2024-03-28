@@ -2,8 +2,10 @@ package com.user.controller.commons;
 
 import com.user.init.InitMap;
 import com.user.init.MapTypeEnum;
+import com.user.model.entities.UserSecurity;
 import com.user.service.commons.AbstractService;
 import com.user.validator.AddressValidator;
+import com.user.validator.UserSecurityValidator;
 import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;

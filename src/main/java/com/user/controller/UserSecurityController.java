@@ -11,6 +11,7 @@ import com.user.model.entities.UserSecurity;
 import com.user.model.entities.enums.RoleEnum;
 import com.user.service.UserSecurityService;
 import com.user.validator.*;
+import com.user.validator.commons.AbstractValidator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
